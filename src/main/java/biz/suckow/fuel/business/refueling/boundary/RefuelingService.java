@@ -7,41 +7,39 @@ import javax.ws.rs.Path;
 @Singleton
 public class RefuelingService {
 
-   /**
-    * 1. from station fills tank
-    * 2. from station fills tank partially
-    * 3. from station fills tank and stock
-    * 4. from station fill stock
-    * 5. from stock fills tank
-    * 6. from stock fills tank partially
-    * 
-    * @param id
-    * @param email
-    * @param kilometers
-    * @param litres
-    * @param euros
-    */
-    
-    public void refuel(String id, String email, String kilometers,
-	    String litres, String euros) {
+    // 1. from station fills tank
+    public void standardRefuel(String username, String kilometers,
+	    String litres, String euros, String memo) {
 
     }
 
-    public void overRefuel(String id, String email, String kilometers,
-	    String litresTank, String litresStock, String euros) {
+    // 2. from station fills tank partially
+    public void partialRefuel(String username, String litres, String euros,
+	    String memo) {
 
     }
 
-    public void underRefuel(String id, String email, String litres, String euros) {
-	
-    }
-
-    public void stockRefuel(String id, String email, String litres) {
+    // 3. from station fills tank and stock
+    public void overRefuel(String username, String kilometers,
+	    String litresTank, String litresStock, String euros, String memo) {
 
     }
-    
-    public void releaseRefuel() {
-	
+
+    // 4. from station fill stock
+    public void refuelStock(String username, String litres, String euros,
+	    String memo) {
+
     }
 
+    // 5. from stock fills tank
+    public void fromStockFullRefuel(String username, String litres,
+	    String kilometres, String memo) {
+
+    }
+
+    // 6. from stock fills tank partially
+    public void fromStockPartialRefuel(String username, String litres,
+	    String memo) {
+
+    }
 }
