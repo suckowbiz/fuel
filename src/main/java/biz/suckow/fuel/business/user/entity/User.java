@@ -15,7 +15,11 @@ public class User {
     @OneToMany
     private List<Refueling> refuelings = Collections.emptyList();
     private FuelStock fuelStock;
-    private List<FuelConsumption> fuelConsumptions;
+    private List<FuelConsumption> fuelConsumptions = Collections.emptyList();
+
+    public void addFuelConsuption(FuelConsumption consumption) {
+	this.fuelConsumptions.add(consumption);
+    }
 
     public void addRefueling(Refueling refueling) {
 	this.refuelings.add(refueling);
