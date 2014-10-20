@@ -1,5 +1,6 @@
 package biz.suckow.fuel.business.user.entity;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -12,7 +13,11 @@ import biz.suckow.fuel.business.refueling.entity.Refueling;
 @Entity
 public class User {
     @OneToMany
-    private List<Refueling> refuelings;
+    private List<Refueling> refuelings = Collections.emptyList();
     private FuelStock fuelStock;
     private List<FuelConsumption> fuelConsumptions;
+
+    public void addRefueling(Refueling refueling) {
+	this.refuelings.add(refueling);
+    }
 }
