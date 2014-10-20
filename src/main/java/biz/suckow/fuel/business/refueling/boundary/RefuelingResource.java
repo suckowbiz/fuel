@@ -1,11 +1,11 @@
 package biz.suckow.fuel.business.refueling.boundary;
 
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.ws.rs.Path;
 
 @Path("refuelings")
-@Singleton
-public class RefuelingService {
+@Stateless
+public class RefuelingResource {
 
     // 1. from station fills tank
     public void standardRefuel(String username, String kilometers,
