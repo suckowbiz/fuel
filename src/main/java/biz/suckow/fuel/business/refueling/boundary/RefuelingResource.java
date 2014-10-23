@@ -1,45 +1,90 @@
 package biz.suckow.fuel.business.refueling.boundary;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import biz.suckow.fuel.business.refueling.control.RefuelingService;
+import biz.suckow.fuel.business.refueling.entity.RefuelingMeta;
 
 @Path("refuelings")
 @Stateless
 public class RefuelingResource {
+    @Inject
+    private RefuelingService service;
 
-    // 1. from station fills tank
-    public void standardRefuel(String username, String kilometers,
-	    String litres, String euros, String memo) {
-
+    /**
+     * Adds a refueling. Representation of use case: Fill tank completely at gas
+     * station.
+     * 
+     * @param username
+     * @param meta
+     * @return
+     */
+    @POST
+    @Path("http://www.suckow.eu/refuelings/station/full/{username}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response refuel(@PathParam("username") String username,
+	    RefuelingMeta meta) {
+	this.service.standardRefuel(username, meta.kilometers,
+		meta.litresToTank, meta.eurosPerLitre, meta.date, meta.memo);
+	return Response.ok().build();
     }
 
-    // 2. from station fills tank partially
-    public void partialRefuel(String username, String litres, String euros,
-	    String memo) {
-
+    /**
+     * Adds a refueling. Representation of use case: Fill tank partially at gas
+     * station.
+     * 
+     * @param username
+     * @param meta
+     * @return
+     */
+    @POST
+    @Path("http://www.suckow.eu/refuelings/station/partial/{username}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response partialRefuel(@PathParam("username") String username,
+	    RefuelingMeta meta) {
+	this.service.partialRefuel(username, meta.litresToTank,
+		meta.eurosPerLitre, meta.date, meta.memo);
+	return Response.ok().build();
     }
 
-    // 3. from station fills tank and stock
-    public void overRefuel(String username, String kilometers,
-	    String litresTank, String litresStock, String euros, String memo) {
-
+    /**
+     * Adds a refueling. Representation of use case: from station fills tank and
+     * stock.
+     * 
+     * @param username
+     * @param meta
+     */
+    @POST
+    @Path("http://www.suckow.eu/refuelings/station/all/{username}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response toTankAndStock(@PathParam("username") String username,
+	    RefuelingMeta meta) {
+	this.service.overRefuel(username, meta.kilometers, meta.litresToTank,
+		meta.litresToStock, meta.eurosPerLitre, meta.date, meta.memo);
+	return Response.ok().build();
     }
 
-    // 4. from station fill stock
-    public void refuelStock(String username, String litres, String euros,
-	    String memo) {
-
+    /**
+     * Adds a refueling. Representation of use case: from station fills stock.
+     * 
+     * @param username
+     * @param meta
+     */
+    @POST
+    @Path("http://www.suckow.eu/refuelings/station/stock/{username}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response refuelStock(@PathParam("username") String username,
+	    RefuelingMeta meta) {
+	this.service.refuelStock(username, meta.litresToStock,
+		meta.eurosPerLitre, meta.date, meta.memo);
+	return Response.ok().build();
     }
 
-    // 5. from stock fills tank
-    public void fromStockFullRefuel(String username, String litres,
-	    String kilometres, String memo) {
-
-    }
-
-    // 6. from stock fills tank partially
-    public void fromStockPartialRefuel(String username, String litres,
-	    String memo) {
-
-    }
 }

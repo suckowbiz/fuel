@@ -22,14 +22,15 @@ public class RefuelingService {
     private EntityManager em;
 
     // 1. from station fills tank
-    public void standardRefuel(String username, String kilometres,
-	    String litres, String euros, String memo) {
-	Refueling refueling = new Refueling.Builder().eurosPerLitre(euros)
-		.litres(litres).memo(memo).build();
+    public void standardRefuel(String username, Double kilometres,
+	    Double litres, Double eurosPerLitre, Date date, String memo) {
+	Refueling refueling = new Refueling.Builder()
+		.eurosPerLitre(eurosPerLitre).litres(litres).memo(memo)
+		.date(date).build();
 	em.persist(refueling);
 
-	Double litresPerKilometre = maths.computeActualFuelConsumption(
-		username, kilometres, litres, euros);
+	Double litresPerKilometre = null; // maths.computeActualFuelConsumption(username,
+					  // kilometres, litres, euros);
 	FuelConsumption consumption = new FuelConsumption();
 	consumption.setDate(new Date());
 	consumption.setLitresPerKilometre(litresPerKilometre);
@@ -42,32 +43,33 @@ public class RefuelingService {
     }
 
     // 2. from station fills tank partially
-    public void partialRefuel(String username, String litres, String euros,
-	    String memo) {
+    public void partialRefuel(String username, Double litres, Double euros,
+	    Date date, String memo) {
+	Refueling refueling = new Refueling.Builder().litres(litres)
+		.eurosPerLitre(euros).date(date).memo(memo).build();
+	em.persist(refueling);
 
+	User user = this.userService.getUser(username);
+	user.addRefueling(refueling);
+	em.merge(user);
     }
 
     // 3. from station fills tank and stock
-    public void overRefuel(String username, String kilometers,
-	    String litresTank, String litresStock, String euros, String memo) {
-
-    }
-
-    // 4. from station fill stock
-    public void refuelStock(String username, String litres, String euros,
+    public void overRefuel(String username, Double kilometers,
+	    Double litresTank, Double litresStock, Double euros, Date date,
 	    String memo) {
-
+	this.standardRefuel(username, kilometers, litresTank, euros, date, memo);
+	this.refuelStock(username, litresStock, euros, date, null);
     }
 
-    // 5. from stock fills tank
-    public void fromStockFullRefuel(String username, String litres,
-	    String kilometres, String memo) {
+    public void refuelStock(String username, Double litres, Double euros,
+	    Date date, String memo) {
+	Refueling stockRefueling = new Refueling.Builder().date(date)
+		.litres(litres).memo(memo).build();
+	em.persist(stockRefueling);
 
-    }
-
-    // 6. from stock fills tank partially
-    public void fromStockPartialRefuel(String username, String litres,
-	    String memo) {
-
+	User user = this.userService.getUser(username);
+	user.getFuelStock().addRefueling(stockRefueling);
+	em.merge(user);
     }
 }

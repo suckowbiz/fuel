@@ -11,4 +11,12 @@ public class FuelStock {
     private List<Refueling> in;
     @OneToMany
     private List<StockRelease> out;
+
+    public void addRefueling(Refueling refueling) {
+	this.in.add(refueling);
+    }
+
+    public void addStockRelease(StockRelease out) {
+	this.out.add(out);
+    }
 }

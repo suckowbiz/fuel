@@ -4,6 +4,8 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMin;
@@ -12,6 +14,9 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 public class Refueling {
+    @Id
+    @GeneratedValue
+    private Long id;
 
     public static final class Builder {
 	private Refueling refueling = new Refueling();
@@ -20,20 +25,23 @@ public class Refueling {
 	    this.refueling.setDate(new Date());
 	}
 
-	public Builder eurosPerLitre(String value) {
-	    Double numericValue = Double.valueOf(value);
-	    this.refueling.setEurosPerLitre(numericValue);
+	public Builder eurosPerLitre(Double value) {
+	    this.refueling.setEurosPerLitre(value);
 	    return this;
 	}
 
-	public Builder litres(String value) {
-	    Double numericValue = Double.valueOf(value);
-	    this.refueling.setLitres(numericValue);
+	public Builder litres(Double value) {
+	    this.refueling.setLitres(value);
 	    return this;
 	}
 
 	public Builder memo(String memo) {
 	    this.refueling.setMemo(memo);
+	    return this;
+	}
+
+	public Builder date(Date date) {
+	    this.refueling.setDate(date);
 	    return this;
 	}
 
@@ -89,5 +97,9 @@ public class Refueling {
 
     public void setMemo(String memo) {
 	this.memo = memo;
+    }
+
+    public Long getId() {
+	return id;
     }
 }

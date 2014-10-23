@@ -24,4 +24,9 @@ public class User {
     public void addRefueling(Refueling refueling) {
 	this.refuelings.add(refueling);
     }
+
+    public FuelStock getFuelStock() {
+	return fuelStock;
+    }
+
 }
