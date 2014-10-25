@@ -7,7 +7,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import biz.suckow.fuel.business.refueling.entity.Refueling;
-import biz.suckow.fuel.business.user.UserService;
+import biz.suckow.fuel.business.user.boundary.UserService;
 import biz.suckow.fuel.business.user.entity.User;
 
 public class RefuelingService {

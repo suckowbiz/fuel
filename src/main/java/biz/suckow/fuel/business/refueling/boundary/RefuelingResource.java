@@ -27,7 +27,7 @@ public class RefuelingResource {
      * @return
      */
     @POST
-    @Path("http://www.suckow.eu/refuelings/station/full/{username}")
+    @Path("/station/full/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response refuel(@PathParam("username") String username,
 	    RefuelingMeta meta) {
@@ -45,7 +45,7 @@ public class RefuelingResource {
      * @return
      */
     @POST
-    @Path("http://www.suckow.eu/refuelings/station/partial/{username}")
+    @Path("/station/partial/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response partialRefuel(@PathParam("username") String username,
 	    RefuelingMeta meta) {
@@ -62,12 +62,13 @@ public class RefuelingResource {
      * @param meta
      */
     @POST
-    @Path("http://www.suckow.eu/refuelings/station/all/{username}")
+    @Path("/station/all/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response toTankAndStock(@PathParam("username") String username,
 	    RefuelingMeta meta) {
-	this.service.fullTankAndStockRefuel(username, meta.kilometers, meta.litresToTank,
-		meta.litresToStock, meta.eurosPerLitre, meta.date, meta.memo);
+	this.service.fullTankAndStockRefuel(username, meta.kilometers,
+		meta.litresToTank, meta.litresToStock, meta.eurosPerLitre,
+		meta.date, meta.memo);
 	return Response.ok().build();
     }
 
@@ -78,7 +79,7 @@ public class RefuelingResource {
      * @param meta
      */
     @POST
-    @Path("http://www.suckow.eu/refuelings/station/stock/{username}")
+    @Path("/station/stock/{username}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response refuelStock(@PathParam("username") String username,
 	    RefuelingMeta meta) {
