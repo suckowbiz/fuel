@@ -12,6 +12,9 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
+import biz.suckow.fuel.business.user.entity.User;
+
 @Entity
 public class Refueling {
     @Id
@@ -21,8 +24,12 @@ public class Refueling {
     public static final class Builder {
 	private Refueling refueling = new Refueling();
 
+	/**
+	 * Standard constructor to initiate optional/ default values.
+	 */
 	public Builder() {
 	    this.refueling.setDate(new Date());
+	    this.refueling.setIsFillUp(false);
 	}
 
 	public Builder eurosPerLitre(Double value) {
@@ -45,6 +52,16 @@ public class Refueling {
 	    return this;
 	}
 
+	public Builder fillUp(boolean value) {
+	    this.refueling.setIsFillUp(value);
+	    return this;
+	}
+
+	public Builder user(User user) {
+	    this.refueling.setUser(user);
+	    return this;
+	}
+
 	public Refueling build() {
 	    return this.refueling;
 	}
@@ -52,20 +69,55 @@ public class Refueling {
 
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false)
     private Date date;
 
     @DecimalMin(value = "0.009", inclusive = true)
     @NotNull
-    @Column
+    @Column(nullable = false)
     private Double eurosPerLitre;
 
     @Min(value = 1)
     @NotNull
-    @Column
+    @Column(nullable = false)
     private Double litres;
 
     @Column
     private String memo;
+
+    @Column
+    private Boolean isFillUp;
+
+    @Column
+    private FuelConsumption consumption;
+
+    @Column(nullable = false)
+    private User user;
+
+    public User getUser() {
+	return user;
+    }
+
+    public void setUser(User user) {
+	this.user = user;
+    }
+
+    public FuelConsumption getConsumption() {
+	return consumption;
+    }
+
+    public void setConsumption(FuelConsumption consumption) {
+	this.consumption = consumption;
+    }
+
+    @Column
+    public Boolean getIsFillUp() {
+	return isFillUp;
+    }
+
+    public void setIsFillUp(Boolean isFillUp) {
+	this.isFillUp = isFillUp;
+    }
 
     public Date getDate() {
 	return date;

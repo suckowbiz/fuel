@@ -31,7 +31,7 @@ public class RefuelingResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response refuel(@PathParam("username") String username,
 	    RefuelingMeta meta) {
-	this.service.standardRefuel(username, meta.kilometers,
+	this.service.fullTankRefuel(username, meta.kilometers,
 		meta.litresToTank, meta.eurosPerLitre, meta.date, meta.memo);
 	return Response.ok().build();
     }
@@ -49,7 +49,7 @@ public class RefuelingResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response partialRefuel(@PathParam("username") String username,
 	    RefuelingMeta meta) {
-	this.service.partialRefuel(username, meta.litresToTank,
+	this.service.partialTankRefuel(username, meta.litresToTank,
 		meta.eurosPerLitre, meta.date, meta.memo);
 	return Response.ok().build();
     }
@@ -66,7 +66,7 @@ public class RefuelingResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response toTankAndStock(@PathParam("username") String username,
 	    RefuelingMeta meta) {
-	this.service.overRefuel(username, meta.kilometers, meta.litresToTank,
+	this.service.fullTankAndStockRefuel(username, meta.kilometers, meta.litresToTank,
 		meta.litresToStock, meta.eurosPerLitre, meta.date, meta.memo);
 	return Response.ok().build();
     }
@@ -82,7 +82,7 @@ public class RefuelingResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response refuelStock(@PathParam("username") String username,
 	    RefuelingMeta meta) {
-	this.service.refuelStock(username, meta.litresToStock,
+	this.service.stockRefuel(username, meta.litresToStock,
 		meta.eurosPerLitre, meta.date, meta.memo);
 	return Response.ok().build();
     }
