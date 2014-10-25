@@ -15,7 +15,6 @@ import javax.persistence.PersistenceContext;
 
 import biz.suckow.fuel.business.consumption.control.FuelConsumptionMaths;
 import biz.suckow.fuel.business.consumption.control.RefuelingLocator;
-import biz.suckow.fuel.business.consumption.control.RefuelingOldestFirstComparator;
 import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.user.entity.User;
@@ -28,9 +27,6 @@ public class FuelConsumptionSchedule {
 
     @Inject
     private FuelConsumptionMaths maths;
-
-    @Inject
-    private RefuelingOldestFirstComparator comparator;
 
     @Inject
     private Logger logger;
@@ -50,8 +46,8 @@ public class FuelConsumptionSchedule {
 	this.isRunning.set(true);
 	List<Refueling> refuelings = Collections.emptyList();
 	try {
-	    refuelings = this.locator.getRefuelingsMissingFuelConsump();
-	    Collections.sort(refuelings, this.comparator);
+	    refuelings = this.locator
+		    .getRefuelingsMissingConsumptionOldestFirst();
 	    for (Refueling refueling : refuelings) {
 		Double result = this.maths.calculate();
 

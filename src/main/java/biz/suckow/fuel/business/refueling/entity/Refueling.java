@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMin;
@@ -15,7 +16,10 @@ import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuel.business.user.entity.User;
 
 @Entity
+@NamedQuery(name = Refueling.BY_MISSING_CONSUMPTION_OLDEST_FIRST, query = "FROM Refueling r WHERE r.isFillUp = false ORDER BY r.date ASC")
 public class Refueling extends BaseEntity {
+    public static final String BY_MISSING_CONSUMPTION_OLDEST_FIRST = "";
+
     public static final class Builder {
 	private Refueling refueling = new Refueling();
 

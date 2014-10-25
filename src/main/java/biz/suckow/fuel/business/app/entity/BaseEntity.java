@@ -31,7 +31,7 @@ public class BaseEntity {
     }
 
     @PreUpdate
-    private void updateUTime() {
+    private void updateUtime() {
 	this.utime = new Date();
     }
 
@@ -39,7 +39,7 @@ public class BaseEntity {
 	return ctime;
     }
 
-    public Date getUTime() {
+    public Date getUtime() {
 	return utime;
     }
 
