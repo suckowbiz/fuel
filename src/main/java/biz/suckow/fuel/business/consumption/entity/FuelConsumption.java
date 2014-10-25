@@ -4,9 +4,14 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import biz.suckow.fuel.business.app.entity.BaseEntity;
 
 @Entity
-public class FuelConsumption {
+public class FuelConsumption extends BaseEntity {
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date date;
 

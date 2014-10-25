@@ -4,23 +4,18 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import biz.suckow.fuel.business.app.entity.BaseEntity;
 import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuel.business.user.entity.User;
 
 @Entity
-public class Refueling {
-    @Id
-    @GeneratedValue
-    private Long id;
-
+public class Refueling extends BaseEntity {
     public static final class Builder {
 	private Refueling refueling = new Refueling();
 
@@ -151,7 +146,4 @@ public class Refueling {
 	this.memo = memo;
     }
 
-    public Long getId() {
-	return id;
-    }
 }

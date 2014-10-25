@@ -7,12 +7,13 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
+import biz.suckow.fuel.business.app.entity.BaseEntity;
 import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuel.business.refueling.entity.FuelStock;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 
 @Entity
-public class User {
+public class User extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String username;
 
