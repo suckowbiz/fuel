@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -13,13 +14,20 @@ import javax.validation.constraints.NotNull;
 
 import biz.suckow.fuel.business.app.entity.BaseEntity;
 import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
-import biz.suckow.fuel.business.user.entity.User;
+import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Entity
-@NamedQuery(name = Refueling.BY_MISSING_CONSUMPTION_OLDEST_FIRST, query = "FROM Refueling r WHERE r.isFillUp = false ORDER BY r.date ASC")
-public class Refueling extends BaseEntity {
-    public static final String BY_MISSING_CONSUMPTION_OLDEST_FIRST = "";
+@NamedQueries({
 
+@NamedQuery(name = Refueling.ByExistingConsumptionForDateNewestFirst.NAME, query = "FROM Refueling r WHERE r.isFillUp = true "
+	+ "AND r.consumption IS NOT NULL AND r.date < :date ORDER BY r.date DESC ") })
+public class Refueling extends BaseEntity {
+    public static final class ByExistingConsumptionForDateNewestFirst {
+	public static final String NAME = "Refueling.byExistingConsumptionForDate";
+	public static final String PARAM_NAME = "Refueling.byExistingConsumptionForDateParam";
+    }
+
+    // TODO add multi vehicle-ancy
     public static final class Builder {
 	private Refueling refueling = new Refueling();
 
@@ -56,8 +64,8 @@ public class Refueling extends BaseEntity {
 	    return this;
 	}
 
-	public Builder user(User user) {
-	    this.refueling.setUser(user);
+	public Builder vehicle(Vehicle vehicle) {
+	    this.refueling.setVehicle(vehicle);
 	    return this;
 	}
 
@@ -84,21 +92,21 @@ public class Refueling extends BaseEntity {
     @Column
     private String memo;
 
-    @Column
+    @Column(nullable = false)
     private Boolean isFillUp;
 
     @Column
     private FuelConsumption consumption;
 
     @Column(nullable = false)
-    private User user;
+    private Vehicle vehicle;
 
-    public User getUser() {
-	return user;
+    public Vehicle getVehicle() {
+	return vehicle;
     }
 
-    public void setUser(User user) {
-	this.user = user;
+    public void setVehicle(Vehicle vehicle) {
+	this.vehicle = vehicle;
     }
 
     public FuelConsumption getConsumption() {

@@ -11,6 +11,8 @@ import javax.ws.rs.core.Response;
 
 import biz.suckow.fuel.business.refueling.control.RefuelingService;
 import biz.suckow.fuel.business.refueling.entity.RefuelingMeta;
+import biz.suckow.fuel.business.vehicle.boundary.VehicleLocator;
+import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Path("refuelings")
 @Stateless
@@ -18,72 +20,50 @@ public class RefuelingResource {
     @Inject
     private RefuelingService service;
 
-    /**
-     * Adds a refueling. Representation of use case: Fill tank completely at gas
-     * station.
-     * 
-     * @param username
-     * @param meta
-     * @return
-     */
+    @Inject
+    private VehicleLocator vehicleService;
+
     @POST
-    @Path("/station/full/{username}")
+    @Path("/station/full/{username}/{vehiclename}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response refuel(@PathParam("username") String username,
-	    RefuelingMeta meta) {
-	this.service.fullTankRefuel(username, meta.kilometers,
+	    @PathParam("vehiclename") String vehiclename, RefuelingMeta meta) {
+	Vehicle vehicle = this.vehicleService.getVehicle(username, vehiclename);
+	this.service.fullTankRefuel(vehicle, meta.kilometers,
 		meta.litresToTank, meta.eurosPerLitre, meta.date, meta.memo);
 	return Response.ok().build();
     }
 
-    /**
-     * Adds a refueling. Representation of use case: Fill tank partially at gas
-     * station.
-     * 
-     * @param username
-     * @param meta
-     * @return
-     */
     @POST
-    @Path("/station/partial/{username}")
+    @Path("/station/partial/{username}/{vehiclename}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response partialRefuel(@PathParam("username") String username,
-	    RefuelingMeta meta) {
-	this.service.partialTankRefuel(username, meta.litresToTank,
+	    @PathParam("vehiclename") String vehiclename, RefuelingMeta meta) {
+	Vehicle vehicle = this.vehicleService.getVehicle(username, vehiclename);
+	this.service.partialTankRefuel(vehicle, meta.litresToTank,
 		meta.eurosPerLitre, meta.date, meta.memo);
 	return Response.ok().build();
     }
 
-    /**
-     * Adds a refueling. Representation of use case: from station fills tank and
-     * stock.
-     * 
-     * @param username
-     * @param meta
-     */
     @POST
-    @Path("/station/all/{username}")
+    @Path("/station/all/{username}/{vehiclename}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response toTankAndStock(@PathParam("username") String username,
-	    RefuelingMeta meta) {
-	this.service.fullTankAndStockRefuel(username, meta.kilometers,
+	    @PathParam("vehiclename") String vehiclename, RefuelingMeta meta) {
+	Vehicle vehicle = this.vehicleService.getVehicle(username, vehiclename);
+	this.service.fullTankAndStockRefuel(vehicle, meta.kilometers,
 		meta.litresToTank, meta.litresToStock, meta.eurosPerLitre,
 		meta.date, meta.memo);
 	return Response.ok().build();
     }
 
-    /**
-     * Adds a refueling. Representation of use case: from station fills stock.
-     * 
-     * @param username
-     * @param meta
-     */
     @POST
-    @Path("/station/stock/{username}")
+    @Path("/station/stock/{username}/{vehiclename}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response refuelStock(@PathParam("username") String username,
-	    RefuelingMeta meta) {
-	this.service.stockRefuel(username, meta.litresToStock,
+	    @PathParam("vehiclename") String vehiclename, RefuelingMeta meta) {
+	Vehicle vehicle = this.vehicleService.getVehicle(username, vehiclename);
+	this.service.stockRefuel(vehicle, meta.litresToStock,
 		meta.eurosPerLitre, meta.date, meta.memo);
 	return Response.ok().build();
     }

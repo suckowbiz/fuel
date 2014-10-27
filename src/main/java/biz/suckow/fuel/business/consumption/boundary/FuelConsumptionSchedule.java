@@ -36,6 +36,7 @@ public class FuelConsumptionSchedule {
 
     AtomicBoolean isRunning = new AtomicBoolean(false);
 
+    // TODO test
     @Schedule(hour = "*", minute = "*", second = "*/30", persistent = false)
     public void timer() {
 	if (this.isRunning.get()) {
@@ -47,9 +48,9 @@ public class FuelConsumptionSchedule {
 	List<Refueling> refuelings = Collections.emptyList();
 	try {
 	    refuelings = this.locator
-		    .getRefuelingsMissingConsumptionOldestFirst();
+		    .getVehiclesMissingConsumptionOldestFirst();
 	    for (Refueling refueling : refuelings) {
-		Double result = this.maths.calculate();
+		Double result = this.maths.calculate(refueling);
 
 		FuelConsumption consumption = new FuelConsumption();
 		consumption.setDate(refueling.getDate());
