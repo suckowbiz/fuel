@@ -13,17 +13,17 @@ import biz.suckow.fuel.business.app.entity.BaseEntity;
 public class FuelConsumption extends BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date date;
+    private Date dateComputed;
 
     @Column(nullable = false)
     private Double litresPerKilometre;
 
-    public Date getDate() {
-	return date;
+    public Date getDateComputed() {
+	return dateComputed;
     }
 
-    public void setDate(Date date) {
-	this.date = date;
+    public void setDateComputed(Date dateComputed) {
+	this.dateComputed = dateComputed;
     }
 
     public Double getLitresPerKilometre() {

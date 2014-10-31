@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -16,21 +15,20 @@ import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuel.business.refueling.entity.FuelStock;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.user.entity.User;
+import com.google.common.collect.Lists;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
-// TEST
+// TODO test
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehiclename",
-	"user" }))
-@NamedQueries({
-@NamedQuery(name = Vehicle.ByUserAndVehicle.NAME, query = "FROM Vehicle v WHERE LOWER(v.vehiclename) = LOWER(:"
-	+ Vehicle.ByUserAndVehicle.PARAM_VEHICLENAME_NAME
-	+ ") AND LOWER(v.user.username = :"
-	+ Vehicle.ByUserAndVehicle.PARAM_USERNAME_NAME + ")"),
-	@NamedQuery(name = Vehicle.BY_MISSING_CONSUMPTION_OLDEST_FIRST, query = "FROM Refueling r WHERE r.isFillUp = false ORDER BY r.date ASC")})
+//@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehiclename",
+//	"user.username" }))
+@NamedQuery(name = Vehicle.QueryByUserAndVehicle.NAME, query = "FROM Vehicle v WHERE LOWER(v.vehiclename) = LOWER(:"
+	+ Vehicle.QueryByUserAndVehicle.PARAM_VEHICLENAME_NAME
+	+ ") AND LOWER(v.user.username) = :"
+	+ Vehicle.QueryByUserAndVehicle.PARAM_USERNAME_NAME)
 public class Vehicle extends BaseEntity {
-    public static final String BY_MISSING_CONSUMPTION_OLDEST_FIRST = "Vehicle.byMissingConsumptionOldestFirst";
-
-    public static final class ByUserAndVehicle {
+    public static final class QueryByUserAndVehicle {
 	public static final String NAME = "Vehicle.ByUserAndVehicle";
 	public static final String PARAM_USERNAME_NAME = "username";
 	public static final String PARAM_VEHICLENAME_NAME = "vehiclename";
@@ -39,18 +37,23 @@ public class Vehicle extends BaseEntity {
     @Column(nullable = false)
     private String vehiclename;
 
-    @Column(nullable = false)
+    @ManyToOne(optional = false)
     private User user;
 
-    @Column
+    @OneToOne
     private FuelStock fuelStock;
 
     @OneToMany
-    private List<Refueling> refuelings = Collections.emptyList();
+    private List<Refueling> refuelings;
 
     @OneToMany
-    private List<FuelConsumption> fuelConsumptions = Collections.emptyList();
+    private List<FuelConsumption> fuelConsumptions;
 
+    public Vehicle() {
+        this.fuelConsumptions = Lists.newArrayList();
+        this.refuelings = Lists.newArrayList();
+    }
+    
     public void addFuelConsuption(FuelConsumption consumption) {
 	this.fuelConsumptions.add(consumption);
     }

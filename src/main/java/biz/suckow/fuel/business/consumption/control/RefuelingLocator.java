@@ -15,14 +15,22 @@ public class RefuelingLocator {
     private EntityManager em;
 
     // TODO test
+    public List<Refueling> getRefuelingsMissingConsumptionOldestFirst() {
+	@SuppressWarnings("unchecked")
+	List<Refueling> result = this.em.createNamedQuery(
+		Refueling.BY_MISSING_CONSUMPTION_OLDEST_FIRST).getResultList();
+	return result;
+    }
+
+    // TODO test
     public Optional<Refueling> get(Refueling refueling) {
 	@SuppressWarnings("unchecked")
 	List<Refueling> refuelings = this.em
 		.createNamedQuery(
-			Refueling.ByExistingConsumptionForDateNewestFirst.NAME)
+			Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME)
 		.setParameter(
-			Refueling.ByExistingConsumptionForDateNewestFirst.PARAM_NAME,
-			refueling.getDate(), TemporalType.TIMESTAMP)
+			Refueling.QueryByExistingConsumptionForDateNewestFirst.PARAM_NAME,
+			refueling.getDateRefueled(), TemporalType.TIMESTAMP)
 		.getResultList();
 	Optional<Refueling> result = Optional.absent();
 	if (refuelings.size() > 0) {

@@ -17,11 +17,11 @@ import biz.suckow.fuel.business.consumption.control.FuelConsumptionMaths;
 import biz.suckow.fuel.business.consumption.control.RefuelingLocator;
 import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
-import biz.suckow.fuel.business.user.entity.User;
+import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Startup
 @Singleton
-public class FuelConsumptionSchedule {
+public class FuelConsumptionScheduler {
     @Inject
     private RefuelingLocator locator;
 
@@ -48,21 +48,21 @@ public class FuelConsumptionSchedule {
 	List<Refueling> refuelings = Collections.emptyList();
 	try {
 	    refuelings = this.locator
-		    .getVehiclesMissingConsumptionOldestFirst();
+		    .getRefuelingsMissingConsumptionOldestFirst();
 	    for (Refueling refueling : refuelings) {
 		Double result = this.maths.calculate(refueling);
 
 		FuelConsumption consumption = new FuelConsumption();
-		consumption.setDate(refueling.getDate());
+		consumption.setDateComputed(refueling.getDateRefueled());
 		consumption.setLitresPerKilometre(result);
 		em.persist(consumption);
 
 		refueling.setConsumption(consumption);
 		em.merge(refueling);
 
-		User user = refueling.getUser();
-		user.addFuelConsuption(consumption);
-		em.merge(user);
+		Vehicle vehicle = refueling.getVehicle();
+		vehicle.addFuelConsuption(consumption);
+		em.merge(vehicle);
 	    }
 	} catch (Exception e) {
 	    this.logger.log(Level.SEVERE, "Fuel consumption timer crashed.", e);

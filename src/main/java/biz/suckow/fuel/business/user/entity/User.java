@@ -11,22 +11,28 @@ import biz.suckow.fuel.business.app.entity.BaseEntity;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 import com.google.common.collect.Lists;
+import javax.persistence.Table;
 
 @Entity
-@NamedQuery(name = User.QUERY_BY_USERNAME_CASE_IGNORE.NAME, query = "FROM User u "
+@Table(name = "\"User\"")
+@NamedQuery(name = User.QueryByUsernameCaseIgnore.NAME, query = "FROM User u "
 	+ "WHERE LOWER(u.username) = LOWER(:"
-	+ User.QUERY_BY_USERNAME_CASE_IGNORE.PARAM_NAME + ")")
+	+ User.QueryByUsernameCaseIgnore.PARAM_NAME + ")")
 public class User extends BaseEntity {
-    public static final class QUERY_BY_USERNAME_CASE_IGNORE {
+    public static final class QueryByUsernameCaseIgnore {
 	public static final String NAME = "User.byUsername";
 	public static final String PARAM_NAME = "username";
     }
 
     @OneToMany
-    private List<Vehicle> vehicles = Lists.newArrayList();
+    private final List<Vehicle> vehicles;
 
     @Column(unique = true, nullable = false)
     private String username;
+
+    public User() {
+        this.vehicles = Lists.newArrayList();
+    }
 
     public String getUsername() {
 	return username;

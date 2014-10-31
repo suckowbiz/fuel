@@ -15,27 +15,31 @@ import javax.validation.constraints.NotNull;
 import biz.suckow.fuel.business.app.entity.BaseEntity;
 import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 @Entity
 @NamedQueries({
-
-@NamedQuery(name = Refueling.ByExistingConsumptionForDateNewestFirst.NAME, query = "FROM Refueling r WHERE r.isFillUp = true "
-	+ "AND r.consumption IS NOT NULL AND r.date < :date ORDER BY r.date DESC ") })
+	@NamedQuery(name = Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME, query = "FROM Refueling r WHERE r.isFillUp = true "
+		+ "AND r.consumption IS NOT NULL AND r.dateRefueled < :date ORDER BY r.dateRefueled DESC "),
+	@NamedQuery(name = Refueling.BY_MISSING_CONSUMPTION_OLDEST_FIRST, query = "FROM Refueling r WHERE r.isFillUp = false ORDER BY r.dateRefueled ASC") })
 public class Refueling extends BaseEntity {
-    public static final class ByExistingConsumptionForDateNewestFirst {
+    public static final String BY_MISSING_CONSUMPTION_OLDEST_FIRST = "Vehicle.byMissingConsumptionOldestFirst";
+
+    public static final class QueryByExistingConsumptionForDateNewestFirst {
 	public static final String NAME = "Refueling.byExistingConsumptionForDate";
 	public static final String PARAM_NAME = "Refueling.byExistingConsumptionForDateParam";
     }
 
-    // TODO add multi vehicle-ancy
     public static final class Builder {
-	private Refueling refueling = new Refueling();
+	private final Refueling refueling = new Refueling();
 
 	/**
 	 * Standard constructor to initiate optional/ default values.
 	 */
 	public Builder() {
-	    this.refueling.setDate(new Date());
+	    this.refueling.setDateRefueled(new Date());
 	    this.refueling.setIsFillUp(false);
 	}
 
@@ -55,7 +59,7 @@ public class Refueling extends BaseEntity {
 	}
 
 	public Builder date(Date date) {
-	    this.refueling.setDate(date);
+	    this.refueling.setDateRefueled(date);
 	    return this;
 	}
 
@@ -77,7 +81,7 @@ public class Refueling extends BaseEntity {
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date date;
+    private Date dateRefueled;
 
     @DecimalMin(value = "0.009", inclusive = true)
     @NotNull
@@ -95,10 +99,10 @@ public class Refueling extends BaseEntity {
     @Column(nullable = false)
     private Boolean isFillUp;
 
-    @Column
+    @OneToOne
     private FuelConsumption consumption;
 
-    @Column(nullable = false)
+    @ManyToOne
     private Vehicle vehicle;
 
     public Vehicle getVehicle() {
@@ -117,7 +121,6 @@ public class Refueling extends BaseEntity {
 	this.consumption = consumption;
     }
 
-    @Column
     public Boolean getIsFillUp() {
 	return isFillUp;
     }
@@ -126,12 +129,12 @@ public class Refueling extends BaseEntity {
 	this.isFillUp = isFillUp;
     }
 
-    public Date getDate() {
-	return date;
+    public Date getDateRefueled() {
+	return dateRefueled;
     }
 
-    public void setDate(Date date) {
-	this.date = date;
+    public void setDateRefueled(Date dateRefueled) {
+	this.dateRefueled = dateRefueled;
     }
 
     public Double getEurosPerLitre() {

@@ -16,7 +16,7 @@ public class StockRelease extends BaseEntity {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date date;
+    private Date dateReleased;
 
     public Double getLitres() {
 	return litres;
@@ -26,11 +26,11 @@ public class StockRelease extends BaseEntity {
 	this.litres = litres;
     }
 
-    public Date getDate() {
-	return date;
+    public Date getDateReleased() {
+	return dateReleased;
     }
 
-    public void setDate(Date date) {
-	this.date = date;
+    public void setDateReleased(Date dateReleased) {
+	this.dateReleased = dateReleased;
     }
 }

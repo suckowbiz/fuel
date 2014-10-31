@@ -14,14 +14,14 @@ public class FuelConsumptionMaths {
 
     public Double calculate(Refueling refueling) {
 	// get right date interval
-	Date rightBorder = refueling.getDate();
+	Date rightBorder = refueling.getDateRefueled();
 
 	// get left date interval
 	Date leftBorder = (Date) this.em
-		.createNamedQuery(Refueling.ByExistingConsumptionForDateNewestFirst.NAME)
+		.createNamedQuery(Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME)
 		.setParameter(
-			Refueling.ByExistingConsumptionForDateNewestFirst.PARAM_NAME,
-			refueling.getDate(), TemporalType.TIMESTAMP)
+			Refueling.QueryByExistingConsumptionForDateNewestFirst.PARAM_NAME,
+			refueling.getDateRefueled(), TemporalType.TIMESTAMP)
 		.getResultList();
 
 	// get all partial refuelings within interval

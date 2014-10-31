@@ -15,8 +15,8 @@ public class UserService extends BaseEntity {
     // TODO write test
     public User getUser(String username) {
 	User result = (User) this.em
-		.createNamedQuery(User.QUERY_BY_USERNAME_CASE_IGNORE.NAME)
-		.setParameter(User.QUERY_BY_USERNAME_CASE_IGNORE.PARAM_NAME,
+		.createNamedQuery(User.QueryByUsernameCaseIgnore.NAME)
+		.setParameter(User.QueryByUsernameCaseIgnore.PARAM_NAME,
 			username).getSingleResult();
 	return result;
     }
