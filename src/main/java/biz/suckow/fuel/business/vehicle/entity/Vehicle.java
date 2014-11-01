@@ -1,36 +1,38 @@
 package biz.suckow.fuel.business.vehicle.entity;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import biz.suckow.fuel.business.app.entity.BaseEntity;
 import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
+import biz.suckow.fuel.business.owner.entity.Owner;
 import biz.suckow.fuel.business.refueling.entity.FuelStock;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
-import biz.suckow.fuel.business.user.entity.User;
+
 import com.google.common.collect.Lists;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 // TODO test
 @Entity
-//@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehiclename",
-//	"user.username" }))
-@NamedQuery(name = Vehicle.QueryByUserAndVehicle.NAME, query = "FROM Vehicle v WHERE LOWER(v.vehiclename) = LOWER(:"
-	+ Vehicle.QueryByUserAndVehicle.PARAM_VEHICLENAME_NAME
-	+ ") AND LOWER(v.user.username) = :"
-	+ Vehicle.QueryByUserAndVehicle.PARAM_USERNAME_NAME)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehiclename",
+	"owner_id" }))
+@NamedQuery(name = Vehicle.QueryByOwnerAndVehicle.NAME, query = "SELECT v FROM Vehicle v WHERE LOWER(v.vehiclename) = LOWER(:"
+	+ Vehicle.QueryByOwnerAndVehicle.PARAM_VEHICLENAME_NAME
+	+ ") AND LOWER(v.owner.ownername) = :"
+	+ Vehicle.QueryByOwnerAndVehicle.PARAM_OWNERNAME_NAME)
 public class Vehicle extends BaseEntity {
-    public static final class QueryByUserAndVehicle {
-	public static final String NAME = "Vehicle.ByUserAndVehicle";
-	public static final String PARAM_USERNAME_NAME = "username";
+    private static final long serialVersionUID = -5360751385120611439L;
+
+    public static final class QueryByOwnerAndVehicle {
+	public static final String NAME = "Vehicle.ByOwnerAndVehicle";
+	public static final String PARAM_OWNERNAME_NAME = "ownername";
 	public static final String PARAM_VEHICLENAME_NAME = "vehiclename";
     }
 
@@ -38,22 +40,22 @@ public class Vehicle extends BaseEntity {
     private String vehiclename;
 
     @ManyToOne(optional = false)
-    private User user;
+    private Owner owner;
 
     @OneToOne
     private FuelStock fuelStock;
 
-    @OneToMany
+    @OneToMany(mappedBy = "vehicle")
     private List<Refueling> refuelings;
 
     @OneToMany
     private List<FuelConsumption> fuelConsumptions;
 
     public Vehicle() {
-        this.fuelConsumptions = Lists.newArrayList();
-        this.refuelings = Lists.newArrayList();
+	this.fuelConsumptions = Lists.newArrayList();
+	this.refuelings = Lists.newArrayList();
     }
-    
+
     public void addFuelConsuption(FuelConsumption consumption) {
 	this.fuelConsumptions.add(consumption);
     }

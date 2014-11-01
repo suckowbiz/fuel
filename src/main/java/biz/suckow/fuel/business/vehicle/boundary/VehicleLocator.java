@@ -10,12 +10,12 @@ public class VehicleLocator {
     private EntityManager em;
 
     // TODO test
-    public Vehicle getVehicle(String username, String vehiclename) {
+    public Vehicle getVehicle(String ownername, String vehiclename) {
 	Vehicle result = (Vehicle) this.em
-		.createNamedQuery(Vehicle.QueryByUserAndVehicle.NAME)
-		.setParameter(Vehicle.QueryByUserAndVehicle.PARAM_USERNAME_NAME,
-			username)
-		.setParameter(Vehicle.QueryByUserAndVehicle.PARAM_VEHICLENAME_NAME,
+		.createNamedQuery(Vehicle.QueryByOwnerAndVehicle.NAME)
+		.setParameter(Vehicle.QueryByOwnerAndVehicle.PARAM_OWNERNAME_NAME,
+			ownername)
+		.setParameter(Vehicle.QueryByOwnerAndVehicle.PARAM_VEHICLENAME_NAME,
 			vehiclename).getSingleResult();
 	return result;
     }

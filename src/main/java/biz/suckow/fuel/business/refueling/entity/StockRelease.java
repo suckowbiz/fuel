@@ -11,6 +11,8 @@ import biz.suckow.fuel.business.app.entity.BaseEntity;
 
 @Entity
 public class StockRelease extends BaseEntity {
+    private static final long serialVersionUID = 7021516650764717192L;
+
     @Column(nullable = false)
     private Double litres;
 

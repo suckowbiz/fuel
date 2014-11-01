@@ -11,6 +11,8 @@ import biz.suckow.fuel.business.app.entity.BaseEntity;
 
 @Entity
 public class FuelConsumption extends BaseEntity {
+    private static final long serialVersionUID = -6145466237775398192L;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date dateComputed;

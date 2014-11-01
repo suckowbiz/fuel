@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2014 tobias.
+ * Copyright 2014 Tobias Suckow.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@
 package biz.suckow.fuel.business.app.control;
 
 import java.util.logging.Logger;
+
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.persistence.EntityManager;
@@ -36,14 +37,14 @@ import javax.persistence.PersistenceContext;
 public class ExternalsFactory {
     @PersistenceContext
     private EntityManager em;
-    
+
     @Produces
     public EntityManager produceEntityManager() {
-        return this.em;
+	return this.em;
     }
-    
+
     @Produces
     public Logger procudeLogger(InjectionPoint ip) {
-        return Logger.getLogger(ip.getMember().getDeclaringClass().getName());
+	return Logger.getLogger(ip.getMember().getDeclaringClass().getName());
     }
 }

@@ -4,8 +4,10 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMin;
@@ -15,16 +17,15 @@ import javax.validation.constraints.NotNull;
 import biz.suckow.fuel.business.app.entity.BaseEntity;
 import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME, query = "FROM Refueling r WHERE r.isFillUp = true "
+	@NamedQuery(name = Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME, query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
 		+ "AND r.consumption IS NOT NULL AND r.dateRefueled < :date ORDER BY r.dateRefueled DESC "),
-	@NamedQuery(name = Refueling.BY_MISSING_CONSUMPTION_OLDEST_FIRST, query = "FROM Refueling r WHERE r.isFillUp = false ORDER BY r.dateRefueled ASC") })
+	@NamedQuery(name = Refueling.BY_MISSING_CONSUMPTION_OLDEST_FIRST, query = "SELECT r FROM Refueling r WHERE r.isFillUp = false ORDER BY r.dateRefueled ASC") })
 public class Refueling extends BaseEntity {
+    private static final long serialVersionUID = 9175526663957115977L;
+
     public static final String BY_MISSING_CONSUMPTION_OLDEST_FIRST = "Vehicle.byMissingConsumptionOldestFirst";
 
     public static final class QueryByExistingConsumptionForDateNewestFirst {
