@@ -1,0 +1,2 @@
+1. Enable project specific save actions (right click project -> Properties -> Save Actions)
+2. Save file org.eclipse.jdt.ui.prefs to <project dir>/.settings/
