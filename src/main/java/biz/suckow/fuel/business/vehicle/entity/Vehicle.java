@@ -37,18 +37,18 @@ import com.google.common.collect.Lists;
 // TODO test
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehiclename",
-"owner_id" }))
+        "owner_id" }))
 @NamedQuery(name = Vehicle.QueryByOwnerAndVehicle.NAME, query = "SELECT v FROM Vehicle v WHERE LOWER(v.vehiclename) = LOWER(:"
-	+ Vehicle.QueryByOwnerAndVehicle.PARAM_VEHICLENAME_NAME
-	+ ") AND LOWER(v.owner.ownername) = :"
-	+ Vehicle.QueryByOwnerAndVehicle.PARAM_OWNERNAME_NAME)
+        + Vehicle.QueryByOwnerAndVehicle.PARAM_VEHICLENAME_NAME
+        + ") AND LOWER(v.owner.ownername) = :"
+        + Vehicle.QueryByOwnerAndVehicle.PARAM_OWNERNAME_NAME)
 public class Vehicle extends BaseEntity {
     private static final long serialVersionUID = -5360751385120611439L;
 
     public static final class QueryByOwnerAndVehicle {
-	public static final String NAME = "Vehicle.ByOwnerAndVehicle";
-	public static final String PARAM_OWNERNAME_NAME = "ownername";
-	public static final String PARAM_VEHICLENAME_NAME = "vehiclename";
+        public static final String NAME = "Vehicle.ByOwnerAndVehicle";
+        public static final String PARAM_OWNERNAME_NAME = "ownername";
+        public static final String PARAM_VEHICLENAME_NAME = "vehiclename";
     }
 
     @Column(nullable = false)
@@ -67,27 +67,27 @@ public class Vehicle extends BaseEntity {
     private List<FuelConsumption> fuelConsumptions;
 
     public Vehicle() {
-	this.fuelConsumptions = Lists.newArrayList();
-	this.refuelings = Lists.newArrayList();
+        this.fuelConsumptions = Lists.newArrayList();
+        this.refuelings = Lists.newArrayList();
     }
 
     public void addFuelConsuption(final FuelConsumption consumption) {
-	this.fuelConsumptions.add(consumption);
+        this.fuelConsumptions.add(consumption);
     }
 
     public void addRefueling(final Refueling refueling) {
-	this.refuelings.add(refueling);
+        this.refuelings.add(refueling);
     }
 
     public FuelStock getFuelStock() {
-	return this.fuelStock;
+        return this.fuelStock;
     }
 
     public List<Refueling> getRefuelings() {
-	return this.refuelings;
+        return this.refuelings;
     }
 
     public List<FuelConsumption> getFuelConsumptions() {
-	return this.fuelConsumptions;
+        return this.fuelConsumptions;
     }
 }
