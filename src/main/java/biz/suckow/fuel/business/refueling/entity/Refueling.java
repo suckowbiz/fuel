@@ -1,3 +1,18 @@
+/*
+ * Copyright 2014 Tobias Suckow.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package biz.suckow.fuel.business.refueling.entity;
 
 import java.util.Date;
@@ -20,9 +35,9 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME, query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
-		+ "AND r.consumption IS NOT NULL AND r.dateRefueled < :date ORDER BY r.dateRefueled DESC "),
-	@NamedQuery(name = Refueling.BY_MISSING_CONSUMPTION_OLDEST_FIRST, query = "SELECT r FROM Refueling r WHERE r.isFillUp = false ORDER BY r.dateRefueled ASC") })
+    @NamedQuery(name = Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME, query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
+	    + "AND r.consumption IS NOT NULL AND r.dateRefueled < :date ORDER BY r.dateRefueled DESC "),
+	    @NamedQuery(name = Refueling.BY_MISSING_CONSUMPTION_OLDEST_FIRST, query = "SELECT r FROM Refueling r WHERE r.isFillUp = false ORDER BY r.dateRefueled ASC") })
 public class Refueling extends BaseEntity {
     private static final long serialVersionUID = 9175526663957115977L;
 
@@ -44,32 +59,32 @@ public class Refueling extends BaseEntity {
 	    this.refueling.setIsFillUp(false);
 	}
 
-	public Builder eurosPerLitre(Double value) {
+	public Builder eurosPerLitre(final Double value) {
 	    this.refueling.setEurosPerLitre(value);
 	    return this;
 	}
 
-	public Builder litres(Double value) {
+	public Builder litres(final Double value) {
 	    this.refueling.setLitres(value);
 	    return this;
 	}
 
-	public Builder memo(String memo) {
+	public Builder memo(final String memo) {
 	    this.refueling.setMemo(memo);
 	    return this;
 	}
 
-	public Builder date(Date date) {
+	public Builder date(final Date date) {
 	    this.refueling.setDateRefueled(date);
 	    return this;
 	}
 
-	public Builder fillUp(boolean value) {
+	public Builder fillUp(final boolean value) {
 	    this.refueling.setIsFillUp(value);
 	    return this;
 	}
 
-	public Builder vehicle(Vehicle vehicle) {
+	public Builder vehicle(final Vehicle vehicle) {
 	    this.refueling.setVehicle(vehicle);
 	    return this;
 	}
@@ -107,58 +122,58 @@ public class Refueling extends BaseEntity {
     private Vehicle vehicle;
 
     public Vehicle getVehicle() {
-	return vehicle;
+	return this.vehicle;
     }
 
-    public void setVehicle(Vehicle vehicle) {
+    public void setVehicle(final Vehicle vehicle) {
 	this.vehicle = vehicle;
     }
 
     public FuelConsumption getConsumption() {
-	return consumption;
+	return this.consumption;
     }
 
-    public void setConsumption(FuelConsumption consumption) {
+    public void setConsumption(final FuelConsumption consumption) {
 	this.consumption = consumption;
     }
 
     public Boolean getIsFillUp() {
-	return isFillUp;
+	return this.isFillUp;
     }
 
-    public void setIsFillUp(Boolean isFillUp) {
+    public void setIsFillUp(final Boolean isFillUp) {
 	this.isFillUp = isFillUp;
     }
 
     public Date getDateRefueled() {
-	return dateRefueled;
+	return this.dateRefueled;
     }
 
-    public void setDateRefueled(Date dateRefueled) {
+    public void setDateRefueled(final Date dateRefueled) {
 	this.dateRefueled = dateRefueled;
     }
 
     public Double getEurosPerLitre() {
-	return eurosPerLitre;
+	return this.eurosPerLitre;
     }
 
-    public void setEurosPerLitre(Double eurosPerLitre) {
+    public void setEurosPerLitre(final Double eurosPerLitre) {
 	this.eurosPerLitre = eurosPerLitre;
     }
 
     public Double getLitres() {
-	return litres;
+	return this.litres;
     }
 
-    public void setLitres(Double litres) {
+    public void setLitres(final Double litres) {
 	this.litres = litres;
     }
 
     public String getMemo() {
-	return memo;
+	return this.memo;
     }
 
-    public void setMemo(String memo) {
+    public void setMemo(final String memo) {
 	this.memo = memo;
     }
 

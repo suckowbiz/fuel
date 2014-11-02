@@ -1,3 +1,18 @@
+/*
+ * Copyright 2014 Tobias Suckow.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package biz.suckow.fuel.business.vehicle.entity;
 
 import java.util.List;
@@ -22,7 +37,7 @@ import com.google.common.collect.Lists;
 // TODO test
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehiclename",
-	"owner_id" }))
+"owner_id" }))
 @NamedQuery(name = Vehicle.QueryByOwnerAndVehicle.NAME, query = "SELECT v FROM Vehicle v WHERE LOWER(v.vehiclename) = LOWER(:"
 	+ Vehicle.QueryByOwnerAndVehicle.PARAM_VEHICLENAME_NAME
 	+ ") AND LOWER(v.owner.ownername) = :"
@@ -56,23 +71,23 @@ public class Vehicle extends BaseEntity {
 	this.refuelings = Lists.newArrayList();
     }
 
-    public void addFuelConsuption(FuelConsumption consumption) {
+    public void addFuelConsuption(final FuelConsumption consumption) {
 	this.fuelConsumptions.add(consumption);
     }
 
-    public void addRefueling(Refueling refueling) {
+    public void addRefueling(final Refueling refueling) {
 	this.refuelings.add(refueling);
     }
 
     public FuelStock getFuelStock() {
-	return fuelStock;
+	return this.fuelStock;
     }
 
     public List<Refueling> getRefuelings() {
-	return refuelings;
+	return this.refuelings;
     }
 
     public List<FuelConsumption> getFuelConsumptions() {
-	return fuelConsumptions;
+	return this.fuelConsumptions;
     }
 }
