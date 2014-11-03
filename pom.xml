@@ -1,62 +1,220 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>biz.suckow</groupId>
-    <artifactId>fuel</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
-    <dependencies>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <version>7.0</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- Initially added to have Optionals support. -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${version.guava}</version>
-        </dependency>
-        <!-- The core O/RM functionality as provided by Hibernate -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>4.3.6.Final</version>
-        </dependency>
-        <!-- Hibernate O/RM implementation of the JPA specification -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>4.3.1.Final</version>
-        </dependency>
-        <!-- Hibernate's Bean Validation (JSR-303) reference implementation. -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>5.1.2.Final</version>
-        </dependency>
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>biz.suckow</groupId>
+	<artifactId>fuel</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
+	<organization>
+		<name>Suckow.biz</name>
+		<url>http://suckow.biz</url>
+	</organization>
+	<scm>
+		<url>https://bitbucket.org/tsuckow/fuel</url>
+		<connection>git@bitbucket.org:tsuckow/fuel.git</connection>
+		<developerConnection>git@bitbucket.org:tsuckow/fuel.git</developerConnection>
+		<tag>master</tag>
+	</scm>
+	<ciManagement>
+		<system>Drone.io</system>
+		<url>https://drone.io/hook?id=bitbucket.org/tsuckow/fuel&amp;token=OapGLpukgpXN7nAzykbW</url>
+	</ciManagement>
+	<issueManagement>
+		<url>https://bitbucket.org/tsuckow/fuel/issues</url>
+		<system>Bitbucket.org</system>
+	</issueManagement>
+	<name>fuel</name>
+	<description>A software to track fuel consumtions of vehicles.</description>
+	<inceptionYear>2014</inceptionYear>
+	<dependencyManagement>
+		<dependencies>
+			<!-- Have integration tests. Import the BOM, or version matrix, for Arquillian’s 
+				transitive dependencies -->
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>${version.arquillian}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	<dependencies>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<!-- Intentionally added to have Optionals support. -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>${version.guava}</version>
+		</dependency>
+		<!-- The core O/RM functionality as provided by Hibernate -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>4.3.6.Final</version>
+		</dependency>
+		<!-- Hibernate O/RM implementation of the JPA specification -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>4.3.1.Final</version>
+		</dependency>
+		<!-- Hibernate's Bean Validation (JSR-303) reference implementation. -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.1.2.Final</version>
+		</dependency>
+		<!-- Intentionally added to test with TestNG. -->
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>${version.testng}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Arquillian TestNG integration. -->
+		<dependency>
+			<groupId>org.jboss.arquillian.testng</groupId>
+			<artifactId>arquillian-testng-container</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Set up Arquillian is a pain so shrinkwrap resolver helps by slurping 
+			dependencies. -->
+		<dependency>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-depchain</artifactId>
+			<!-- <version>${version.shrinkwrap-resolver}</version> -->
+			<scope>test</scope>
+			<type>pom</type>
+		</dependency>
+		<!-- The dependencies for embedded Wildfly8.1 to complete Arquillian. -->
+		<!-- https://docs.jboss.org/author/display/ARQ/WildFly+8.1.0+-+Embedded -->
+		<dependency>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-arquillian-container-embedded</artifactId>
+			<version>${version.wildfly-arquillian}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- maybe better use a managed container. see arquillian config .xml -->
+		<dependency>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-embedded</artifactId>
+			<version>${version.wildfly-arquillian}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- My testing requires mocking. -->
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>${version.easymock}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${version.maven-compiler-plugin}</version>
+				<configuration>
+					<showDeprecation>true</showDeprecation>
+				</configuration>
+			</plugin>
+			<!-- Added to support integration tests during $ mvn verify -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>${version.maven-failsafe-plugin}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<!-- Fork every test because it will launch a separate AS instance -->
+					<forkMode>always</forkMode>
+					<systemPropertyVariables>
+						<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+						<jboss.home>${project.basedir}/target/wildfly-8.1.0.Final</jboss.home>
+						<module.path>${project.basedir}/target/wildfly-8.1.0.Final/modules</module.path>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+			<!-- Added to support execution of unit test during $ mvn test -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${version.maven-surefire-plugin}</version>
+			</plugin>
+			<!-- Intentionally added to prepare wildfly for integration tests. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>${version.maven-dependency-plugin}</version>
+				<executions>
+					<execution>
+						<id>unpack</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.wildfly</groupId>
+									<artifactId>wildfly-dist</artifactId>
+									<version>8.1.0.Final</version>
+									<type>zip</type>
+									<overWrite>false</overWrite>
+									<outputDirectory>target</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 
-    </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <!-- Report use of deprecatet APIs -->
-                    <showDeprecation>true</showDeprecation>
-                </configuration>
-            </plugin>
-        </plugins>
-        <finalName>fuel</finalName>
-    </build>
-    <properties>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
-        <failOnMissingWebXml>false</failOnMissingWebXml>
-        <version.guava>18.0</version.guava>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+		<finalName>fuel</finalName>
+	</build>
+	<developers>
+		<developer>
+			<name>Tobias Suckow</name>
+			<email>tobias@suckow.biz</email>
+		</developer>
+	</developers>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<distribution>repo</distribution>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+		</license>
+	</licenses>
+	<properties>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<failOnMissingWebXml>false</failOnMissingWebXml>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+		<version.guava>18.0</version.guava>
+		<version.arquillian>1.1.5.Final</version.arquillian>
+		<version.easymock>3.2</version.easymock>
+		<version.maven-compiler-plugin>2.3.2</version.maven-compiler-plugin>
+		<version.maven-dependency-plugin>2.9</version.maven-dependency-plugin>
+		<version.maven-surefire-plugin>2.17</version.maven-surefire-plugin>
+		<version.maven-failsafe-plugin>2.17</version.maven-failsafe-plugin>
+		<version.maven-war-plugin>2.1.1</version.maven-war-plugin>
+		<version.shrinkwrap-resolver>2.1.1</version.shrinkwrap-resolver>
+		<version.testng>6.8.1</version.testng>
+		<version.wildfly-arquillian>8.1.0.Final</version.wildfly-arquillian>
+		<version.wildfly-dist>8.1.0.Final</version.wildfly-dist>
+	</properties>
 </project>
