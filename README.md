@@ -1,6 +1,9 @@
 #Development
 ##Tests
-Tests are triggered manually (see below) or automatically ([drone.io](drone.io)): [![Build Status](https://drone.io/bitbucket.org/tsuckow/fuel/status.png)](https://drone.io/bitbucket.org/tsuckow/fuel/latest)
+Tests are triggered automatically on [drone.io](drone.io) but can be triggered manually as well (see below).
+
+	[![Build Status](https://drone.io/bitbucket.org/tsuckow/fuel/status.png)](https://drone.io/bitbucket.org/tsuckow/fuel/latest)
+
 ###Unit Tests
 Unit tests are supported by [Surefire Plugin](http://maven.apache.org/surefire/maven-surefire-plugin/). To run Unit Tets use IDE or invoke:
 
