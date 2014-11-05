@@ -32,7 +32,7 @@ public class ExternalsFactory {
     }
 
     @Produces
-    public Logger procudeLogger(final InjectionPoint ip) {
+    public Logger produceLogger(final InjectionPoint ip) {
 	return Logger.getLogger(ip.getMember().getDeclaringClass().getName());
     }
 }

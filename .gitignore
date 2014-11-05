@@ -4,5 +4,4 @@ target/
 .settings
 .tern-project
 nb-configuration.xml
-src/test/
 test-output
