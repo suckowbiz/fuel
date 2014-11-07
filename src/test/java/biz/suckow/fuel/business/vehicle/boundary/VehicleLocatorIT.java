@@ -13,6 +13,8 @@ import biz.suckow.fuel.business.ArquillianBase;
 import biz.suckow.fuel.business.owner.entity.Owner;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
+import com.google.common.base.Optional;
+
 public class VehicleLocatorIT extends ArquillianBase {
     @Inject
     private EntityManager em;
@@ -22,7 +24,7 @@ public class VehicleLocatorIT extends ArquillianBase {
 
     @Test
     @Transactional(TransactionMode.ROLLBACK)
-    public void stest() {
+    public void verifyVehicleFetchingSucceeds() {
         final Owner owner = new Owner().setOwnername("duke");
         this.em.persist(owner);
 
@@ -30,12 +32,21 @@ public class VehicleLocatorIT extends ArquillianBase {
                 "duke-bike");
         this.em.persist(vehicle);
 
-        final Vehicle actualResult = this.cut.getVehicle("duke", "duke-bike");
+        final Vehicle actualResult = this.cut.getVehicle("duke", "duke-bike")
+                .get();
         MatcherAssert.assertThat(actualResult,
                 Matchers.not(Matchers.nullValue()));
         MatcherAssert.assertThat(actualResult.getId(),
                 Matchers.not(Matchers.nullValue()));
         MatcherAssert.assertThat(actualResult.getId(),
                 Matchers.equalTo(vehicle.getId()));
+    }
+
+    @Test
+    public void verifyVehicleFetchingFails() {
+        final Optional<Vehicle> possibleVehicle = this.cut.getVehicle("duke",
+                "duke-bike");
+        MatcherAssert.assertThat(possibleVehicle.isPresent(),
+                Matchers.is(false));
     }
 }

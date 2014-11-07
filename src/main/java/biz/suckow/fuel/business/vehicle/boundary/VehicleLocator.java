@@ -16,24 +16,33 @@
 package biz.suckow.fuel.business.vehicle.boundary;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
+
+import com.google.common.base.Optional;
 
 public class VehicleLocator {
     @PersistenceContext
     private EntityManager em;
 
-    // TODO test
-    public Vehicle getVehicle(final String ownername, final String vehiclename) {
-	final Vehicle result = (Vehicle) this.em
-		.createNamedQuery(Vehicle.QueryByOwnerAndVehicle.NAME)
-		.setParameter(
-			Vehicle.QueryByOwnerAndVehicle.PARAM_OWNERNAME_NAME,
-			ownername)
-			.setParameter(
-				Vehicle.QueryByOwnerAndVehicle.PARAM_VEHICLENAME_NAME,
-				vehiclename).getSingleResult();
-	return result;
+    public Optional<Vehicle> getVehicle(final String ownername,
+            final String vehiclename) {
+        Vehicle result = null;
+
+        try {
+            result = (Vehicle) this.em
+                    .createNamedQuery(Vehicle.QueryByOwnerAndVehicle.NAME)
+                    .setParameter(
+                            Vehicle.QueryByOwnerAndVehicle.PARAM_OWNERNAME_NAME,
+                            ownername)
+                    .setParameter(
+                            Vehicle.QueryByOwnerAndVehicle.PARAM_VEHICLENAME_NAME,
+                            vehiclename).getSingleResult();
+        } catch (final NoResultException e) {
+            /* NOP */
+        }
+        return Optional.fromNullable(result);
     }
 }
