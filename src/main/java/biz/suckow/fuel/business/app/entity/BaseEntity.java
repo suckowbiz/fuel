@@ -44,20 +44,24 @@ public abstract class BaseEntity implements Serializable {
 
     @PrePersist
     private void addCtime() {
-	this.ctime = new Date();
+        this.ctime = new Date();
     }
 
     @PreUpdate
     private void updateUtime() {
-	this.utime = new Date();
+        this.utime = new Date();
     }
 
     public Date getCTime() {
-	return this.ctime;
+        return this.ctime;
     }
 
     public Date getUtime() {
-	return this.utime;
+        return this.utime;
+    }
+
+    public Long getId() {
+        return this.id;
     }
 
 }

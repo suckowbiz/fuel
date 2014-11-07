@@ -15,14 +15,13 @@
  */
 package biz.suckow.fuel.business.refueling.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
 import biz.suckow.fuel.business.app.entity.BaseEntity;
-
-import com.google.common.collect.Lists;
 
 @Entity
 public class FuelStock extends BaseEntity {
@@ -35,24 +34,24 @@ public class FuelStock extends BaseEntity {
     private List<StockRelease> stockReleases;
 
     public FuelStock() {
-	this.stockReleases = Lists.newArrayList();
-	this.refuelings = Lists.newArrayList();
+        this.stockReleases = new ArrayList<>();
+        this.refuelings = new ArrayList<>();
     }
 
     public void addRefueling(final Refueling refueling) {
-	this.refuelings.add(refueling);
+        this.refuelings.add(refueling);
     }
 
     public void addStockRelease(final StockRelease out) {
-	this.stockReleases.add(out);
+        this.stockReleases.add(out);
     }
 
     public List<Refueling> getRefuelings() {
-	return this.refuelings;
+        return this.refuelings;
     }
 
     public List<StockRelease> getStockReleases() {
-	return this.stockReleases;
+        return this.stockReleases;
     }
 
 }

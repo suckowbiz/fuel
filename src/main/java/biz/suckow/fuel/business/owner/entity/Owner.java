@@ -15,6 +15,7 @@
  */
 package biz.suckow.fuel.business.owner.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -25,18 +26,16 @@ import javax.persistence.OneToMany;
 import biz.suckow.fuel.business.app.entity.BaseEntity;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
-import com.google.common.collect.Lists;
-
 @Entity
 @NamedQuery(name = Owner.QueryByOwnerameCaseIgnore.NAME, query = "SELECT o FROM Owner o "
-	+ "WHERE LOWER(o.ownername) = LOWER(:"
-	+ Owner.QueryByOwnerameCaseIgnore.PARAM_NAME + ")")
+        + "WHERE LOWER(o.ownername) = LOWER(:"
+        + Owner.QueryByOwnerameCaseIgnore.PARAM_NAME + ")")
 public class Owner extends BaseEntity {
     private static final long serialVersionUID = -2640121939957877859L;
 
     public static final class QueryByOwnerameCaseIgnore {
-	public static final String NAME = "Owner.byOwnername";
-	public static final String PARAM_NAME = "ownername";
+        public static final String NAME = "Owner.byOwnername";
+        public static final String PARAM_NAME = "ownername";
     }
 
     @OneToMany(mappedBy = "owner")
@@ -46,19 +45,20 @@ public class Owner extends BaseEntity {
     private String ownername;
 
     public Owner() {
-	this.vehicles = Lists.newArrayList();
+        this.vehicles = new ArrayList<>();
     }
 
     public String getOwnername() {
-	return this.ownername;
+        return this.ownername;
     }
 
-    public void setOwnername(final String ownername) {
-	this.ownername = ownername;
+    public Owner setOwnername(final String ownername) {
+        this.ownername = ownername;
+        return this;
     }
 
     public List<Vehicle> getVehicles() {
-	return this.vehicles;
+        return this.vehicles;
     }
 
 }

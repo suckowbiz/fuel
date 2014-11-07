@@ -15,6 +15,7 @@
  */
 package biz.suckow.fuel.business.vehicle.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -32,9 +33,6 @@ import biz.suckow.fuel.business.owner.entity.Owner;
 import biz.suckow.fuel.business.refueling.entity.FuelStock;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 
-import com.google.common.collect.Lists;
-
-// TODO test
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehiclename",
         "owner_id" }))
@@ -43,6 +41,10 @@ import com.google.common.collect.Lists;
         + ") AND LOWER(v.owner.ownername) = :"
         + Vehicle.QueryByOwnerAndVehicle.PARAM_OWNERNAME_NAME)
 public class Vehicle extends BaseEntity {
+    public String getVehiclename() {
+        return this.vehiclename;
+    }
+
     private static final long serialVersionUID = -5360751385120611439L;
 
     public static final class QueryByOwnerAndVehicle {
@@ -67,16 +69,32 @@ public class Vehicle extends BaseEntity {
     private List<FuelConsumption> fuelConsumptions;
 
     public Vehicle() {
-        this.fuelConsumptions = Lists.newArrayList();
-        this.refuelings = Lists.newArrayList();
+        this.fuelConsumptions = new ArrayList<>();
+        this.refuelings = new ArrayList<>();
     }
 
-    public void addFuelConsuption(final FuelConsumption consumption) {
+    public Vehicle setVehiclename(final String vehiclename) {
+        this.vehiclename = vehiclename;
+        return this;
+    }
+
+    public Owner getOwner() {
+        return this.owner;
+    }
+
+    public Vehicle setOwner(final Owner owner) {
+        this.owner = owner;
+        return this;
+    }
+
+    public Vehicle addFuelConsuption(final FuelConsumption consumption) {
         this.fuelConsumptions.add(consumption);
+        return this;
     }
 
-    public void addRefueling(final Refueling refueling) {
+    public Vehicle addRefueling(final Refueling refueling) {
         this.refuelings.add(refueling);
+        return this;
     }
 
     public FuelStock getFuelStock() {
