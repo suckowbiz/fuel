@@ -29,28 +29,27 @@ public class RefuelingLocator {
     @PersistenceContext
     private EntityManager em;
 
-    // TODO test
-    public List<Refueling> getRefuelingsMissingConsumptionOldestFirst() {
-	@SuppressWarnings("unchecked")
-	final List<Refueling> result = this.em.createNamedQuery(
-		Refueling.BY_MISSING_CONSUMPTION_OLDEST_FIRST).getResultList();
-	return result;
+    public List<Refueling> getFilledUpRefuelingsMissingConsumptionOldestFirst() {
+        @SuppressWarnings("unchecked")
+        final List<Refueling> result = this.em.createNamedQuery(
+                Refueling.BY_FILLED_UP_WITH_MISSING_CONSUMPTION_OLDEST_FIRST).getResultList();
+        return result;
     }
 
     // TODO test
     public Optional<Refueling> get(final Refueling refueling) {
-	@SuppressWarnings("unchecked")
-	final List<Refueling> refuelings = this.em
-	.createNamedQuery(
-		Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME)
-		.setParameter(
-			Refueling.QueryByExistingConsumptionForDateNewestFirst.PARAM_NAME,
-			refueling.getDateRefueled(), TemporalType.TIMESTAMP)
-			.getResultList();
-	Optional<Refueling> result = Optional.absent();
-	if (refuelings.size() > 0) {
-	    result = Optional.of(refuelings.get(0));
-	}
-	return result;
+        @SuppressWarnings("unchecked")
+        final List<Refueling> refuelings = this.em
+                .createNamedQuery(
+                        Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME)
+                .setParameter(
+                        Refueling.QueryByExistingConsumptionForDateNewestFirst.PARAM_NAME,
+                        refueling.getDateRefueled(), TemporalType.TIMESTAMP)
+                .getResultList();
+        Optional<Refueling> result = Optional.absent();
+        if (refuelings.size() > 0) {
+            result = Optional.of(refuelings.get(0));
+        }
+        return result;
     }
 }

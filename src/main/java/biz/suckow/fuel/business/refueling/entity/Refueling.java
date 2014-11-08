@@ -35,63 +35,65 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME, query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
-	    + "AND r.consumption IS NOT NULL AND r.dateRefueled < :date ORDER BY r.dateRefueled DESC "),
-	    @NamedQuery(name = Refueling.BY_MISSING_CONSUMPTION_OLDEST_FIRST, query = "SELECT r FROM Refueling r WHERE r.isFillUp = false ORDER BY r.dateRefueled ASC") })
+        @NamedQuery(name = Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME,
+                    query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
+                            + "AND r.consumption IS NOT NULL AND r.dateRefueled < :date ORDER BY r.dateRefueled DESC "),
+        @NamedQuery(name = Refueling.BY_FILLED_UP_WITH_MISSING_CONSUMPTION_OLDEST_FIRST,
+                    query = "SELECT r FROM Refueling r WHERE r.isFillUp = false AND r.consumption IS NULL ORDER BY r.dateRefueled ASC") })
 public class Refueling extends BaseEntity {
     private static final long serialVersionUID = 9175526663957115977L;
 
-    public static final String BY_MISSING_CONSUMPTION_OLDEST_FIRST = "Vehicle.byMissingConsumptionOldestFirst";
+    public static final String BY_FILLED_UP_WITH_MISSING_CONSUMPTION_OLDEST_FIRST = "Vehicle.byMissingConsumptionOldestFirst";
 
     public static final class QueryByExistingConsumptionForDateNewestFirst {
-	public static final String NAME = "Refueling.byExistingConsumptionForDate";
-	public static final String PARAM_NAME = "Refueling.byExistingConsumptionForDateParam";
+        public static final String NAME = "Refueling.byExistingConsumptionForDate";
+        public static final String PARAM_NAME = "Refueling.byExistingConsumptionForDateParam";
     }
 
     public static final class Builder {
-	private final Refueling refueling = new Refueling();
+        private final Refueling refueling = new Refueling();
 
-	/**
-	 * Standard constructor to initiate optional/ default values.
-	 */
-	public Builder() {
-	    this.refueling.setDateRefueled(new Date());
-	    this.refueling.setIsFillUp(false);
-	}
+        /**
+         * Standard constructor to initiate optional/ default values.
+         */
+        public Builder() {
+            this.refueling.setDateRefueled(new Date());
+            this.refueling.setIsFillUp(false);
+        }
 
-	public Builder eurosPerLitre(final Double value) {
-	    this.refueling.setEurosPerLitre(value);
-	    return this;
-	}
+        public Builder eurosPerLitre(final Double value) {
+            this.refueling.setEurosPerLitre(value);
+            return this;
+        }
 
-	public Builder litres(final Double value) {
-	    this.refueling.setLitres(value);
-	    return this;
-	}
+        public Builder litres(final Double value) {
+            this.refueling.setLitres(value);
+            return this;
+        }
 
-	public Builder memo(final String memo) {
-	    this.refueling.setMemo(memo);
-	    return this;
-	}
+        public Builder memo(final String memo) {
+            this.refueling.setMemo(memo);
+            return this;
+        }
 
-	public Builder date(final Date date) {
-	    this.refueling.setDateRefueled(date);
-	    return this;
-	}
+        public Builder dateRefueled(final Date date) {
+            this.refueling.setDateRefueled(date);
+            return this;
+        }
 
-	public Builder fillUp(final boolean value) {
-	    this.refueling.setIsFillUp(value);
-	    return this;
-	}
+        public Builder fillUp(final boolean value) {
+            this.refueling.setIsFillUp(value);
+            return this;
+        }
 
-	public Builder vehicle(final Vehicle vehicle) {
-	    this.refueling.setVehicle(vehicle);
-	    return this;
-	}
+        public Builder vehicle(final Vehicle vehicle) {
+            this.refueling.setVehicle(vehicle);
+            return this;
+        }
 
-	public Refueling build() {
-	    return this.refueling;
-	}
+        public Refueling build() {
+            return this.refueling;
+        }
     }
 
     @NotNull
@@ -122,59 +124,59 @@ public class Refueling extends BaseEntity {
     private Vehicle vehicle;
 
     public Vehicle getVehicle() {
-	return this.vehicle;
+        return this.vehicle;
     }
 
     public void setVehicle(final Vehicle vehicle) {
-	this.vehicle = vehicle;
+        this.vehicle = vehicle;
     }
 
     public FuelConsumption getConsumption() {
-	return this.consumption;
+        return this.consumption;
     }
 
     public void setConsumption(final FuelConsumption consumption) {
-	this.consumption = consumption;
+        this.consumption = consumption;
     }
 
     public Boolean getIsFillUp() {
-	return this.isFillUp;
+        return this.isFillUp;
     }
 
     public void setIsFillUp(final Boolean isFillUp) {
-	this.isFillUp = isFillUp;
+        this.isFillUp = isFillUp;
     }
 
     public Date getDateRefueled() {
-	return this.dateRefueled;
+        return this.dateRefueled;
     }
 
     public void setDateRefueled(final Date dateRefueled) {
-	this.dateRefueled = dateRefueled;
+        this.dateRefueled = dateRefueled;
     }
 
     public Double getEurosPerLitre() {
-	return this.eurosPerLitre;
+        return this.eurosPerLitre;
     }
 
     public void setEurosPerLitre(final Double eurosPerLitre) {
-	this.eurosPerLitre = eurosPerLitre;
+        this.eurosPerLitre = eurosPerLitre;
     }
 
     public Double getLitres() {
-	return this.litres;
+        return this.litres;
     }
 
     public void setLitres(final Double litres) {
-	this.litres = litres;
+        this.litres = litres;
     }
 
     public String getMemo() {
-	return this.memo;
+        return this.memo;
     }
 
     public void setMemo(final String memo) {
-	this.memo = memo;
+        this.memo = memo;
     }
 
 }

@@ -36,18 +36,20 @@ public class FuelConsumption extends BaseEntity {
     private Double litresPerKilometre;
 
     public Date getDateComputed() {
-	return this.dateComputed;
+        return this.dateComputed;
     }
 
-    public void setDateComputed(final Date dateComputed) {
-	this.dateComputed = dateComputed;
+    public FuelConsumption setDateComputed(final Date dateComputed) {
+        this.dateComputed = dateComputed;
+        return this;
     }
 
     public Double getLitresPerKilometre() {
-	return this.litresPerKilometre;
+        return this.litresPerKilometre;
     }
 
-    public void setLitresPerKilometre(final Double litresPerKilometre) {
-	this.litresPerKilometre = litresPerKilometre;
+    public FuelConsumption setLitresPerKilometre(final Double litresPerKilometre) {
+        this.litresPerKilometre = litresPerKilometre;
+        return this;
     }
 }

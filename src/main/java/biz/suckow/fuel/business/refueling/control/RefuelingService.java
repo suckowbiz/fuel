@@ -32,7 +32,7 @@ public class RefuelingService {
 	    final Double eurosPerLitre, final Date date, final String memo) {
 	final Refueling refueling = new Refueling.Builder()
 	.eurosPerLitre(eurosPerLitre).litres(litres).memo(memo)
-	.date(date).fillUp(true).build();
+	.dateRefueled(date).fillUp(true).build();
 	this.em.persist(refueling);
 
 	vehicle.addRefueling(refueling);
@@ -43,7 +43,7 @@ public class RefuelingService {
 	    final Double litres, final Double euros, final Date date,
 	    final String memo) {
 	final Refueling refueling = new Refueling.Builder().litres(litres)
-		.eurosPerLitre(euros).date(date).memo(memo).build();
+		.eurosPerLitre(euros).dateRefueled(date).memo(memo).build();
 	this.em.persist(refueling);
 
 	vehicle.addRefueling(refueling);
@@ -61,7 +61,7 @@ public class RefuelingService {
 
     public void stockRefuel(final Vehicle vehicle, final Double litres,
 	    final Double euros, final Date date, final String memo) {
-	final Refueling stockRefueling = new Refueling.Builder().date(date)
+	final Refueling stockRefueling = new Refueling.Builder().dateRefueled(date)
 		.litres(litres).memo(memo).build();
 	this.em.persist(stockRefueling);
 
