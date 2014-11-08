@@ -3,15 +3,15 @@ package biz.suckow.fuel.business.vehicle.boundary;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import org.hamcrest.MatcherAssert;
-import org.hamcrest.Matchers;
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.ArquillianBase;
 import biz.suckow.fuel.business.owner.entity.Owner;
-import biz.suckow.fuel.business.vehicle.entity.Vehicle;
+import biz.suckow.fuel.business.vehicle.entity.Vehicle; 
 
 import com.google.common.base.Optional;
 
@@ -32,21 +32,16 @@ public class VehicleLocatorIT extends ArquillianBase {
                 "duke-bike");
         this.em.persist(vehicle);
 
-        final Vehicle actualResult = this.cut.getVehicle("duke", "duke-bike")
-                .get();
-        MatcherAssert.assertThat(actualResult,
-                Matchers.not(Matchers.nullValue()));
-        MatcherAssert.assertThat(actualResult.getId(),
-                Matchers.not(Matchers.nullValue()));
-        MatcherAssert.assertThat(actualResult.getId(),
-                Matchers.equalTo(vehicle.getId()));
+        final Vehicle actualResult = this.cut.getVehicle("duke", "duke-bike").get();
+        assertThat(actualResult, not(nullValue()));    
+        assertThat(actualResult.getId(), not(nullValue()));
+        assertThat(actualResult.getId(), equalTo(vehicle.getId())); 
     }
 
     @Test
     public void verifyVehicleFetchingFails() {
         final Optional<Vehicle> possibleVehicle = this.cut.getVehicle("duke",
                 "duke-bike");
-        MatcherAssert.assertThat(possibleVehicle.isPresent(),
-                Matchers.is(false));
+        assertThat(possibleVehicle.isPresent(), is(false));
     }
 }

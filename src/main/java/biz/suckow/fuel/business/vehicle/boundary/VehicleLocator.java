@@ -30,7 +30,6 @@ public class VehicleLocator {
     public Optional<Vehicle> getVehicle(final String ownername,
             final String vehiclename) {
         Vehicle result = null;
-
         try {
             result = (Vehicle) this.em
                     .createNamedQuery(Vehicle.QueryByOwnerAndVehicle.NAME)
