@@ -33,8 +33,10 @@ public class OwnerService extends BaseEntity {
 
     // TODO write test
     public Owner getOwner(final String ownername) {
-        final Owner result = (Owner) this.em.createNamedQuery(Owner.QueryByOwnerameCaseIgnore.NAME)
-                .setParameter(Owner.QueryByOwnerameCaseIgnore.PARAM_NAME, ownername).getSingleResult();
+        final Owner result = (Owner) this.em
+                .createNamedQuery(Owner.QueryByOwnerameCaseIgnore.NAME)
+                .setParameter(Owner.QueryByOwnerameCaseIgnore.PARAM_NAME, ownername)
+                .getSingleResult();
         return result;
     }
 
