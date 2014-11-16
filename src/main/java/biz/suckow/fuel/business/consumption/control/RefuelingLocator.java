@@ -17,8 +17,8 @@ package biz.suckow.fuel.business.consumption.control;
 
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
 
 import biz.suckow.fuel.business.refueling.entity.Refueling;
@@ -26,7 +26,7 @@ import biz.suckow.fuel.business.refueling.entity.Refueling;
 import com.google.common.base.Optional;
 
 public class RefuelingLocator {
-    @PersistenceContext
+    @Inject
     private EntityManager em;
 
     public List<Refueling> getFilledUpAndMissingConsumptionOldestFirst() {

@@ -15,16 +15,16 @@
  */
 package biz.suckow.fuel.business.vehicle.boundary;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 import com.google.common.base.Optional;
 
 public class VehicleLocator {
-    @PersistenceContext
+    @Inject
     private EntityManager em;
 
     public Optional<Vehicle> getVehicle(final String ownername, final String vehiclename) {
