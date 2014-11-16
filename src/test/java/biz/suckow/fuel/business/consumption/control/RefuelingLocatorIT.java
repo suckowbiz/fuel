@@ -80,7 +80,7 @@ public class RefuelingLocatorIT extends ArquillianBase {
                 .build();
         this.em.persist(refuelingMarchPartial);
 
-        final List<Refueling> actualResult = this.cut.getFilledUpRefuelingsMissingConsumptionOldestFirst();
+        final List<Refueling> actualResult = this.cut.getFilledUpAndMissingConsumptionOldestFirst();
         assertThat(actualResult.size(), is(3));
         assertThat(actualResult.get(0).getDateRefueled(), is(march));
         assertThat(actualResult.get(1).getDateRefueled(), is(february));

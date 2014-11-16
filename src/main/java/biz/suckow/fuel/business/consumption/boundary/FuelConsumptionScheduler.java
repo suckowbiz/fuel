@@ -61,7 +61,7 @@ public class FuelConsumptionScheduler {
         this.isRunning.set(true);
         List<Refueling> refuelings = Collections.emptyList();
         try {
-            refuelings = this.locator.getFilledUpRefuelingsMissingConsumptionOldestFirst();
+            refuelings = this.locator.getFilledUpAndMissingConsumptionOldestFirst();
             for (final Refueling refueling : refuelings) {
                 final Double result = this.maths.calculate(refueling);
 

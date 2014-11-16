@@ -29,10 +29,9 @@ public class RefuelingLocator {
     @PersistenceContext
     private EntityManager em;
 
-    public List<Refueling> getFilledUpRefuelingsMissingConsumptionOldestFirst() {
-        @SuppressWarnings("unchecked")
+    public List<Refueling> getFilledUpAndMissingConsumptionOldestFirst() {
         final List<Refueling> result = this.em.createNamedQuery(
-                Refueling.BY_FILLED_UP_AND_MISSING_CONSUMPTION_OLDEST_FIRST).getResultList();
+                Refueling.BY_FILLED_UP_AND_MISSING_CONSUMPTION_OLDEST_FIRST, Refueling.class).getResultList();
         return result;
     }
 
@@ -40,9 +39,9 @@ public class RefuelingLocator {
     public Optional<Refueling> get(final Refueling refueling) {
         @SuppressWarnings("unchecked")
         final List<Refueling> refuelings = this.em
-                .createNamedQuery(Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME)
-                .setParameter(Refueling.QueryByExistingConsumptionForDateNewestFirst.PARAM_NAME,
-                        refueling.getDateRefueled(), TemporalType.TIMESTAMP)
+        .createNamedQuery(Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME)
+        .setParameter(Refueling.QueryByExistingConsumptionForDateNewestFirst.PARAM_NAME,
+                refueling.getDateRefueled(), TemporalType.TIMESTAMP)
                 .getResultList();
         Optional<Refueling> result = Optional.absent();
         if (refuelings.size() > 0) {
