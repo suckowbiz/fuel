@@ -34,6 +34,10 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 @Path("refuelings")
 @Stateless
 public class RefuelingResource {
+
+    // TODO verify: because once a full refueling is added and the consumption is calculated the addition of previous
+    // partial refuelings cannot be accepted!
+
     @Inject
     private RefuelingService service;
 
