@@ -15,30 +15,45 @@
  */
 package biz.suckow.fuel.business.consumption.control;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TemporalType;
 
+import biz.suckow.fuel.business.refueling.boundary.RefuelingLocator;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 
+import com.google.common.base.Optional;
+
 public class FuelConsumptionMaths {
-    @PersistenceContext
+    @Inject
     private EntityManager em;
+
+    @Inject
+    private RefuelingLocator locator;
 
     public Double calculate(final Refueling refueling) {
         // get right date interval
         final Date rightBorder = refueling.getDateRefueled();
 
-        // get left date interval
-        final Date leftBorder = (Date) this.em
-                .createNamedQuery(Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME)
-                .setParameter(Refueling.QueryByExistingConsumptionForDateNewestFirst.PARAM_NAME,
-                        refueling.getDateRefueled(), TemporalType.TIMESTAMP)
-                .getResultList();
+        // get left date interval (earliest refueling before the given that is not a full refueling)
+        // might be null on first time
+
+        // query by date with isFull (not by existing consumption)
+        List<Refueling> partials = new ArrayList<>();
+        final Optional<Refueling> possibleLeftBorder = this.locator
+                .getLatestFilledUpBefore(refueling.getDateRefueled());
+        if (possibleLeftBorder.isPresent()) {
+            partials = this.locator.getPartialRefuelingsBetween(possibleLeftBorder.get().getDateRefueled(),
+                    rightBorder, refueling.getVehicle());
+        } else {
+            partials = this.locator.getAllPartialRefuelingsUntil(rightBorder, refueling.getVehicle());
+        }
 
         // get all partial refuelings within interval
+
         // figure out stock at time of right date interval
         // sum up all refuelings and what is left of stock
         // divide litres by kilometers from actual refueling minus kilometer
