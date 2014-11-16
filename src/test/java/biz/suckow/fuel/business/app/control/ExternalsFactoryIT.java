@@ -13,13 +13,13 @@ import org.testng.annotations.Test;
 public class ExternalsFactoryIT extends Arquillian {
 
     @Inject
-    private ExternalsFactory factory;
+    private LoggerFactory factory;
 
     @Deployment
     public static WebArchive createDeployment() {
         return ShrinkWrap
                 .create(WebArchive.class)
-                .addClass(ExternalsFactory.class)
+                .addClass(LoggerFactory.class)
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("persistence.xml", "META-INF/persistence.xml");
     }
