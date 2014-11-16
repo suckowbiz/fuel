@@ -48,7 +48,7 @@ public class RefuelingLocatorIT extends ArquillianBase {
         this.em.persist(refuelingMarchPartial);
 
         final List<Refueling> actualResult = this.cut.getFilledUpAndMissingConsumptionOldestFirst();
-        assertThat(actualResult.size(), is(0));
+        assertThat(actualResult.isEmpty(), is(true));
     }
 
     @Test
