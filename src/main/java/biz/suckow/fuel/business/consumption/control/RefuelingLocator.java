@@ -32,7 +32,7 @@ public class RefuelingLocator {
     public List<Refueling> getFilledUpRefuelingsMissingConsumptionOldestFirst() {
         @SuppressWarnings("unchecked")
         final List<Refueling> result = this.em.createNamedQuery(
-                Refueling.BY_FILLED_UP_WITH_MISSING_CONSUMPTION_OLDEST_FIRST).getResultList();
+                Refueling.BY_FILLED_UP_AND_MISSING_CONSUMPTION_OLDEST_FIRST).getResultList();
         return result;
     }
 
