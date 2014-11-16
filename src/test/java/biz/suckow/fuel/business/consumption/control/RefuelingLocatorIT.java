@@ -24,10 +24,36 @@ public class RefuelingLocatorIT extends ArquillianBase {
 
     @Inject
     private EntityManager em;
+    
+    @Test
+    @Transactional(value = TransactionMode.ROLLBACK)
+    public void testLocateNothing() {
+        final Owner duke = new Owner().setOwnername("duke");
+        this.em.persist(duke);
+
+        final Vehicle dukeCar = new Vehicle().setOwner(duke).setVehiclename("duke-car");
+        this.em.persist(dukeCar);
+
+        final Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, 2);
+        final Date march = calendar.getTime();
+
+        final Refueling refuelingMarchPartial = new Refueling.Builder()
+                .dateRefueled(march)
+                .eurosPerLitre(1D)
+                .fillUp(false)
+                .litres(1D)
+                .vehicle(dukeCar)
+                .build();
+        this.em.persist(refuelingMarchPartial);
+
+        final List<Refueling> actualResult = this.cut.getFilledUpAndMissingConsumptionOldestFirst();
+        assertThat(actualResult.size(), is(0));
+    }
 
     @Test
     @Transactional(value = TransactionMode.ROLLBACK)
-    public void testLocateRefuelingsByDateAndStatus() {
+    public void testLocateExactly() {
         final Owner duke = new Owner().setOwnername("duke");
         this.em.persist(duke);
 
