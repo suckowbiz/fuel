@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package biz.suckow.fuel.business.consumption.control;
+package biz.suckow.fuel.business.refueling.boundary;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -35,13 +36,10 @@ public class RefuelingLocator {
         return result;
     }
 
-    // TODO test
-    public Optional<Refueling> get(final Refueling refueling) {
-        @SuppressWarnings("unchecked")
+    public Optional<Refueling> getLatestFilledUpBefore(final Date date) {
         final List<Refueling> refuelings = this.em
-        .createNamedQuery(Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME)
-        .setParameter(Refueling.QueryByExistingConsumptionForDateNewestFirst.PARAM_NAME,
-                refueling.getDateRefueled(), TemporalType.TIMESTAMP)
+                .createNamedQuery(Refueling.QueryLatestByFilledUpBeforeDate.NAME, Refueling.class)
+                .setParameter(Refueling.QueryLatestByFilledUpBeforeDate.PARAM_NAME, date, TemporalType.TIMESTAMP)
                 .getResultList();
         Optional<Refueling> result = Optional.absent();
         if (refuelings.size() > 0) {
@@ -49,4 +47,5 @@ public class RefuelingLocator {
         }
         return result;
     }
+
 }

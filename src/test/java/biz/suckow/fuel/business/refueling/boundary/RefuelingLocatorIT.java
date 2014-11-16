@@ -1,4 +1,4 @@
-package biz.suckow.fuel.business.consumption.control;
+package biz.suckow.fuel.business.refueling.boundary;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -9,12 +9,14 @@ import javax.persistence.EntityManager;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+
 import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.ArquillianBase;
 import biz.suckow.fuel.business.owner.entity.Owner;
+import biz.suckow.fuel.business.refueling.boundary.RefuelingLocator;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
