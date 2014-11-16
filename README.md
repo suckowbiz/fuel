@@ -1,5 +1,5 @@
 #Fuel
-This software is under development. The system to build is a fuel consumption tracking tool based on a relation database, accessable via REST api.
+This software is under development. The system to build is a fuel consumption tracking tool based on a relation database, accessible via REST api. Motivation for this project is to have a Java EE 7 project for reference (following status quo) and for real use.
 
 #Development
 To build the application Maven is used to have a high degree of automation. Source code is developed under principles of Clean Code to ensure code quality with Java 7. Package organization follows Entity/Control/Boundary pattern as of presentations of Adam Bien to standardize package structure and serve business first. For development the web application Java EE 7 standard stack is used. The goal is to stay with the Java EE 7 standard as much as possible. Database PostgresQL serves for backend storage.
