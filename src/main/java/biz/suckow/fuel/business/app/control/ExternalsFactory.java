@@ -28,11 +28,11 @@ public class ExternalsFactory {
 
     @Produces
     public EntityManager produceEntityManager() {
-	return this.em;
+        return this.em;
     }
 
     @Produces
     public Logger produceLogger(final InjectionPoint ip) {
-	return Logger.getLogger(ip.getMember().getDeclaringClass().getName());
+        return Logger.getLogger(ip.getMember().getDeclaringClass().getName());
     }
 }

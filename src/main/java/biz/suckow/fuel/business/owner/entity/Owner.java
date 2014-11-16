@@ -28,8 +28,7 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Entity
 @NamedQuery(name = Owner.QueryByOwnerameCaseIgnore.NAME, query = "SELECT o FROM Owner o "
-        + "WHERE LOWER(o.ownername) = LOWER(:"
-        + Owner.QueryByOwnerameCaseIgnore.PARAM_NAME + ")")
+        + "WHERE LOWER(o.ownername) = LOWER(:" + Owner.QueryByOwnerameCaseIgnore.PARAM_NAME + ")")
 public class Owner extends BaseEntity {
     private static final long serialVersionUID = -2640121939957877859L;
 

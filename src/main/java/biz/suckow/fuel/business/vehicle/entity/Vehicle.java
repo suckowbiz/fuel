@@ -34,12 +34,11 @@ import biz.suckow.fuel.business.refueling.entity.FuelStock;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehiclename",
-        "owner_id" }))
-@NamedQuery(name = Vehicle.QueryByOwnerAndVehicle.NAME, query = "SELECT v FROM Vehicle v WHERE LOWER(v.vehiclename) = LOWER(:"
-        + Vehicle.QueryByOwnerAndVehicle.PARAM_VEHICLENAME_NAME
-        + ") AND LOWER(v.owner.ownername) = :"
-        + Vehicle.QueryByOwnerAndVehicle.PARAM_OWNERNAME_NAME)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehiclename", "owner_id" }))
+@NamedQuery(name = Vehicle.QueryByOwnerAndVehicle.NAME,
+        query = "SELECT v FROM Vehicle v WHERE LOWER(v.vehiclename) = LOWER(:"
+                + Vehicle.QueryByOwnerAndVehicle.PARAM_VEHICLENAME_NAME + ") AND LOWER(v.owner.ownername) = :"
+                + Vehicle.QueryByOwnerAndVehicle.PARAM_OWNERNAME_NAME)
 public class Vehicle extends BaseEntity {
     public String getVehiclename() {
         return this.vehiclename;

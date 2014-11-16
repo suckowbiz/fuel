@@ -12,7 +12,8 @@ public class VehicleIT extends ArquillianBase {
     @Inject
     private EntityManager em;
 
-    @Test(expectedExceptions = RuntimeException.class, expectedExceptionsMessageRegExp = "Unable to commit the transaction.")
+    @Test(expectedExceptions = RuntimeException.class,
+            expectedExceptionsMessageRegExp = "Unable to commit the transaction.")
     public void mustNotPersistNonUniqueVehiclename() throws Throwable {
         final Owner owner = new Owner();
         owner.setOwnername("duke");

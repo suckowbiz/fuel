@@ -40,10 +40,8 @@ public class RefuelingLocator {
     public Optional<Refueling> get(final Refueling refueling) {
         @SuppressWarnings("unchecked")
         final List<Refueling> refuelings = this.em
-                .createNamedQuery(
-                        Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME)
-                .setParameter(
-                        Refueling.QueryByExistingConsumptionForDateNewestFirst.PARAM_NAME,
+                .createNamedQuery(Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME)
+                .setParameter(Refueling.QueryByExistingConsumptionForDateNewestFirst.PARAM_NAME,
                         refueling.getDateRefueled(), TemporalType.TIMESTAMP)
                 .getResultList();
         Optional<Refueling> result = Optional.absent();

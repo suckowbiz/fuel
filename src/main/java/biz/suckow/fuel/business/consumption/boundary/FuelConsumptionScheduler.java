@@ -54,38 +54,34 @@ public class FuelConsumptionScheduler {
     // TODO test
     @Schedule(hour = "*", minute = "*", second = "*/30", persistent = false)
     public void timer() {
-	if (this.isRunning.get()) {
-	    this.logger.log(Level.INFO,
-		    "Returning since previous invocation still is running.");
-	    return;
-	}
-	this.isRunning.set(true);
-	List<Refueling> refuelings = Collections.emptyList();
-	try {
-	    refuelings = this.locator
-		    .getFilledUpRefuelingsMissingConsumptionOldestFirst();
-	    for (final Refueling refueling : refuelings) {
-		final Double result = this.maths.calculate(refueling);
+        if (this.isRunning.get()) {
+            this.logger.log(Level.INFO, "Returning since previous invocation still is running.");
+            return;
+        }
+        this.isRunning.set(true);
+        List<Refueling> refuelings = Collections.emptyList();
+        try {
+            refuelings = this.locator.getFilledUpRefuelingsMissingConsumptionOldestFirst();
+            for (final Refueling refueling : refuelings) {
+                final Double result = this.maths.calculate(refueling);
 
-		final FuelConsumption consumption = new FuelConsumption();
-		consumption.setDateComputed(refueling.getDateRefueled());
-		consumption.setLitresPerKilometre(result);
-		this.em.persist(consumption);
+                final FuelConsumption consumption = new FuelConsumption();
+                consumption.setDateComputed(refueling.getDateRefueled());
+                consumption.setLitresPerKilometre(result);
+                this.em.persist(consumption);
 
-		refueling.setConsumption(consumption);
-		this.em.merge(refueling);
+                refueling.setConsumption(consumption);
+                this.em.merge(refueling);
 
-		final Vehicle vehicle = refueling.getVehicle();
-		vehicle.addFuelConsuption(consumption);
-		this.em.merge(vehicle);
-	    }
-	} catch (final Exception e) {
-	    this.logger.log(Level.SEVERE, "Fuel consumption timer crashed.", e);
-	} finally {
-	    this.logger.log(Level.INFO,
-		    "Fuel consumption timer completed for {0} refuelings.",
-		    refuelings);
-	    this.isRunning.set(false);
-	}
+                final Vehicle vehicle = refueling.getVehicle();
+                vehicle.addFuelConsuption(consumption);
+                this.em.merge(vehicle);
+            }
+        } catch (final Exception e) {
+            this.logger.log(Level.SEVERE, "Fuel consumption timer crashed.", e);
+        } finally {
+            this.logger.log(Level.INFO, "Fuel consumption timer completed for {0} refuelings.", refuelings);
+            this.isRunning.set(false);
+        }
     }
 }

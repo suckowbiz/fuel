@@ -17,7 +17,8 @@ public class ExternalsFactoryIT extends Arquillian {
 
     @Deployment
     public static WebArchive createDeployment() {
-        return ShrinkWrap.create(WebArchive.class)
+        return ShrinkWrap
+                .create(WebArchive.class)
                 .addClass(ExternalsFactory.class)
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("persistence.xml", "META-INF/persistence.xml");

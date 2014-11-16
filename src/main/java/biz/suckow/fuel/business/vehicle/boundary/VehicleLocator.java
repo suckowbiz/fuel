@@ -27,18 +27,12 @@ public class VehicleLocator {
     @PersistenceContext
     private EntityManager em;
 
-    public Optional<Vehicle> getVehicle(final String ownername,
-            final String vehiclename) {
+    public Optional<Vehicle> getVehicle(final String ownername, final String vehiclename) {
         Vehicle result = null;
         try {
-            result = (Vehicle) this.em
-                    .createNamedQuery(Vehicle.QueryByOwnerAndVehicle.NAME)
-                    .setParameter(
-                            Vehicle.QueryByOwnerAndVehicle.PARAM_OWNERNAME_NAME,
-                            ownername)
-                    .setParameter(
-                            Vehicle.QueryByOwnerAndVehicle.PARAM_VEHICLENAME_NAME,
-                            vehiclename).getSingleResult();
+            result = (Vehicle) this.em.createNamedQuery(Vehicle.QueryByOwnerAndVehicle.NAME)
+                    .setParameter(Vehicle.QueryByOwnerAndVehicle.PARAM_OWNERNAME_NAME, ownername)
+                    .setParameter(Vehicle.QueryByOwnerAndVehicle.PARAM_VEHICLENAME_NAME, vehiclename).getSingleResult();
         } catch (final NoResultException e) {
             /* NOP */
         }

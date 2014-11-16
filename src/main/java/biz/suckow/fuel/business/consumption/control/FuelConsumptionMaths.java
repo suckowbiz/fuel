@@ -28,25 +28,23 @@ public class FuelConsumptionMaths {
     private EntityManager em;
 
     public Double calculate(final Refueling refueling) {
-	// get right date interval
-	final Date rightBorder = refueling.getDateRefueled();
+        // get right date interval
+        final Date rightBorder = refueling.getDateRefueled();
 
-	// get left date interval
-	final Date leftBorder = (Date) this.em
-		.createNamedQuery(
-			Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME)
-			.setParameter(
-				Refueling.QueryByExistingConsumptionForDateNewestFirst.PARAM_NAME,
-				refueling.getDateRefueled(), TemporalType.TIMESTAMP)
-				.getResultList();
+        // get left date interval
+        final Date leftBorder = (Date) this.em
+                .createNamedQuery(Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME)
+                .setParameter(Refueling.QueryByExistingConsumptionForDateNewestFirst.PARAM_NAME,
+                        refueling.getDateRefueled(), TemporalType.TIMESTAMP)
+                .getResultList();
 
-	// get all partial refuelings within interval
-	// figure out stock at time of right date interval
-	// sum up all refuelings and what is left of stock
-	// divide litres by kilometers from actual refueling minus kilometer
-	// from left date refueling
+        // get all partial refuelings within interval
+        // figure out stock at time of right date interval
+        // sum up all refuelings and what is left of stock
+        // divide litres by kilometers from actual refueling minus kilometer
+        // from left date refueling
 
-	// TODO 3. Implement
-	throw new UnsupportedOperationException();
+        // TODO 3. Implement
+        throw new UnsupportedOperationException();
     }
 }

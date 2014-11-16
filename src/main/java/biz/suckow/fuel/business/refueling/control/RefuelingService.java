@@ -27,45 +27,47 @@ public class RefuelingService {
     @PersistenceContext
     private EntityManager em;
 
-    public Vehicle fullTankRefuel(final Vehicle vehicle,
-	    final Double kilometres, final Double litres,
-	    final Double eurosPerLitre, final Date date, final String memo) {
-	final Refueling refueling = new Refueling.Builder()
-	.eurosPerLitre(eurosPerLitre).litres(litres).memo(memo)
-	.dateRefueled(date).fillUp(true).build();
-	this.em.persist(refueling);
+    public Vehicle fullTankRefuel(final Vehicle vehicle, final Double kilometres, final Double litres,
+            final Double eurosPerLitre, final Date date, final String memo) {
+        final Refueling refueling = new Refueling.Builder()
+                .eurosPerLitre(eurosPerLitre)
+                .litres(litres)
+                .memo(memo)
+                .dateRefueled(date)
+                .fillUp(true)
+                .build();
+        this.em.persist(refueling);
 
-	vehicle.addRefueling(refueling);
-	return this.em.merge(vehicle);
+        vehicle.addRefueling(refueling);
+        return this.em.merge(vehicle);
     }
 
-    public Vehicle partialTankRefuel(final Vehicle vehicle,
-	    final Double litres, final Double euros, final Date date,
-	    final String memo) {
-	final Refueling refueling = new Refueling.Builder().litres(litres)
-		.eurosPerLitre(euros).dateRefueled(date).memo(memo).build();
-	this.em.persist(refueling);
+    public Vehicle partialTankRefuel(final Vehicle vehicle, final Double litres, final Double euros, final Date date,
+            final String memo) {
+        final Refueling refueling = new Refueling.Builder()
+                .litres(litres)
+                .eurosPerLitre(euros)
+                .dateRefueled(date)
+                .memo(memo)
+                .build();
+        this.em.persist(refueling);
 
-	vehicle.addRefueling(refueling);
-	return this.em.merge(vehicle);
+        vehicle.addRefueling(refueling);
+        return this.em.merge(vehicle);
     }
 
-    public void fullTankAndStockRefuel(final Vehicle vehicle,
-	    final Double kilometers, final Double litresTank,
-	    final Double litresStock, final Double euros, final Date date,
-	    final String memo) {
-	final Vehicle mergedVehicle = this.fullTankRefuel(vehicle, kilometers,
-		litresTank, euros, date, memo);
-	this.stockRefuel(mergedVehicle, litresStock, euros, date, null);
+    public void fullTankAndStockRefuel(final Vehicle vehicle, final Double kilometers, final Double litresTank,
+            final Double litresStock, final Double euros, final Date date, final String memo) {
+        final Vehicle mergedVehicle = this.fullTankRefuel(vehicle, kilometers, litresTank, euros, date, memo);
+        this.stockRefuel(mergedVehicle, litresStock, euros, date, null);
     }
 
-    public void stockRefuel(final Vehicle vehicle, final Double litres,
-	    final Double euros, final Date date, final String memo) {
-	final Refueling stockRefueling = new Refueling.Builder().dateRefueled(date)
-		.litres(litres).memo(memo).build();
-	this.em.persist(stockRefueling);
+    public void stockRefuel(final Vehicle vehicle, final Double litres, final Double euros, final Date date,
+            final String memo) {
+        final Refueling stockRefueling = new Refueling.Builder().dateRefueled(date).litres(litres).memo(memo).build();
+        this.em.persist(stockRefueling);
 
-	vehicle.getFuelStock().addRefueling(stockRefueling);
-	this.em.merge(vehicle);
+        vehicle.getFuelStock().addRefueling(stockRefueling);
+        this.em.merge(vehicle);
     }
 }

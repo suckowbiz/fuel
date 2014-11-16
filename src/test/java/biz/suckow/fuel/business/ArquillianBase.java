@@ -37,8 +37,11 @@ public abstract class ArquillianBase extends Arquillian {
                 .addPackages(true, "biz.suckow.fuel")
                 .addAsLibraries(resolver.resolve("org.hamcrest:hamcrest-all").withTransitivity().asFile())
                 .addAsLibraries(
-                        resolver.importDependencies(ScopeType.COMPILE, ScopeType.RUNTIME).resolve().withTransitivity()
-                                .asFile()).addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                        resolver.importDependencies(ScopeType.COMPILE, ScopeType.RUNTIME)
+                                .resolve()
+                                .withTransitivity()
+                                .asFile())
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("persistence.xml", "META-INF/persistence.xml");
     }
 }

@@ -36,10 +36,11 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 @Entity
 @NamedQueries({
         @NamedQuery(name = Refueling.QueryByExistingConsumptionForDateNewestFirst.NAME,
-                    query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
-                            + "AND r.consumption IS NOT NULL AND r.dateRefueled < :date ORDER BY r.dateRefueled DESC "),
-        @NamedQuery(name = Refueling.BY_FILLED_UP_WITH_MISSING_CONSUMPTION_OLDEST_FIRST,
-                    query = "SELECT r FROM Refueling r WHERE r.isFillUp = false AND r.consumption IS NULL ORDER BY r.dateRefueled ASC") })
+                query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
+                        + "AND r.consumption IS NOT NULL AND r.dateRefueled < :date ORDER BY r.dateRefueled DESC "),
+        @NamedQuery(
+                name = Refueling.BY_FILLED_UP_WITH_MISSING_CONSUMPTION_OLDEST_FIRST,
+                query = "SELECT r FROM Refueling r WHERE r.isFillUp = false AND r.consumption IS NULL ORDER BY r.dateRefueled ASC") })
 public class Refueling extends BaseEntity {
     private static final long serialVersionUID = 9175526663957115977L;
 

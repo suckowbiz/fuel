@@ -36,18 +36,18 @@ public class StockRelease extends BaseEntity {
     private Date dateReleased;
 
     public Double getLitres() {
-	return this.litres;
+        return this.litres;
     }
 
     public void setLitres(final Double litres) {
-	this.litres = litres;
+        this.litres = litres;
     }
 
     public Date getDateReleased() {
-	return this.dateReleased;
+        return this.dateReleased;
     }
 
     public void setDateReleased(final Date dateReleased) {
-	this.dateReleased = dateReleased;
+        this.dateReleased = dateReleased;
     }
 }

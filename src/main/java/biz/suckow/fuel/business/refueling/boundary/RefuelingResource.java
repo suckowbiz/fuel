@@ -51,41 +51,31 @@ public class RefuelingResource {
     @Path("station/full/{ownername}/{vehiclename}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response refuel(@PathParam("ownername") final String ownername,
-            @PathParam("vehiclename") final String vehiclename,
-            final RefuelingMeta meta) {
-        final Vehicle vehicle = this.vehicleService.getVehicle(ownername,
-                vehiclename).get();
-        this.service.fullTankRefuel(vehicle, meta.kilometers,
-                meta.litresToTank, meta.eurosPerLitre, meta.date, meta.memo);
+            @PathParam("vehiclename") final String vehiclename, final RefuelingMeta meta) {
+        final Vehicle vehicle = this.vehicleService.getVehicle(ownername, vehiclename).get();
+        this.service.fullTankRefuel(vehicle, meta.kilometers, meta.litresToTank, meta.eurosPerLitre, meta.date,
+                meta.memo);
         return Response.ok().build();
     }
 
     @POST
     @Path("station/partial/{ownername}/{vehiclename}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response partialRefuel(
-            @PathParam("ownername") final String ownername,
-            @PathParam("vehiclename") final String vehiclename,
-            final RefuelingMeta meta) {
-        final Vehicle vehicle = this.vehicleService.getVehicle(ownername,
-                vehiclename).get();
-        this.service.partialTankRefuel(vehicle, meta.litresToTank,
-                meta.eurosPerLitre, meta.date, meta.memo);
+    public Response partialRefuel(@PathParam("ownername") final String ownername,
+            @PathParam("vehiclename") final String vehiclename, final RefuelingMeta meta) {
+        final Vehicle vehicle = this.vehicleService.getVehicle(ownername, vehiclename).get();
+        this.service.partialTankRefuel(vehicle, meta.litresToTank, meta.eurosPerLitre, meta.date, meta.memo);
         return Response.ok().build();
     }
 
     @POST
     @Path("station/all/{ownername}/{vehiclename}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response toTankAndStock(
-            @PathParam("ownername") final String ownername,
-            @PathParam("vehiclename") final String vehiclename,
-            final RefuelingMeta meta) {
-        final Vehicle vehicle = this.vehicleService.getVehicle(ownername,
-                vehiclename).get();
-        this.service.fullTankAndStockRefuel(vehicle, meta.kilometers,
-                meta.litresToTank, meta.litresToStock, meta.eurosPerLitre,
-                meta.date, meta.memo);
+    public Response toTankAndStock(@PathParam("ownername") final String ownername,
+            @PathParam("vehiclename") final String vehiclename, final RefuelingMeta meta) {
+        final Vehicle vehicle = this.vehicleService.getVehicle(ownername, vehiclename).get();
+        this.service.fullTankAndStockRefuel(vehicle, meta.kilometers, meta.litresToTank, meta.litresToStock,
+                meta.eurosPerLitre, meta.date, meta.memo);
         return Response.ok().build();
     }
 
@@ -93,12 +83,9 @@ public class RefuelingResource {
     @Path("station/stock/{ownername}/{vehiclename}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response refuelStock(@PathParam("ownername") final String ownername,
-            @PathParam("vehiclename") final String vehiclename,
-            final RefuelingMeta meta) {
-        final Vehicle vehicle = this.vehicleService.getVehicle(ownername,
-                vehiclename).get();
-        this.service.stockRefuel(vehicle, meta.litresToStock,
-                meta.eurosPerLitre, meta.date, meta.memo);
+            @PathParam("vehiclename") final String vehiclename, final RefuelingMeta meta) {
+        final Vehicle vehicle = this.vehicleService.getVehicle(ownername, vehiclename).get();
+        this.service.stockRefuel(vehicle, meta.litresToStock, meta.eurosPerLitre, meta.date, meta.memo);
         return Response.ok().build();
     }
 
