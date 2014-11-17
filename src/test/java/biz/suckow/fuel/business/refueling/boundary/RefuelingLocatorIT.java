@@ -15,8 +15,8 @@ import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.ArquillianBase;
+import biz.suckow.fuel.business.consumption.control.RefuelingLocator;
 import biz.suckow.fuel.business.owner.entity.Owner;
-import biz.suckow.fuel.business.refueling.boundary.RefuelingLocator;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
@@ -76,6 +76,7 @@ public class RefuelingLocatorIT extends ArquillianBase {
                 .dateRefueled(january)
                 .eurosPerLitre(1D)
                 .fillUp(true)
+                .kilometre(1D)
                 .litres(1D)
                 .vehicle(dukeCar)
                 .build();
@@ -85,6 +86,7 @@ public class RefuelingLocatorIT extends ArquillianBase {
                 .dateRefueled(february)
                 .eurosPerLitre(1D)
                 .fillUp(true)
+                .kilometre(1D)
                 .litres(1D)
                 .vehicle(dukeCar)
                 .build();
@@ -94,6 +96,7 @@ public class RefuelingLocatorIT extends ArquillianBase {
                 .dateRefueled(march)
                 .eurosPerLitre(1D)
                 .fillUp(true)
+                .kilometre(1D)
                 .litres(1D)
                 .vehicle(dukeCar)
                 .build();

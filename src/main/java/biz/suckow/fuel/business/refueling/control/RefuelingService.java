@@ -27,11 +27,12 @@ public class RefuelingService {
     @PersistenceContext
     private EntityManager em;
 
-    public Vehicle fullTankRefuel(final Vehicle vehicle, final Double kilometres, final Double litres,
+    public Vehicle fullTankRefuel(final Vehicle vehicle, final Double kilometre, final Double litres,
             final Double eurosPerLitre, final Date date, final String memo) {
         final Refueling refueling = new Refueling.Builder()
                 .eurosPerLitre(eurosPerLitre)
                 .litres(litres)
+                .kilometre(kilometre)
                 .memo(memo)
                 .dateRefueled(date)
                 .fillUp(true)
@@ -56,9 +57,9 @@ public class RefuelingService {
         return this.em.merge(vehicle);
     }
 
-    public void fullTankAndStockRefuel(final Vehicle vehicle, final Double kilometers, final Double litresTank,
+    public void fullTankAndStockRefuel(final Vehicle vehicle, final Double kilometre, final Double litresTank,
             final Double litresStock, final Double euros, final Date date, final String memo) {
-        final Vehicle mergedVehicle = this.fullTankRefuel(vehicle, kilometers, litresTank, euros, date, memo);
+        final Vehicle mergedVehicle = this.fullTankRefuel(vehicle, kilometre, litresTank, euros, date, memo);
         this.stockRefuel(mergedVehicle, litresStock, euros, date, null);
     }
 

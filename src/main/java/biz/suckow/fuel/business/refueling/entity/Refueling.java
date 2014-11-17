@@ -35,12 +35,12 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = Refueling.QueryLatestByFilledUpBeforeDate.NAME,
-                query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
-                        + "AND r.dateRefueled < :date ORDER BY r.dateRefueled DESC "),
-        @NamedQuery(
-                name = Refueling.BY_FILLED_UP_AND_MISSING_CONSUMPTION_OLDEST_FIRST,
-                query = "SELECT r FROM Refueling r WHERE r.isFillUp = true AND r.consumption IS NULL ORDER BY r.dateRefueled DESC") })
+    @NamedQuery(name = Refueling.QueryLatestByFilledUpBeforeDate.NAME,
+            query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
+                    + "AND r.dateRefueled < :date ORDER BY r.dateRefueled DESC "),
+                    @NamedQuery(
+                            name = Refueling.BY_FILLED_UP_AND_MISSING_CONSUMPTION_OLDEST_FIRST,
+                            query = "SELECT r FROM Refueling r WHERE r.isFillUp = true AND r.consumption IS NULL ORDER BY r.dateRefueled DESC") })
 public class Refueling extends BaseEntity {
     private static final long serialVersionUID = 9175526663957115977L;
 
@@ -72,6 +72,11 @@ public class Refueling extends BaseEntity {
             return this;
         }
 
+        public Builder kilometre(final Double value) {
+            this.refueling.setKilometre(value);
+            return this;
+        }
+
         public Builder memo(final String memo) {
             this.refueling.setMemo(memo);
             return this;
@@ -93,6 +98,9 @@ public class Refueling extends BaseEntity {
         }
 
         public Refueling build() {
+            if (this.refueling.getIsFillUp() && this.refueling.getKilometre() == null) {
+                throw new IllegalArgumentException("Combination of filled up refueling with missing kilometre.");
+            }
             return this.refueling;
         }
     }
@@ -102,10 +110,13 @@ public class Refueling extends BaseEntity {
     @Column(nullable = false)
     private Date dateRefueled;
 
-    @DecimalMin(value = "0.009", inclusive = true)
     @NotNull
+    @DecimalMin(value = "0.009", inclusive = true)
     @Column(nullable = false)
     private Double eurosPerLitre;
+
+    @DecimalMin(value = "0.00", inclusive = false)
+    private Double kilometre;
 
     @Min(value = 1)
     @NotNull
@@ -178,6 +189,14 @@ public class Refueling extends BaseEntity {
 
     public void setMemo(final String memo) {
         this.memo = memo;
+    }
+
+    public void setKilometre(final Double kilometre) {
+        this.kilometre = kilometre;
+    }
+
+    public Double getKilometre() {
+        return this.kilometre;
     }
 
 }

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package biz.suckow.fuel.business.refueling.boundary;
+package biz.suckow.fuel.business.consumption.control;
 
 import java.util.Date;
 import java.util.List;
@@ -23,6 +23,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TemporalType;
 
 import biz.suckow.fuel.business.refueling.entity.Refueling;
+import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 import com.google.common.base.Optional;
 
@@ -46,6 +47,21 @@ public class RefuelingLocator {
             result = Optional.of(refuelings.get(0));
         }
         return result;
+    }
+
+    public List<Refueling> getPartialRefuelingsBetween(final Date left, final Date right, final Vehicle vehicle) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * @param refuelingDate
+     * @param vehicle
+     * @return
+     */
+    public List<Refueling> getAllPartialRefuelingsUntil(final Date date, final Vehicle vehicle) {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

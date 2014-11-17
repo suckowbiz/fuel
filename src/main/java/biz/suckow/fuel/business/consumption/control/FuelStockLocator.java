@@ -13,19 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package biz.suckow.fuel.business.refueling.entity;
+package biz.suckow.fuel.business.consumption.control;
 
-import java.util.Date;
+/**
+ * @author tobias
+ *
+ */
+public class FuelStockLocator {
 
-import javax.xml.bind.annotation.XmlRootElement;
-
-@XmlRootElement
-public class RefuelingMeta {
-    public Date date;
-    public String memo;
-    public Double kilometre;
-    public Double eurosPerLitre;
-    public Double litresToTank;
-    public Double litresToStock;
-    public Double litresReleasedFromStock;
 }

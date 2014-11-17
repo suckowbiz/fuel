@@ -57,7 +57,7 @@ public class RefuelingResource {
     public Response refuel(@PathParam("ownername") final String ownername,
             @PathParam("vehiclename") final String vehiclename, final RefuelingMeta meta) {
         final Vehicle vehicle = this.vehicleService.getVehicle(ownername, vehiclename).get();
-        this.service.fullTankRefuel(vehicle, meta.kilometers, meta.litresToTank, meta.eurosPerLitre, meta.date,
+        this.service.fullTankRefuel(vehicle, meta.kilometre, meta.litresToTank, meta.eurosPerLitre, meta.date,
                 meta.memo);
         return Response.ok().build();
     }
@@ -78,7 +78,7 @@ public class RefuelingResource {
     public Response toTankAndStock(@PathParam("ownername") final String ownername,
             @PathParam("vehiclename") final String vehiclename, final RefuelingMeta meta) {
         final Vehicle vehicle = this.vehicleService.getVehicle(ownername, vehiclename).get();
-        this.service.fullTankAndStockRefuel(vehicle, meta.kilometers, meta.litresToTank, meta.litresToStock,
+        this.service.fullTankAndStockRefuel(vehicle, meta.kilometre, meta.litresToTank, meta.litresToStock,
                 meta.eurosPerLitre, meta.date, meta.memo);
         return Response.ok().build();
     }

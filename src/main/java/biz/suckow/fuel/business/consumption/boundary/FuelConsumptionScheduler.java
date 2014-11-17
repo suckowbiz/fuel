@@ -29,8 +29,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import biz.suckow.fuel.business.consumption.control.FuelConsumptionMaths;
+import biz.suckow.fuel.business.consumption.control.RefuelingLocator;
 import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
-import biz.suckow.fuel.business.refueling.boundary.RefuelingLocator;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 

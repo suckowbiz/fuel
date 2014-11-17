@@ -22,8 +22,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import biz.suckow.fuel.business.refueling.boundary.RefuelingLocator;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
+import biz.suckow.fuel.business.refueling.entity.StockRelease;
+import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 import com.google.common.base.Optional;
 
@@ -32,34 +33,53 @@ public class FuelConsumptionMaths {
     private EntityManager em;
 
     @Inject
-    private RefuelingLocator locator;
+    private RefuelingLocator refuelingLocator;
 
-    public Double calculate(final Refueling refueling) {
-        // get right date interval
-        final Date rightBorder = refueling.getDateRefueled();
+    @Inject
+    private FuelStockLocator fuelStockLocator;
 
-        // get left date interval (earliest refueling before the given that is not a full refueling)
-        // might be null on first time
+    public Optional<Double> calculate(final Refueling refueling) {
+        Double result = null;
 
-        // query by date with isFull (not by existing consumption)
+        final Date refuelingDate = refueling.getDateRefueled();
         List<Refueling> partials = new ArrayList<>();
-        final Optional<Refueling> possibleLeftBorder = this.locator
-                .getLatestFilledUpBefore(refueling.getDateRefueled());
-        if (possibleLeftBorder.isPresent()) {
-            partials = this.locator.getPartialRefuelingsBetween(possibleLeftBorder.get().getDateRefueled(),
-                    rightBorder, refueling.getVehicle());
-        } else {
-            partials = this.locator.getAllPartialRefuelingsUntil(rightBorder, refueling.getVehicle());
+        final Optional<Refueling> possibleLastFillUpRefueling = this.refuelingLocator.getLatestFilledUpBefore(refueling.getDateRefueled());
+        if (possibleLastFillUpRefueling.isPresent()) {
+            final Refueling lastRefueling = possibleLastFillUpRefueling.get();
+            partials = this.refuelingLocator.getPartialRefuelingsBetween(lastRefueling.getDateRefueled(),
+                    refuelingDate, refueling.getVehicle());
+            Double litresConsumed = this.sumLitres(partials);
+            litresConsumed += refueling.getLitres();
+
+            final Double litresConsumedFromStock = this.getStockConsumption(lastRefueling.getDateRefueled(),
+                    refueling.getDateRefueled(), refueling.getVehicle());
+
+            final double consumed = litresConsumed + litresConsumedFromStock;
+            final Double distance = refueling.getKilometre() - lastRefueling.getKilometre();
+            result = consumed / distance;
         }
 
-        // get all partial refuelings within interval
-
-        // figure out stock at time of right date interval
-        // sum up all refuelings and what is left of stock
-        // divide litres by kilometers from actual refueling minus kilometer
-        // from left date refueling
-
-        // TODO 3. Implement
-        throw new UnsupportedOperationException();
+        return Optional.fromNullable(result);
     }
+
+    private Double getStockConsumption(final Date left, final Date right, final Vehicle vehicle) {
+        final List<Refueling> stockAdditions = this.fuelStockLocator.getRefuelingsBetween(left, right, vehicle);
+        final List<StockRelease> stockReleases = this.fuelStockLocator.getReleasesBetween(left, right, vehicle);
+        final Double litresAddedToStock = this.sumLitres(stockAdditions);
+        final Double litresReleasedFromStock = this.sumLitres(stockReleases);
+        final Double result = litresAddedToStock - litresReleasedFromStock;
+        if (result < 0) {
+            result *= -1; // in case more consumed than added within this interval
+        }
+        return result;
+    }
+
+    private Double sumLitres(final List<Refueling> refuelings) {
+        Double result = 0D;
+        for (final Refueling refueling : refuelings) {
+            result += refueling.getLitres();
+        }
+        return result;
+    }
+
 }
