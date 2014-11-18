@@ -15,12 +15,10 @@
  */
 package biz.suckow.fuel.business.consumption.control;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.refueling.entity.StockRelease;
@@ -30,9 +28,6 @@ import com.google.common.base.Optional;
 
 public class FuelConsumptionMaths {
     @Inject
-    private EntityManager em;
-
-    @Inject
     private RefuelingLocator refuelingLocator;
 
     @Inject
@@ -40,41 +35,51 @@ public class FuelConsumptionMaths {
 
     public Optional<Double> calculate(final Refueling refueling) {
         Double result = null;
-
         final Date refuelingDate = refueling.getDateRefueled();
-        List<Refueling> partials = new ArrayList<>();
-        final Optional<Refueling> possibleLastFillUpRefueling = this.refuelingLocator.getLatestFilledUpBefore(refueling.getDateRefueled());
+        final Optional<Refueling> possibleLastFillUpRefueling = this.refuelingLocator.getLatestFilledUpBefore(refuelingDate);
         if (possibleLastFillUpRefueling.isPresent()) {
             final Refueling lastRefueling = possibleLastFillUpRefueling.get();
-            partials = this.refuelingLocator.getPartialRefuelingsBetween(lastRefueling.getDateRefueled(),
-                    refuelingDate, refueling.getVehicle());
-            Double litresConsumed = this.sumLitres(partials);
-            litresConsumed += refueling.getLitres();
 
+            final Double litresConsumed = this.getConsumption(refueling, lastRefueling.getDateRefueled(), refuelingDate);
             final Double litresConsumedFromStock = this.getStockConsumption(lastRefueling.getDateRefueled(),
-                    refueling.getDateRefueled(), refueling.getVehicle());
+                    refuelingDate, refueling.getVehicle());
 
             final double consumed = litresConsumed + litresConsumedFromStock;
             final Double distance = refueling.getKilometre() - lastRefueling.getKilometre();
             result = consumed / distance;
         }
-
         return Optional.fromNullable(result);
+    }
+
+    private Double getConsumption(final Refueling refueling, final Date lastRefuelingDate, final Date refuelingDate) {
+        final List<Refueling> partials = this.refuelingLocator.getPartialRefuelingsBetween(lastRefuelingDate,
+                refuelingDate, refueling.getVehicle());
+        Double litresConsumed = this.sumRefuelingLitres(partials);
+        litresConsumed += refueling.getLitres();
+        return litresConsumed;
     }
 
     private Double getStockConsumption(final Date left, final Date right, final Vehicle vehicle) {
         final List<Refueling> stockAdditions = this.fuelStockLocator.getRefuelingsBetween(left, right, vehicle);
         final List<StockRelease> stockReleases = this.fuelStockLocator.getReleasesBetween(left, right, vehicle);
-        final Double litresAddedToStock = this.sumLitres(stockAdditions);
-        final Double litresReleasedFromStock = this.sumLitres(stockReleases);
-        final Double result = litresAddedToStock - litresReleasedFromStock;
+        final Double litresAddedToStock = this.sumRefuelingLitres(stockAdditions);
+        final Double litresReleasedFromStock = this.sumStockReleaseLitres(stockReleases);
+        Double result = litresAddedToStock - litresReleasedFromStock;
         if (result < 0) {
             result *= -1; // in case more consumed than added within this interval
         }
         return result;
     }
 
-    private Double sumLitres(final List<Refueling> refuelings) {
+    private Double sumStockReleaseLitres(final List<StockRelease> releases) {
+        Double result = 0D;
+        for (final StockRelease release : releases) {
+            result += release.getLitres();
+        }
+        return result;
+    }
+
+    private Double sumRefuelingLitres(final List<Refueling> refuelings) {
         Double result = 0D;
         for (final Refueling refueling : refuelings) {
             result += refueling.getLitres();
