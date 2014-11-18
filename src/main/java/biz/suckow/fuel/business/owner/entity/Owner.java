@@ -15,8 +15,8 @@
  */
 package biz.suckow.fuel.business.owner.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,13 +38,13 @@ public class Owner extends BaseEntity {
     }
 
     @OneToMany(mappedBy = "owner")
-    private List<Vehicle> vehicles;
+    private Set<Vehicle> vehicles;
 
     @Column(unique = true, nullable = false)
     private String ownername;
 
     public Owner() {
-        this.vehicles = new ArrayList<>();
+        this.vehicles = new HashSet<>();
     }
 
     public String getOwnername() {
@@ -56,7 +56,7 @@ public class Owner extends BaseEntity {
         return this;
     }
 
-    public List<Vehicle> getVehicles() {
+    public Set<Vehicle> getVehicles() {
         return this.vehicles;
     }
 

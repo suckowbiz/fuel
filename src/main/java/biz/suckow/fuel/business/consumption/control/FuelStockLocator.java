@@ -27,23 +27,11 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
  */
 public class FuelStockLocator {
 
-    /**
-     * @param left
-     * @param right
-     * @param vehicle
-     * @return
-     */
     public List<Refueling> getRefuelingsBetween(final Date left, final Date right, final Vehicle vehicle) {
         // TODO Auto-generated method stub
         return null;
     }
 
-    /**
-     * @param left
-     * @param right
-     * @param vehicle
-     * @return
-     */
     public List<StockRelease> getReleasesBetween(final Date left, final Date right, final Vehicle vehicle) {
         // TODO Auto-generated method stub
         return null;

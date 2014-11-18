@@ -15,11 +15,12 @@
  */
 package biz.suckow.fuel.business.vehicle.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -36,9 +37,9 @@ import biz.suckow.fuel.business.refueling.entity.Refueling;
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehiclename", "owner_id" }))
 @NamedQuery(name = Vehicle.QueryByOwnerAndVehicle.NAME,
-        query = "SELECT v FROM Vehicle v WHERE LOWER(v.vehiclename) = LOWER(:"
-                + Vehicle.QueryByOwnerAndVehicle.PARAM_VEHICLENAME_NAME + ") AND LOWER(v.owner.ownername) = :"
-                + Vehicle.QueryByOwnerAndVehicle.PARAM_OWNERNAME_NAME)
+query = "SELECT v FROM Vehicle v WHERE LOWER(v.vehiclename) = LOWER(:"
+        + Vehicle.QueryByOwnerAndVehicle.PARAM_VEHICLENAME_NAME + ") AND LOWER(v.owner.ownername) = :"
+        + Vehicle.QueryByOwnerAndVehicle.PARAM_OWNERNAME_NAME)
 public class Vehicle extends BaseEntity {
     public String getVehiclename() {
         return this.vehiclename;
@@ -59,17 +60,18 @@ public class Vehicle extends BaseEntity {
     private Owner owner;
 
     @OneToOne
+    @JoinColumn(unique = true)
     private FuelStock fuelStock;
 
     @OneToMany(mappedBy = "vehicle")
-    private List<Refueling> refuelings;
+    private Set<Refueling> refuelings;
 
     @OneToMany
-    private List<FuelConsumption> fuelConsumptions;
+    private Set<FuelConsumption> fuelConsumptions;
 
     public Vehicle() {
-        this.fuelConsumptions = new ArrayList<>();
-        this.refuelings = new ArrayList<>();
+        this.fuelConsumptions = new HashSet<>();
+        this.refuelings = new HashSet<>();
     }
 
     public Vehicle setVehiclename(final String vehiclename) {
@@ -100,11 +102,11 @@ public class Vehicle extends BaseEntity {
         return this.fuelStock;
     }
 
-    public List<Refueling> getRefuelings() {
+    public Set<Refueling> getRefuelings() {
         return this.refuelings;
     }
 
-    public List<FuelConsumption> getFuelConsumptions() {
+    public Set<FuelConsumption> getFuelConsumptions() {
         return this.fuelConsumptions;
     }
 }
