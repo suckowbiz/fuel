@@ -38,8 +38,8 @@ public class RefuelingLocator {
     }
 
     public Optional<Refueling> getLatestFilledUpBefore(final Date date) {
-        final List<Refueling> refuelings = this.em
-                .createNamedQuery(Refueling.QueryLatestByFilledUpBeforeDate.NAME, Refueling.class)
+        final List<Refueling> refuelings = this.em.createNamedQuery(Refueling.QueryLatestByFilledUpBeforeDate.NAME,
+                Refueling.class)
                 .setParameter(Refueling.QueryLatestByFilledUpBeforeDate.PARAM_NAME, date, TemporalType.TIMESTAMP)
                 .getResultList();
         Optional<Refueling> result = Optional.absent();
