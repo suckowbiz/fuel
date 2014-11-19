@@ -18,6 +18,10 @@ package biz.suckow.fuel.business.consumption.control;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+
+import biz.suckow.fuel.business.refueling.entity.FuelStock;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.refueling.entity.StockRelease;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
@@ -26,10 +30,15 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
  * @author tobias
  */
 public class FuelStockLocator {
+    @Inject
+    private EntityManager em;
 
     public List<Refueling> getRefuelingsBetween(final Date left, final Date right, final Vehicle vehicle) {
-        // TODO Auto-generated method stub
-        return null;
+        final List<Refueling> result = this.em.createNamedQuery(FuelStock.QueryRefuelingsBetween.NAME, Refueling.class)
+                .setParameter(FuelStock.QueryRefuelingsBetween.PARAM_LEFT_NAME, left)
+                .setParameter(FuelStock.QueryRefuelingsBetween.PARAM_LEFT_NAME, left)
+                .getResultList();
+        return result;
     }
 
     public List<StockRelease> getReleasesBetween(final Date left, final Date right, final Vehicle vehicle) {
