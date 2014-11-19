@@ -236,6 +236,7 @@
 		<maven.compiler.target>1.7</maven.compiler.target>
 		<failOnMissingWebXml>false</failOnMissingWebXml>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
 		<version.guava>18.0</version.guava>
 		<version.arquillian>1.1.5.Final</version.arquillian>
