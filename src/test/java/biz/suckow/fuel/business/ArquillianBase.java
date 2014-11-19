@@ -17,6 +17,7 @@ package biz.suckow.fuel.business;
 
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.container.test.api.OverProtocol;
 import org.jboss.arquillian.testng.Arquillian;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -29,11 +30,12 @@ import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
 @ArquillianSuiteDeployment
 @Transactional
 public abstract class ArquillianBase extends Arquillian {
+    // required for suite deployment
+    @OverProtocol("Servlet 3.0")
     @Deployment
     public static WebArchive createDeployment() {
         final PomEquippedResolveStage resolver = Maven.resolver().loadPomFromFile("pom.xml");
-        return ShrinkWrap
-                .create(WebArchive.class)
+        return ShrinkWrap.create(WebArchive.class)
                 .addPackages(true, "biz.suckow.fuel")
                 .addAsLibraries(resolver.resolve("org.hamcrest:hamcrest-all").withTransitivity().asFile())
                 .addAsLibraries(
