@@ -22,7 +22,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
 import biz.suckow.fuel.business.refueling.entity.FuelStock;
-import biz.suckow.fuel.business.refueling.entity.Refueling;
+import biz.suckow.fuel.business.refueling.entity.StockAddition;
 import biz.suckow.fuel.business.refueling.entity.StockRelease;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
@@ -33,10 +33,12 @@ public class FuelStockLocator {
     @Inject
     private EntityManager em;
 
-    public List<Refueling> getRefuelingsBetween(final Date left, final Date right, final Vehicle vehicle) {
-        final List<Refueling> result = this.em.createNamedQuery(FuelStock.QueryRefuelingsBetween.NAME, Refueling.class)
-                .setParameter(FuelStock.QueryRefuelingsBetween.PARAM_LEFT_NAME, left)
-                .setParameter(FuelStock.QueryRefuelingsBetween.PARAM_LEFT_NAME, left)
+    // TODO test
+    public List<StockAddition> getAdditionsBetween(final Date left, final Date right, final Vehicle vehicle) {
+        final List<StockAddition> result = this.em.createNamedQuery(FuelStock.QueryAdditionsBetween.NAME,
+                StockAddition.class)
+                .setParameter(FuelStock.QueryAdditionsBetween.PARAM_LEFT_NAME, left)
+                .setParameter(FuelStock.QueryAdditionsBetween.PARAM_LEFT_NAME, left)
                 .getResultList();
         return result;
     }

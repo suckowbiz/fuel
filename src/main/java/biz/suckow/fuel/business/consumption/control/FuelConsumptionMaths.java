@@ -22,6 +22,7 @@ import javax.inject.Inject;
 
 import biz.suckow.fuel.business.refueling.boundary.RefuelingLocator;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
+import biz.suckow.fuel.business.refueling.entity.StockAddition;
 import biz.suckow.fuel.business.refueling.entity.StockRelease;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
@@ -61,10 +62,12 @@ public class FuelConsumptionMaths {
     }
 
     private Double getStockConsumption(final Date left, final Date right, final Vehicle vehicle) {
-        final List<Refueling> stockAdditions = this.fuelStockLocator.getRefuelingsBetween(left, right, vehicle);
+        final List<StockAddition> stockAdditions = this.fuelStockLocator.getAdditionsBetween(left, right, vehicle);
+        final Double litresAddedToStock = this.sumStockAdditionsLitres(stockAdditions);
+
         final List<StockRelease> stockReleases = this.fuelStockLocator.getReleasesBetween(left, right, vehicle);
-        final Double litresAddedToStock = this.sumRefuelingLitres(stockAdditions);
         final Double litresReleasedFromStock = this.sumStockReleaseLitres(stockReleases);
+
         Double result = litresAddedToStock - litresReleasedFromStock;
         if (result < 0) {
             result *= -1; // in case more consumed than added within this interval
@@ -88,4 +91,11 @@ public class FuelConsumptionMaths {
         return result;
     }
 
+    private Double sumStockAdditionsLitres(final List<StockAddition> additions) {
+        Double result = 0D;
+        for (final StockAddition addition : additions) {
+            result += addition.getLitres();
+        }
+        return result;
+    }
 }

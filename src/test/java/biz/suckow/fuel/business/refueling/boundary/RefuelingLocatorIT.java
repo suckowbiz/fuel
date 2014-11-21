@@ -1,5 +1,7 @@
 package biz.suckow.fuel.business.refueling.boundary;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -104,9 +106,9 @@ public class RefuelingLocatorIT extends ArquillianBase {
         this.em.persist(refuelingMarchPartial);
 
         final List<Refueling> actualResult = this.cut.getFilledUpAndMissingConsumptionOldestFirst();
-        Assertions.assertThat(actualResult).hasSize(3);
-        Assertions.assertThat(actualResult.get(0).getDateRefueled()).isEqualTo(march);
-        Assertions.assertThat(actualResult.get(1).getDateRefueled()).isEqualTo(february);
-        Assertions.assertThat(actualResult.get(2).getDateRefueled()).isEqualTo(january);
+        assertThat(actualResult).hasSize(3);
+        assertThat(actualResult.get(0).getDateRefueled()).isEqualTo(march);
+        assertThat(actualResult.get(1).getDateRefueled()).isEqualTo(february);
+        assertThat(actualResult.get(2).getDateRefueled()).isEqualTo(january);
     }
 }

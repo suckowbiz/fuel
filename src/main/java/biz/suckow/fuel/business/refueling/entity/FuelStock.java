@@ -29,55 +29,49 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = FuelStock.QueryRefuelingsBetween.NAME,
-                query = "SELECT r FROM FuelStock fs JOIN fs.refuelings r WHERE fs.vehicle = :vehicle "
-                        + "AND r.dateRefueled > :left AND r.dateRefueled < :right"),
+        @NamedQuery(name = FuelStock.QueryAdditionsBetween.NAME,
+                query = "SELECT a FROM FuelStock fs JOIN fs.additions a WHERE fs.vehicle = :vehicle"
+                        + " AND a.dateAdded > :" + FuelStock.QueryAdditionsBetween.PARAM_LEFT_NAME
+                        + " AND a.dateAdded < :" + FuelStock.QueryAdditionsBetween.PARAM_RIGHT_NAME),
         @NamedQuery(name = FuelStock.QueryReleasesBetween.NAME,
-                    query = "SELECT sr FROM FuelStock fs JOIN fs.stockReleases sr WHERE fs.vehicle = :vehicle "
-                            + "AND sr.dateReleased > :left AND sr.dateReleased < :right") })
+                query = "SELECT sr FROM FuelStock fs JOIN fs.releases sr WHERE fs.vehicle = :vehicle "
+                        + "AND sr.dateReleased > :" + FuelStock.QueryReleasesBetween.PARAM_LEFT_NAME
+                        + " AND sr.dateReleased < :" + FuelStock.QueryReleasesBetween.PARAM_RIGHT_NAME) })
 public class FuelStock extends BaseEntity {
     private static final long serialVersionUID = 2386152541780890783L;
     // TODO ensuer only one fuelstock per vehcile
     @OneToMany
-    private final Set<Refueling> refuelings;
+    private final Set<StockAddition> additions;
 
     @OneToMany
-    private final Set<StockRelease> stockReleases;
+    private final Set<StockRelease> releases;
 
     @OneToOne(mappedBy = "fuelStock")
     private Vehicle vehicle;
 
-    public static final class QueryRefuelingsBetween {
-        public static final String NAME = "Refueling.refuelingsBetween";
-        public static final String PARAM_LEFT_NAME = "Refueling.refuelingsBetweenLeftParam";
-        public static final String PARAM_RIGHT_NAME = "Refueling.refuelingsBetweenRightParam";
+    public static final class QueryAdditionsBetween {
+        public static final String NAME = "FuelStock.refuelingsBetween";
+        public static final String PARAM_LEFT_NAME = "dateLeft";
+        public static final String PARAM_RIGHT_NAME = "dateRight";
     }
 
     public static final class QueryReleasesBetween {
-        public static final String NAME = "Refueling.releasesBetween";
-        public static final String PARAM_LEFT_NAME = "Refueling.releasesBetweenLeftParam";
-        public static final String PARAM_RIGHT_NAME = "Refueling.releasesBetweenRightParam";
+        public static final String NAME = "FuelStock.releasesBetween";
+        public static final String PARAM_LEFT_NAME = "dateLeft";
+        public static final String PARAM_RIGHT_NAME = "dateRight";
     }
 
     public FuelStock() {
-        this.stockReleases = new HashSet<>();
-        this.refuelings = new HashSet<>();
+        this.releases = new HashSet<>();
+        this.additions = new HashSet<>();
     }
 
-    public void addRefueling(final Refueling refueling) {
-        this.refuelings.add(refueling);
+    public void add(final StockAddition addition) {
+        this.additions.add(addition);
     }
 
-    public void addStockRelease(final StockRelease out) {
-        this.stockReleases.add(out);
-    }
-
-    public Set<Refueling> getRefuelings() {
-        return this.refuelings;
-    }
-
-    public Set<StockRelease> getStockReleases() {
-        return this.stockReleases;
+    public void release(final StockRelease release) {
+        this.releases.add(release);
     }
 
     public Vehicle getVehicle() {

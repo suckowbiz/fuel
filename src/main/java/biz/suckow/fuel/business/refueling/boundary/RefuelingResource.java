@@ -89,7 +89,7 @@ public class RefuelingResource {
     public Response refuelStock(@PathParam("ownername") final String ownername,
             @PathParam("vehiclename") final String vehiclename, final RefuelingMeta meta) {
         final Vehicle vehicle = this.vehicleService.getVehicle(ownername, vehiclename).get();
-        this.service.stockRefuel(vehicle, meta.litresToStock, meta.eurosPerLitre, meta.date, meta.memo);
+        this.service.stockAddition(vehicle, meta.litresToStock, meta.eurosPerLitre, meta.date, meta.memo);
         return Response.ok().build();
     }
 

@@ -35,9 +35,14 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Entity
 @NamedQueries({
+        @NamedQuery(name = Refueling.QueryPartialRefuelingsBetween.NAME,
+                query = "SELECT r FROM Refueling r WHERE r.isFillUp = false AND r.dateRefueled > :"
+                        + Refueling.QueryPartialRefuelingsBetween.PARAM_NAME_LEFT + " AND r.dateRefueled < :"
+                        + Refueling.QueryPartialRefuelingsBetween.PARAM_NAME_RIGHT + " AND r.vehicle = :"
+                        + Refueling.QueryPartialRefuelingsBetween.PARAM_NAME_VEHICLE),
         @NamedQuery(name = Refueling.QueryLatestByFilledUpBeforeDate.NAME,
-                query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
-                        + "AND r.dateRefueled < :date ORDER BY r.dateRefueled DESC "),
+                query = "SELECT r FROM Refueling r WHERE r.isFillUp = true " + "AND r.dateRefueled < :"
+                            + Refueling.QueryLatestByFilledUpBeforeDate.PARAM_NAME + " ORDER BY r.dateRefueled DESC "),
         @NamedQuery(
                 name = Refueling.BY_FILLED_UP_AND_MISSING_CONSUMPTION_OLDEST_FIRST,
                 query = "SELECT r FROM Refueling r WHERE r.isFillUp = true AND r.consumption IS NULL ORDER BY r.dateRefueled DESC") })
@@ -46,9 +51,16 @@ public class Refueling extends BaseEntity {
 
     public static final String BY_FILLED_UP_AND_MISSING_CONSUMPTION_OLDEST_FIRST = "Vehicle.byMissingConsumptionOldestFirst";
 
+    public static final class QueryPartialRefuelingsBetween {
+        public static final String NAME = "Refueling.partialRefuelingsBetween";
+        public static final String PARAM_NAME_LEFT = "dateLeft";
+        public static final String PARAM_NAME_RIGHT = "dateRight";
+        public static final String PARAM_NAME_VEHICLE = "vehicle";
+    }
+
     public static final class QueryLatestByFilledUpBeforeDate {
         public static final String NAME = "Refueling.latestByFilledUpBeforeDate";
-        public static final String PARAM_NAME = "Refueling.latestByFilledUpBeforeDateParam";
+        public static final String PARAM_NAME = "dateParam";
     }
 
     public static final class Builder {
