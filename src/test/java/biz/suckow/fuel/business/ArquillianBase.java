@@ -41,10 +41,10 @@ public abstract class ArquillianBase extends Arquillian {
                 .addAsLibraries(resolver.resolve("org.assertj:assertj-guava").withTransitivity().asFile())
                 .addAsLibraries(
                         resolver.importDependencies(ScopeType.COMPILE, ScopeType.RUNTIME)
-                        .resolve()
-                        .withTransitivity()
-                        .asFile())
-                        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                        .addAsResource("persistence.xml", "META-INF/persistence.xml");
+                                .resolve()
+                                .withTransitivity()
+                                .asFile())
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                .addAsResource("persistence.xml", "META-INF/persistence.xml");
     }
 }
