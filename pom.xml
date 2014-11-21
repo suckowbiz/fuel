@@ -26,6 +26,44 @@
 	<name>fuel</name>
 	<description>A software to track fuel consumtions of vehicles.</description>
 	<inceptionYear>2014</inceptionYear>
+		<developers>
+		<developer>
+			<name>Tobias Suckow</name>
+			<email>tobias@suckow.biz</email>
+		</developer>
+	</developers>
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<distribution>repo</distribution>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+		</license>
+	</licenses>
+	<properties>
+		<maven.compiler.source>1.7</maven.compiler.source>
+		<maven.compiler.target>1.7</maven.compiler.target>
+		<failOnMissingWebXml>false</failOnMissingWebXml>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
+		<version.guava>18.0</version.guava>
+		<version.arquillian>1.1.5.Final</version.arquillian>
+		<version.arquillian-transaction>1.0.1.Final</version.arquillian-transaction>
+		<version.easymock>3.2</version.easymock>
+		<version.maven-compiler-plugin>2.3.2</version.maven-compiler-plugin>
+		<version.maven-dependency-plugin>2.9</version.maven-dependency-plugin>
+		<version.maven-surefire-plugin>2.17</version.maven-surefire-plugin>
+		<version.maven-failsafe-plugin>2.17</version.maven-failsafe-plugin>
+		<version.maven-war-plugin>2.1.1</version.maven-war-plugin>
+		<version.shrinkwrap-resolver>2.1.1</version.shrinkwrap-resolver>
+		<version.testng>6.8.1</version.testng>
+		<version.wildfly-arquillian>8.1.0.Final</version.wildfly-arquillian>
+		<version.wildfly-dist>8.1.0.Final</version.wildfly-dist>
+		<version.hibernate-core>4.3.6.Final</version.hibernate-core>
+		<version.hibernate-entitymanager>4.3.1.Final</version.hibernate-entitymanager>
+		<version.hibernate-validator>5.1.2.Final</version.hibernate-validator>
+		<version.arquillian-suite-extension>1.1.2</version.arquillian-suite-extension>
+	</properties>
 	<dependencyManagement>
 		<dependencies>
 			<!-- Set up Arquillian is a pain so shrinkwrap resolver helps by slurping 
@@ -65,19 +103,19 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
-			<version>4.3.6.Final</version>
+			<version>${version.hibernate-core}</version>
 		</dependency>
 		<!-- Hibernate O/RM implementation of the JPA specification -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
-			<version>4.3.1.Final</version>
+			<version>${version.hibernate-entitymanager}</version>
 		</dependency>
 		<!-- Hibernate's Bean Validation (JSR-303) reference implementation. -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>5.1.2.Final</version>
+			<version>${version.hibernate-validator}</version>
 		</dependency>
 		<!-- Intentionally added to test with TestNG. -->
 		<dependency>
@@ -96,7 +134,7 @@
 		<dependency>
 			<groupId>org.jboss.arquillian.extension</groupId>
 			<artifactId>arquillian-transaction-jta</artifactId>
-			<version>1.0.1.Final</version>
+			<version>${version.arquillian-transaction}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -145,7 +183,7 @@
 		<dependency>
 			<groupId>org.eu.ingwar.tools</groupId>
 			<artifactId>arquillian-suite-extension</artifactId>
-			<version>1.1.2</version>
+			<version>${version.arquillian-suite-extension}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -218,37 +256,4 @@
 		</plugins>
 		<finalName>fuel</finalName>
 	</build>
-	<developers>
-		<developer>
-			<name>Tobias Suckow</name>
-			<email>tobias@suckow.biz</email>
-		</developer>
-	</developers>
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<distribution>repo</distribution>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-		</license>
-	</licenses>
-	<properties>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
-		<failOnMissingWebXml>false</failOnMissingWebXml>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    	<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
-		<version.guava>18.0</version.guava>
-		<version.arquillian>1.1.5.Final</version.arquillian>
-		<version.easymock>3.2</version.easymock>
-		<version.maven-compiler-plugin>2.3.2</version.maven-compiler-plugin>
-		<version.maven-dependency-plugin>2.9</version.maven-dependency-plugin>
-		<version.maven-surefire-plugin>2.17</version.maven-surefire-plugin>
-		<version.maven-failsafe-plugin>2.17</version.maven-failsafe-plugin>
-		<version.maven-war-plugin>2.1.1</version.maven-war-plugin>
-		<version.shrinkwrap-resolver>2.1.1</version.shrinkwrap-resolver>
-		<version.testng>6.8.1</version.testng>
-		<version.wildfly-arquillian>8.1.0.Final</version.wildfly-arquillian>
-		<version.wildfly-dist>8.1.0.Final</version.wildfly-dist>
-	</properties>
 </project>
