@@ -1,10 +1,11 @@
 package biz.suckow.fuel.business.vehicle.boundary;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.guava.api.Assertions.assertThat;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import static org.hamcrest.MatcherAssert.*;
-import static org.hamcrest.Matchers.*;
 import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.testng.annotations.Test;
@@ -32,14 +33,13 @@ public class VehicleLocatorIT extends ArquillianBase {
         this.em.persist(vehicle);
 
         final Vehicle actualResult = this.cut.getVehicle("duke", "duke-bike").get();
-        assertThat(actualResult, not(nullValue()));
-        assertThat(actualResult.getId(), not(nullValue()));
-        assertThat(actualResult.getId(), equalTo(vehicle.getId()));
+        assertThat(actualResult).isNotNull();
+        assertThat(actualResult.getId()).isEqualTo(vehicle.getId());
     }
 
     @Test
     public void verifyVehicleFetchingFails() {
         final Optional<Vehicle> possibleVehicle = this.cut.getVehicle("duke", "duke-bike");
-        assertThat(possibleVehicle.isPresent(), is(false));
+        assertThat(possibleVehicle).isAbsent();
     }
 }

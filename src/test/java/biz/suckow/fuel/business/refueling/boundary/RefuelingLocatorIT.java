@@ -7,9 +7,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
-
+import org.assertj.core.api.Assertions;
 import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.testng.annotations.Test;
@@ -26,7 +24,7 @@ public class RefuelingLocatorIT extends ArquillianBase {
 
     @Inject
     private EntityManager em;
-    
+
     @Test
     @Transactional(value = TransactionMode.ROLLBACK)
     public void testLocateNothing() {
@@ -40,8 +38,7 @@ public class RefuelingLocatorIT extends ArquillianBase {
         calendar.set(Calendar.MONTH, 2);
         final Date march = calendar.getTime();
 
-        final Refueling refuelingMarchPartial = new Refueling.Builder()
-                .dateRefueled(march)
+        final Refueling refuelingMarchPartial = new Refueling.Builder().dateRefueled(march)
                 .eurosPerLitre(1D)
                 .fillUp(false)
                 .litres(1D)
@@ -50,7 +47,7 @@ public class RefuelingLocatorIT extends ArquillianBase {
         this.em.persist(refuelingMarchPartial);
 
         final List<Refueling> actualResult = this.cut.getFilledUpAndMissingConsumptionOldestFirst();
-        assertThat(actualResult.isEmpty(), is(true));
+        Assertions.assertThat(actualResult).isEmpty();
     }
 
     @Test
@@ -72,8 +69,7 @@ public class RefuelingLocatorIT extends ArquillianBase {
         calendar.set(Calendar.MONTH, 2);
         final Date march = calendar.getTime();
 
-        Refueling refueling = new Refueling.Builder()
-                .dateRefueled(january)
+        Refueling refueling = new Refueling.Builder().dateRefueled(january)
                 .eurosPerLitre(1D)
                 .fillUp(true)
                 .kilometre(1D)
@@ -82,8 +78,7 @@ public class RefuelingLocatorIT extends ArquillianBase {
                 .build();
         this.em.persist(refueling);
 
-        refueling = new Refueling.Builder()
-                .dateRefueled(february)
+        refueling = new Refueling.Builder().dateRefueled(february)
                 .eurosPerLitre(1D)
                 .fillUp(true)
                 .kilometre(1D)
@@ -92,8 +87,7 @@ public class RefuelingLocatorIT extends ArquillianBase {
                 .build();
         this.em.persist(refueling);
 
-        refueling = new Refueling.Builder()
-                .dateRefueled(march)
+        refueling = new Refueling.Builder().dateRefueled(march)
                 .eurosPerLitre(1D)
                 .fillUp(true)
                 .kilometre(1D)
@@ -102,8 +96,7 @@ public class RefuelingLocatorIT extends ArquillianBase {
                 .build();
         this.em.persist(refueling);
 
-        final Refueling refuelingMarchPartial = new Refueling.Builder()
-                .dateRefueled(march)
+        final Refueling refuelingMarchPartial = new Refueling.Builder().dateRefueled(march)
                 .eurosPerLitre(1D)
                 .fillUp(false)
                 .litres(1D)
@@ -112,9 +105,9 @@ public class RefuelingLocatorIT extends ArquillianBase {
         this.em.persist(refuelingMarchPartial);
 
         final List<Refueling> actualResult = this.cut.getFilledUpAndMissingConsumptionOldestFirst();
-        assertThat(actualResult.size(), is(3));
-        assertThat(actualResult.get(0).getDateRefueled(), is(march));
-        assertThat(actualResult.get(1).getDateRefueled(), is(february));
-        assertThat(actualResult.get(2).getDateRefueled(), is(january));
+        Assertions.assertThat(actualResult).hasSize(3);
+        Assertions.assertThat(actualResult.get(0).getDateRefueled()).isEqualTo(march);
+        Assertions.assertThat(actualResult.get(1).getDateRefueled()).isEqualTo(february);
+        Assertions.assertThat(actualResult.get(2).getDateRefueled()).isEqualTo(january);
     }
 }

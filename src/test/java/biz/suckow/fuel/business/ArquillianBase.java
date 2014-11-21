@@ -37,13 +37,14 @@ public abstract class ArquillianBase extends Arquillian {
         final PomEquippedResolveStage resolver = Maven.resolver().loadPomFromFile("pom.xml");
         return ShrinkWrap.create(WebArchive.class)
                 .addPackages(true, "biz.suckow.fuel")
-                .addAsLibraries(resolver.resolve("org.hamcrest:hamcrest-all").withTransitivity().asFile())
+                .addAsLibraries(resolver.resolve("org.assertj:assertj-core").withTransitivity().asFile())
+                .addAsLibraries(resolver.resolve("org.assertj:assertj-guava").withTransitivity().asFile())
                 .addAsLibraries(
                         resolver.importDependencies(ScopeType.COMPILE, ScopeType.RUNTIME)
-                                .resolve()
-                                .withTransitivity()
-                                .asFile())
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsResource("persistence.xml", "META-INF/persistence.xml");
+                        .resolve()
+                        .withTransitivity()
+                        .asFile())
+                        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                        .addAsResource("persistence.xml", "META-INF/persistence.xml");
     }
 }
