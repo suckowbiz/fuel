@@ -35,7 +35,7 @@ public class OwnerService extends BaseEntity {
     public Owner getOwner(final String ownername) {
         final Owner result = (Owner) this.em
                 .createNamedQuery(Owner.QueryByOwnerameCaseIgnore.NAME)
-                .setParameter(Owner.QueryByOwnerameCaseIgnore.PARAM_NAME, ownername)
+                .setParameter(Owner.QueryByOwnerameCaseIgnore.OWNERNAME, ownername)
                 .getSingleResult();
         return result;
     }

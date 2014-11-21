@@ -40,7 +40,7 @@ public class RefuelingLocator {
     public Optional<Refueling> getLatestFilledUpBefore(final Date date) {
         final List<Refueling> refuelings = this.em.createNamedQuery(Refueling.QueryLatestByFilledUpBeforeDate.NAME,
                 Refueling.class)
-                .setParameter(Refueling.QueryLatestByFilledUpBeforeDate.PARAM_NAME, date, TemporalType.TIMESTAMP)
+                .setParameter(Refueling.QueryLatestByFilledUpBeforeDate.DATE, date, TemporalType.TIMESTAMP)
                 .getResultList();
         Optional<Refueling> result = Optional.absent();
         if (refuelings.size() > 0) {
@@ -52,9 +52,9 @@ public class RefuelingLocator {
     public List<Refueling> getPartialRefuelingsBetween(final Date left, final Date right, final Vehicle vehicle) {
         final List<Refueling> result = this.em.createNamedQuery(Refueling.QueryPartialRefuelingsBetween.NAME,
                 Refueling.class)
-                .setParameter(Refueling.QueryPartialRefuelingsBetween.PARAM_NAME_LEFT, left)
-                .setParameter(Refueling.QueryPartialRefuelingsBetween.PARAM_NAME_RIGHT, right)
-                .setParameter(Refueling.QueryPartialRefuelingsBetween.PARAM_NAME_VEHICLE, vehicle)
+                .setParameter(Refueling.QueryPartialRefuelingsBetween.DATE_LEFT, left)
+                .setParameter(Refueling.QueryPartialRefuelingsBetween.DATE_RIGHT, right)
+                .setParameter(Refueling.QueryPartialRefuelingsBetween.VEHICLE, vehicle)
                 .getResultList();
         return result;
     }

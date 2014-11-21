@@ -32,8 +32,8 @@ public class VehicleLocator {
         try {
             result = this.em
                     .createNamedQuery(Vehicle.QueryByOwnerAndVehicle.NAME, Vehicle.class)
-                    .setParameter(Vehicle.QueryByOwnerAndVehicle.PARAM_OWNERNAME_NAME, ownername)
-                    .setParameter(Vehicle.QueryByOwnerAndVehicle.PARAM_VEHICLENAME_NAME, vehiclename)
+                    .setParameter(Vehicle.QueryByOwnerAndVehicle.OWNERNAME, ownername)
+                    .setParameter(Vehicle.QueryByOwnerAndVehicle.VEHICLENAME, vehiclename)
                     .getSingleResult();
         } catch (final NoResultException e) {
             /* NOP */

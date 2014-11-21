@@ -38,8 +38,8 @@ import biz.suckow.fuel.business.refueling.entity.Refueling;
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehiclename", "owner_id" }))
 @NamedQuery(name = Vehicle.QueryByOwnerAndVehicle.NAME,
 query = "SELECT v FROM Vehicle v WHERE LOWER(v.vehiclename) = LOWER(:"
-        + Vehicle.QueryByOwnerAndVehicle.PARAM_VEHICLENAME_NAME + ") AND LOWER(v.owner.ownername) = :"
-        + Vehicle.QueryByOwnerAndVehicle.PARAM_OWNERNAME_NAME)
+        + Vehicle.QueryByOwnerAndVehicle.VEHICLENAME + ") AND LOWER(v.owner.ownername) = :"
+        + Vehicle.QueryByOwnerAndVehicle.OWNERNAME)
 public class Vehicle extends BaseEntity {
     public String getVehiclename() {
         return this.vehiclename;
@@ -49,8 +49,8 @@ public class Vehicle extends BaseEntity {
 
     public static final class QueryByOwnerAndVehicle {
         public static final String NAME = "Vehicle.ByOwnerAndVehicle";
-        public static final String PARAM_OWNERNAME_NAME = "ownername";
-        public static final String PARAM_VEHICLENAME_NAME = "vehiclename";
+        public static final String OWNERNAME = "ownername";
+        public static final String VEHICLENAME = "vehiclename";
     }
 
     @Column(nullable = false)

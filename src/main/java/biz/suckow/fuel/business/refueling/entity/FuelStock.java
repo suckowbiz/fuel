@@ -31,12 +31,12 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 @NamedQueries({
         @NamedQuery(name = FuelStock.QueryAdditionsBetween.NAME,
                 query = "SELECT a FROM FuelStock fs JOIN fs.additions a WHERE fs.vehicle = :vehicle"
-                        + " AND a.dateAdded > :" + FuelStock.QueryAdditionsBetween.PARAM_LEFT_NAME
-                        + " AND a.dateAdded < :" + FuelStock.QueryAdditionsBetween.PARAM_RIGHT_NAME),
+                        + " AND a.dateAdded > :" + FuelStock.QueryAdditionsBetween.DATE_LEFT
+                        + " AND a.dateAdded < :" + FuelStock.QueryAdditionsBetween.DATE_RIGHT),
         @NamedQuery(name = FuelStock.QueryReleasesBetween.NAME,
                 query = "SELECT sr FROM FuelStock fs JOIN fs.releases sr WHERE fs.vehicle = :vehicle "
-                        + "AND sr.dateReleased > :" + FuelStock.QueryReleasesBetween.PARAM_LEFT_NAME
-                        + " AND sr.dateReleased < :" + FuelStock.QueryReleasesBetween.PARAM_RIGHT_NAME) })
+                        + "AND sr.dateReleased > :" + FuelStock.QueryReleasesBetween.DATE_LEFT
+                        + " AND sr.dateReleased < :" + FuelStock.QueryReleasesBetween.DATE_RIGHT) })
 public class FuelStock extends BaseEntity {
     private static final long serialVersionUID = 2386152541780890783L;
     // TODO ensuer only one fuelstock per vehcile
@@ -51,14 +51,14 @@ public class FuelStock extends BaseEntity {
 
     public static final class QueryAdditionsBetween {
         public static final String NAME = "FuelStock.refuelingsBetween";
-        public static final String PARAM_LEFT_NAME = "dateLeft";
-        public static final String PARAM_RIGHT_NAME = "dateRight";
+        public static final String DATE_LEFT = "dateLeft";
+        public static final String DATE_RIGHT = "dateRight";
     }
 
     public static final class QueryReleasesBetween {
         public static final String NAME = "FuelStock.releasesBetween";
-        public static final String PARAM_LEFT_NAME = "dateLeft";
-        public static final String PARAM_RIGHT_NAME = "dateRight";
+        public static final String DATE_LEFT = "dateLeft";
+        public static final String DATE_RIGHT = "dateRight";
     }
 
     public FuelStock() {
