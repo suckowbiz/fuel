@@ -13,7 +13,6 @@ import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.ArquillianBase;
-import biz.suckow.fuel.business.consumption.control.RefuelingLocator;
 import biz.suckow.fuel.business.owner.entity.Owner;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;

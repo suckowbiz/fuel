@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package biz.suckow.fuel.business.consumption.control;
+package biz.suckow.fuel.business.refueling.boundary;
 
 import java.util.Date;
 import java.util.List;
@@ -49,6 +49,7 @@ public class RefuelingLocator {
         return result;
     }
 
+    // TODO Continue here
     public List<Refueling> getPartialRefuelingsBetween(final Date left, final Date right, final Vehicle vehicle) {
         // TODO Auto-generated method stub
         return null;
