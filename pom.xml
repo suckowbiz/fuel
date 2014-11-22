@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
- ~ Copyright 2014 Tobias Suckow.
- ~
- ~ Licensed under the Apache License, Version 2.0 (the "License");
- ~ you may not use this file except in compliance with the License.
- ~ You may obtain a copy of the License at
- ~
- ~      http://www.apache.org/licenses/LICENSE-2.0
- ~
- ~ Unless required by applicable law or agreed to in writing, software
- ~ distributed under the License is distributed on an "AS IS" BASIS,
- ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- ~ See the License for the specific language governing permissions and
- ~ limitations under the License.
- -->
+<!-- ~ Copyright 2014 Tobias Suckow. ~ ~ Licensed under the Apache License, 
+	Version 2.0 (the "License"); ~ you may not use this file except in compliance 
+	with the License. ~ You may obtain a copy of the License at ~ ~ http://www.apache.org/licenses/LICENSE-2.0 
+	~ ~ Unless required by applicable law or agreed to in writing, software ~ 
+	distributed under the License is distributed on an "AS IS" BASIS, ~ WITHOUT 
+	WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. ~ See the 
+	License for the specific language governing permissions and ~ limitations 
+	under the License. -->
 
-<!--
-  Set these VM properties in your IDE debugger
-  -Djava.util.logging.manager=org.jboss.logmanager.LogManager
-  -Djboss.home=target/wildfly-8.1.0.Final
--->
+<!-- Set these VM properties in your IDE debugger -Djava.util.logging.manager=org.jboss.logmanager.LogManager 
+	-Djboss.home=target/wildfly-8.1.0.Final -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -100,8 +90,8 @@
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
-			<!-- Have integration tests. Import the Bill Of Material, or version matrix, for Arquillian’s 
-				transitive dependencies -->
+			<!-- Have integration tests. Import the Bill Of Material, or version matrix, 
+				for Arquillian’s transitive dependencies -->
 			<dependency>
 				<groupId>org.jboss.arquillian</groupId>
 				<artifactId>arquillian-bom</artifactId>
@@ -172,7 +162,8 @@
 			<version>${version.wildfly-arquillian}</version>
 			<scope>test</scope>
 		</dependency>
-		<!-- Added to ease the procedure of creating a .war that Arquillian deploys for testing. -->
+		<!-- Added to ease the procedure of creating a .war that Arquillian deploys 
+			for testing. -->
 		<dependency>
 			<groupId>org.jboss.shrinkwrap.resolver</groupId>
 			<artifactId>shrinkwrap-resolver-depchain</artifactId>
@@ -235,11 +226,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-<!--         <dependency> -->
-<!--             <groupId>junit</groupId> -->
-<!--             <artifactId>junit</artifactId> -->
-<!--             <scope>test</scope> -->
-<!--         </dependency> -->
 	</dependencies>
 	<build>
 		<finalName>fuel</finalName>
@@ -271,8 +257,7 @@
 					<systemPropertyVariables>
 						<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
 						<jboss.home>${jboss.home}</jboss.home>
-<!-- 						<module.path>${jboss.home}/modules</module.path> -->
-<redirectTestOutputToFile>false</redirectTestOutputToFile>
+						<redirectTestOutputToFile>false</redirectTestOutputToFile>
 					</systemPropertyVariables>
 				</configuration>
 			</plugin>
