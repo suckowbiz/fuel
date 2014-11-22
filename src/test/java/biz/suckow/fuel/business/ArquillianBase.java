@@ -19,6 +19,7 @@ import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuit
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OverProtocol;
 import org.jboss.arquillian.testng.Arquillian;
+import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
@@ -28,7 +29,7 @@ import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
 import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
 
 @ArquillianSuiteDeployment
-@Transactional
+@Transactional(value = TransactionMode.ROLLBACK)
 public abstract class ArquillianBase extends Arquillian {
     // required for suite deployment
     @OverProtocol("Servlet 3.0")
@@ -37,6 +38,7 @@ public abstract class ArquillianBase extends Arquillian {
         final PomEquippedResolveStage resolver = Maven.resolver().loadPomFromFile("pom.xml");
         return ShrinkWrap.create(WebArchive.class)
                 .addPackages(true, "biz.suckow.fuel")
+                .addPackages(true, "org.h2")
                 .addAsLibraries(resolver.resolve("org.assertj:assertj-core").withTransitivity().asFile())
                 .addAsLibraries(resolver.resolve("org.assertj:assertj-guava").withTransitivity().asFile())
                 .addAsLibraries(
