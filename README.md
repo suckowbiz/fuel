@@ -28,5 +28,16 @@ Debug with [Failsafe Debug](http://maven.apache.org/surefire/maven-failsafe-plug
 
     mvn -Dmaven.failsafe.debug verify
     
+###Test from Eclipse
+###Setup
+  - install TestNG Plugin from within Eclipse using Marketplace
+  - install JBoss Tools with Arquillian support as "install new software" 
+  ``http://download.jboss.org/jbosstools/targetplatforms/jbosstoolstarget/luna/``
+  
+###Configuration
+``JBoss Tools->Arquillian->Enable default VM arguments`` (enable "Add the default VM arguments to the JUnit/TestNG launch configurations") and add ``-Djava.util.logging.manager=org.jboss.logmanager.LogManager`` and  ``-Djboss.home=target/wildfly-8.1.0.Final``
+
+Now you are ready to run/debug from within eclipse by right click a test and "Run/Debug As -> TestNG Test"
+    
 #License
 The software is available under [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).

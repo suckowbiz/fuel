@@ -59,10 +59,10 @@ public class Vehicle extends BaseEntity {
     private FuelStock fuelStock;
 
     @OneToMany(mappedBy = "vehicle")
-    private final Set<Refueling> refuelings;
+    private Set<Refueling> refuelings;
 
     @OneToMany
-    private final Set<FuelConsumption> fuelConsumptions;
+    private Set<FuelConsumption> fuelConsumptions;
 
     public Vehicle() {
         this.fuelConsumptions = new HashSet<>();

@@ -32,20 +32,21 @@ import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
 @Transactional(value = TransactionMode.ROLLBACK)
 public abstract class ArquillianBase extends Arquillian {
     // required for suite deployment
-    @OverProtocol("Servlet 3.0")
     @Deployment
+    @OverProtocol("Servlet 3.0")
     public static WebArchive createDeployment() {
         final PomEquippedResolveStage resolver = Maven.resolver().loadPomFromFile("pom.xml");
         return ShrinkWrap.create(WebArchive.class)
                 .addPackages(true, "biz.suckow.fuel")
                 .addPackages(true, "org.h2")
+                .addPackages(true, "com.google")
                 .addAsLibraries(resolver.resolve("org.assertj:assertj-core").withTransitivity().asFile())
                 .addAsLibraries(resolver.resolve("org.assertj:assertj-guava").withTransitivity().asFile())
                 .addAsLibraries(
                         resolver.importDependencies(ScopeType.COMPILE, ScopeType.RUNTIME)
-                                .resolve()
-                                .withTransitivity()
-                                .asFile())
+                        .resolve()
+                        .withTransitivity()
+                        .asFile())
                 .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsResource("persistence.xml", "META-INF/persistence.xml");
     }

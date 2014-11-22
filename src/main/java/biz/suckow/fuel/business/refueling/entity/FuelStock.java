@@ -41,10 +41,10 @@ public class FuelStock extends BaseEntity {
     private static final long serialVersionUID = 2386152541780890783L;
 
     @OneToMany
-    private final Set<StockAddition> additions;
+    private Set<StockAddition> additions;
 
     @OneToMany
-    private final Set<StockRelease> releases;
+    private Set<StockRelease> releases;
 
     @OneToOne(mappedBy = "fuelStock")
     private Vehicle vehicle;
