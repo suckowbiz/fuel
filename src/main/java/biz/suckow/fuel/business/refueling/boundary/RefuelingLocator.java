@@ -50,11 +50,11 @@ public class RefuelingLocator {
     }
 
     public List<Refueling> getPartialRefuelingsBetween(final Date left, final Date right, final Vehicle vehicle) {
-        final List<Refueling> result = this.em.createNamedQuery(Refueling.QueryPartialRefuelingsBetween.NAME,
+        final List<Refueling> result = this.em.createNamedQuery(Refueling.QueryPartialsBetween.NAME,
                 Refueling.class)
-                .setParameter(Refueling.QueryPartialRefuelingsBetween.DATE_LEFT, left)
-                .setParameter(Refueling.QueryPartialRefuelingsBetween.DATE_RIGHT, right)
-                .setParameter(Refueling.QueryPartialRefuelingsBetween.VEHICLE, vehicle)
+                .setParameter(Refueling.QueryPartialsBetween.DATE_LEFT, left)
+                .setParameter(Refueling.QueryPartialsBetween.DATE_RIGHT, right)
+                .setParameter(Refueling.QueryPartialsBetween.VEHICLE, vehicle)
                 .getResultList();
         return result;
     }

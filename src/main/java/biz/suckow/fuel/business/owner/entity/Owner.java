@@ -27,12 +27,12 @@ import biz.suckow.fuel.business.app.entity.BaseEntity;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Entity
-@NamedQuery(name = Owner.QueryByOwnerameCaseIgnore.NAME, query = "SELECT o FROM Owner o "
-        + "WHERE LOWER(o.ownername) = LOWER(:" + Owner.QueryByOwnerameCaseIgnore.OWNERNAME + ")")
+@NamedQuery(name = Owner.QueryByOwnernameIgnoreCase.NAME, query = "SELECT o FROM Owner o "
+        + "WHERE LOWER(o.ownername) = LOWER(:" + Owner.QueryByOwnernameIgnoreCase.OWNERNAME + ")")
 public class Owner extends BaseEntity {
     private static final long serialVersionUID = -2640121939957877859L;
 
-    public static final class QueryByOwnerameCaseIgnore {
+    public static final class QueryByOwnernameIgnoreCase {
         public static final String NAME = "Owner.byOwnername";
         public static final String OWNERNAME = "ownername";
     }
