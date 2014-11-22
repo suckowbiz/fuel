@@ -200,6 +200,13 @@
 			<version>${version.arquillian-suite-extension}</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Expecting persistence exceptions requires H2 dependency because H2 
+			is used for testing. -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.2.140</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>fuel</finalName>
