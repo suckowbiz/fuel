@@ -31,6 +31,7 @@ import biz.suckow.fuel.business.refueling.entity.RefuelingMeta;
 import biz.suckow.fuel.business.vehicle.boundary.VehicleLocator;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
+// TODO test
 @Path("refuelings")
 @Stateless
 public class RefuelingResource {

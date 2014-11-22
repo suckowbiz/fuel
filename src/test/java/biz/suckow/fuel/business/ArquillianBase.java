@@ -15,6 +15,9 @@
  */
 package biz.suckow.fuel.business;
 
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OverProtocol;
@@ -31,7 +34,9 @@ import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
 @ArquillianSuiteDeployment
 @Transactional(value = TransactionMode.ROLLBACK)
 public abstract class ArquillianBase extends Arquillian {
-    // required for suite deployment
+    @Inject
+    protected EntityManager em;
+
     @Deployment
     @OverProtocol("Servlet 3.0")
     public static WebArchive createDeployment() {
@@ -44,10 +49,10 @@ public abstract class ArquillianBase extends Arquillian {
                 .addAsLibraries(resolver.resolve("org.assertj:assertj-guava").withTransitivity().asFile())
                 .addAsLibraries(
                         resolver.importDependencies(ScopeType.COMPILE, ScopeType.RUNTIME)
-                        .resolve()
-                        .withTransitivity()
-                        .asFile())
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsResource("persistence.xml", "META-INF/persistence.xml");
+                                .resolve()
+                                .withTransitivity()
+                                .asFile())
+                        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                        .addAsResource("persistence.xml", "META-INF/persistence.xml");
     }
 }

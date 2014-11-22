@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.guava.api.Assertions.assertThat;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 
 import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
@@ -17,9 +16,6 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 import com.google.common.base.Optional;
 
 public class VehicleLocatorIT extends ArquillianBase {
-    @Inject
-    private EntityManager em;
-
     @Inject
     private VehicleLocator cut;
 

@@ -16,28 +16,32 @@
 package biz.suckow.fuel.business.owner.boundary;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.NoResultException;
 
 import biz.suckow.fuel.business.app.entity.BaseEntity;
 import biz.suckow.fuel.business.owner.entity.Owner;
 
+import com.google.common.base.Optional;
+
 @Stateless
 public class OwnerService extends BaseEntity {
-    /**
-     *
-     */
     private static final long serialVersionUID = -218334641369264690L;
-    @PersistenceContext
+
+    @Inject
     private EntityManager em;
 
-    // TODO write test
-    public Owner getOwner(final String ownername) {
-        final Owner result = (Owner) this.em
-                .createNamedQuery(Owner.QueryByOwnernameIgnoreCase.NAME)
-                .setParameter(Owner.QueryByOwnernameIgnoreCase.OWNERNAME, ownername)
-                .getSingleResult();
-        return result;
+    public Optional<Owner> getOwner(final String ownername) {
+        Owner result = null;
+        try {
+            result = (Owner) this.em.createNamedQuery(Owner.QueryByOwnernameIgnoreCase.NAME)
+                    .setParameter(Owner.QueryByOwnernameIgnoreCase.OWNERNAME, ownername)
+                    .getSingleResult();
+        } catch (final NoResultException e) {
+            /* NOP */
+        }
+        return Optional.fromNullable(result);
     }
 
 }

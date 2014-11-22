@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 
 import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
@@ -24,9 +23,6 @@ import com.google.common.base.Optional;
 public class RefuelingLocatorIT extends ArquillianBase {
     @Inject
     private RefuelingLocator cut;
-
-    @Inject
-    private EntityManager em;
 
     @Test
     @Transactional(value = TransactionMode.ROLLBACK)

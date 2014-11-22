@@ -24,6 +24,7 @@ import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.refueling.entity.StockAddition;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
+// TODO test
 public class RefuelingService {
     @Inject
     private EntityManager em;
