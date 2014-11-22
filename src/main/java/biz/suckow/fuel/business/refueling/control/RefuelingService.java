@@ -17,15 +17,15 @@ package biz.suckow.fuel.business.refueling.control;
 
 import java.util.Date;
 
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.refueling.entity.StockAddition;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 public class RefuelingService {
-    @PersistenceContext
+    @Inject
     private EntityManager em;
 
     public Vehicle fullTankRefuel(final Vehicle vehicle, final Double kilometre, final Double litres,

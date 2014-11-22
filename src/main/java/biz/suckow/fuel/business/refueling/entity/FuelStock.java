@@ -31,15 +31,15 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 @NamedQueries({
         @NamedQuery(name = FuelStock.QueryAdditionsBetween.NAME,
                 query = "SELECT a FROM FuelStock fs JOIN fs.additions a WHERE fs.vehicle = :vehicle"
-                        + " AND a.dateAdded > :" + FuelStock.QueryAdditionsBetween.DATE_LEFT
-                        + " AND a.dateAdded < :" + FuelStock.QueryAdditionsBetween.DATE_RIGHT),
+                        + " AND a.dateAdded > :" + FuelStock.QueryAdditionsBetween.DATE_LEFT + " AND a.dateAdded < :"
+                        + FuelStock.QueryAdditionsBetween.DATE_RIGHT),
         @NamedQuery(name = FuelStock.QueryReleasesBetween.NAME,
                 query = "SELECT sr FROM FuelStock fs JOIN fs.releases sr WHERE fs.vehicle = :vehicle "
                         + "AND sr.dateReleased > :" + FuelStock.QueryReleasesBetween.DATE_LEFT
                         + " AND sr.dateReleased < :" + FuelStock.QueryReleasesBetween.DATE_RIGHT) })
 public class FuelStock extends BaseEntity {
     private static final long serialVersionUID = 2386152541780890783L;
-    // TODO ensuer only one fuelstock per vehcile
+
     @OneToMany
     private final Set<StockAddition> additions;
 

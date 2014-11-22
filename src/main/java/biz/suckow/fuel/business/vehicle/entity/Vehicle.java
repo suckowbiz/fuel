@@ -36,15 +36,10 @@ import biz.suckow.fuel.business.refueling.entity.Refueling;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehiclename", "owner_id" }))
-@NamedQuery(name = Vehicle.QueryByOwnerAndVehicle.NAME,
-query = "SELECT v FROM Vehicle v WHERE LOWER(v.vehiclename) = LOWER(:"
-        + Vehicle.QueryByOwnerAndVehicle.VEHICLENAME + ") AND LOWER(v.owner.ownername) = :"
+@NamedQuery(name = Vehicle.QueryByOwnerAndVehicle.NAME, query = "SELECT v FROM Vehicle v WHERE LOWER(v.vehiclename) = "
+        + "LOWER(:" + Vehicle.QueryByOwnerAndVehicle.VEHICLENAME + ") AND " + "LOWER(v.owner.ownername) = :"
         + Vehicle.QueryByOwnerAndVehicle.OWNERNAME)
 public class Vehicle extends BaseEntity {
-    public String getVehiclename() {
-        return this.vehiclename;
-    }
-
     private static final long serialVersionUID = -5360751385120611439L;
 
     public static final class QueryByOwnerAndVehicle {
@@ -64,10 +59,10 @@ public class Vehicle extends BaseEntity {
     private FuelStock fuelStock;
 
     @OneToMany(mappedBy = "vehicle")
-    private Set<Refueling> refuelings;
+    private final Set<Refueling> refuelings;
 
     @OneToMany
-    private Set<FuelConsumption> fuelConsumptions;
+    private final Set<FuelConsumption> fuelConsumptions;
 
     public Vehicle() {
         this.fuelConsumptions = new HashSet<>();
@@ -108,5 +103,9 @@ public class Vehicle extends BaseEntity {
 
     public Set<FuelConsumption> getFuelConsumptions() {
         return this.fuelConsumptions;
+    }
+
+    public String getVehiclename() {
+        return this.vehiclename;
     }
 }

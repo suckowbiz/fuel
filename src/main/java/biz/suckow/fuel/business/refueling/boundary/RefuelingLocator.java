@@ -50,23 +50,12 @@ public class RefuelingLocator {
     }
 
     public List<Refueling> getPartialRefuelingsBetween(final Date left, final Date right, final Vehicle vehicle) {
-        final List<Refueling> result = this.em.createNamedQuery(Refueling.QueryPartialsBetween.NAME,
-                Refueling.class)
+        final List<Refueling> result = this.em.createNamedQuery(Refueling.QueryPartialsBetween.NAME, Refueling.class)
                 .setParameter(Refueling.QueryPartialsBetween.DATE_LEFT, left)
                 .setParameter(Refueling.QueryPartialsBetween.DATE_RIGHT, right)
                 .setParameter(Refueling.QueryPartialsBetween.VEHICLE, vehicle)
                 .getResultList();
         return result;
-    }
-
-    /**
-     * @param refuelingDate
-     * @param vehicle
-     * @return
-     */
-    public List<Refueling> getAllPartialRefuelingsUntil(final Date date, final Vehicle vehicle) {
-        // TODO Auto-generated method stub
-        return null;
     }
 
 }

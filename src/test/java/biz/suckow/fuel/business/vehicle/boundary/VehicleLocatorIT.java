@@ -25,7 +25,7 @@ public class VehicleLocatorIT extends ArquillianBase {
 
     @Test
     @Transactional(TransactionMode.ROLLBACK)
-    public void verifyVehicleFetchingSucceeds() {
+    public void mustFetchExistingVehicle() {
         final Owner owner = new Owner().setOwnername("duke");
         this.em.persist(owner);
 
@@ -38,7 +38,7 @@ public class VehicleLocatorIT extends ArquillianBase {
     }
 
     @Test
-    public void verifyVehicleFetchingFails() {
+    public void mustNotFetchNonExistingVehicle() {
         final Optional<Vehicle> possibleVehicle = this.cut.getVehicle("duke", "duke-bike");
         assertThat(possibleVehicle).isAbsent();
     }

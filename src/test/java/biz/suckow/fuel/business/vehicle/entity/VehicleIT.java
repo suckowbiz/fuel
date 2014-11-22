@@ -1,8 +1,11 @@
 package biz.suckow.fuel.business.vehicle.entity;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.ArquillianBase;
@@ -12,9 +15,8 @@ public class VehicleIT extends ArquillianBase {
     @Inject
     private EntityManager em;
 
-    @Test(expectedExceptions = RuntimeException.class,
-            expectedExceptionsMessageRegExp = "Unable to commit the transaction.")
-    public void mustNotPersistNonUniqueVehiclename() throws Throwable {
+    @Test
+    public void mustNotPersistDuplicateVehicle() {
         final Owner owner = new Owner();
         owner.setOwnername("duke");
         this.em.persist(owner);
@@ -24,9 +26,14 @@ public class VehicleIT extends ArquillianBase {
         vehicle.setVehiclename("duke-car");
         this.em.persist(vehicle);
 
-        vehicle = new Vehicle();
-        vehicle.setOwner(owner);
-        vehicle.setVehiclename("duke-car");
-        this.em.persist(vehicle);
+        try {
+            vehicle = new Vehicle();
+            vehicle.setOwner(owner);
+            vehicle.setVehiclename("duke-car");
+            this.em.persist(vehicle);
+            this.em.flush();
+        } catch (final Throwable t) {
+            assertThat(t).hasCauseInstanceOf(ConstraintViolationException.class);
+        }
     }
 }
