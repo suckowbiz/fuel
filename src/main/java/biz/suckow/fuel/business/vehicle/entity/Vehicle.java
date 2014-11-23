@@ -54,7 +54,7 @@ public class Vehicle extends BaseEntity {
     @ManyToOne(optional = false)
     private Owner owner;
 
-    @OneToOne
+    @OneToOne(mappedBy = "vehicle")
     @JoinColumn(unique = true)
     private FuelStock fuelStock;
 

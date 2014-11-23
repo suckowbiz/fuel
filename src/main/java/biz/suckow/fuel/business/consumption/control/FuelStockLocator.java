@@ -38,7 +38,8 @@ public class FuelStockLocator {
         final List<StockAddition> result = this.em.createNamedQuery(FuelStock.QueryAdditionsBetween.NAME,
                 StockAddition.class)
                 .setParameter(FuelStock.QueryAdditionsBetween.DATE_LEFT, left)
-                .setParameter(FuelStock.QueryAdditionsBetween.DATE_LEFT, left)
+                .setParameter(FuelStock.QueryAdditionsBetween.DATE_RIGHT, right)
+                .setParameter(FuelStock.QueryAdditionsBetween.VEHICLE, vehicle)
                 .getResultList();
         return result;
     }

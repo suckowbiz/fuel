@@ -30,8 +30,9 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 @Entity
 @NamedQueries({
         @NamedQuery(name = FuelStock.QueryAdditionsBetween.NAME,
-                query = "SELECT a FROM FuelStock fs JOIN fs.additions a WHERE fs.vehicle = :vehicle"
-                        + " AND a.dateAdded > :" + FuelStock.QueryAdditionsBetween.DATE_LEFT + " AND a.dateAdded < :"
+                query = "SELECT a FROM FuelStock fs JOIN fs.additions a JOIN fs.vehicle v WHERE v = :"
+                        + FuelStock.QueryAdditionsBetween.VEHICLE + " AND a.dateAdded > :"
+                        + FuelStock.QueryAdditionsBetween.DATE_LEFT + " AND a.dateAdded < :"
                         + FuelStock.QueryAdditionsBetween.DATE_RIGHT),
         @NamedQuery(name = FuelStock.QueryReleasesBetween.NAME,
                 query = "SELECT sr FROM FuelStock fs JOIN fs.releases sr WHERE fs.vehicle = :vehicle "
@@ -46,13 +47,14 @@ public class FuelStock extends BaseEntity {
     @OneToMany
     private Set<StockRelease> releases;
 
-    @OneToOne(mappedBy = "fuelStock")
+    @OneToOne
     private Vehicle vehicle;
 
     public static final class QueryAdditionsBetween {
         public static final String NAME = "FuelStock.refuelingsBetween";
         public static final String DATE_LEFT = "dateLeft";
         public static final String DATE_RIGHT = "dateRight";
+        public static final String VEHICLE = "vehicle";
     }
 
     public static final class QueryReleasesBetween {
@@ -66,8 +68,9 @@ public class FuelStock extends BaseEntity {
         this.additions = new HashSet<>();
     }
 
-    public void add(final StockAddition addition) {
+    public FuelStock add(final StockAddition addition) {
         this.additions.add(addition);
+        return this;
     }
 
     public void release(final StockRelease release) {
