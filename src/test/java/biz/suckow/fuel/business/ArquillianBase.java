@@ -15,6 +15,9 @@
  */
 package biz.suckow.fuel.business;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
@@ -52,11 +55,11 @@ public abstract class ArquillianBase extends Arquillian {
                 .addAsLibraries(resolver.resolve("org.assertj:assertj-guava").withTransitivity().asFile())
                 .addAsLibraries(
                         resolver.importDependencies(ScopeType.COMPILE, ScopeType.RUNTIME)
-                                .resolve()
-                                .withTransitivity()
-                                .asFile())
-                        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                        .addAsResource("persistence.xml", "META-INF/persistence.xml");
+                        .resolve()
+                        .withTransitivity()
+                        .asFile())
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                .addAsResource("persistence.xml", "META-INF/persistence.xml");
     }
 
     protected Vehicle getCreatedAndPersistedDukeCar() {
@@ -70,5 +73,11 @@ public abstract class ArquillianBase extends Arquillian {
         this.em.persist(vehicle);
 
         return vehicle;
+    }
+
+    protected Date getMonth(final int month) {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, month);
+        return calendar.getTime();
     }
 }

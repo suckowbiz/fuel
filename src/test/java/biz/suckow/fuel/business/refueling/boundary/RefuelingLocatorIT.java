@@ -3,7 +3,6 @@ package biz.suckow.fuel.business.refueling.boundary;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.guava.api.Assertions.assertThat;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -127,12 +126,6 @@ public class RefuelingLocatorIT extends ArquillianBase {
 
         final Optional<Refueling> actualResult = this.cut.getLatestFilledUpBefore(april);
         assertThat(actualResult).isPresent().contains(fillUpFebruary);
-    }
-
-    private Date getMonth(final int month) {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MONTH, month);
-        return calendar.getTime();
     }
 
     private Refueling createRefueling(final Vehicle vehicle, final Date date, final Boolean isFillUp) {

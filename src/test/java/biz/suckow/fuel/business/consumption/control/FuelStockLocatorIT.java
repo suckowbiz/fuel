@@ -2,7 +2,6 @@ package biz.suckow.fuel.business.consumption.control;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +12,7 @@ import org.testng.annotations.Test;
 import biz.suckow.fuel.business.ArquillianBase;
 import biz.suckow.fuel.business.refueling.entity.FuelStock;
 import biz.suckow.fuel.business.refueling.entity.StockAddition;
+import biz.suckow.fuel.business.refueling.entity.StockRelease;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 public class FuelStockLocatorIT extends ArquillianBase {
@@ -22,13 +22,10 @@ public class FuelStockLocatorIT extends ArquillianBase {
     @Test
     public void mustFetchAdditionsBetween() {
         final Vehicle dukeCar = this.getCreatedAndPersistedDukeCar();
-        final Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MONTH, 0);
-        final Date january = calendar.getTime();
-        calendar.set(Calendar.MONTH, 1);
-        final Date february = calendar.getTime();
-        calendar.set(Calendar.MONTH, 2);
-        final Date march = calendar.getTime();
+        final Date january = this.getMonth(0);
+        final Date february = this.getMonth(1);
+        final Date march = this.getMonth(2);
+
         final StockAddition additionFebruary = new StockAddition().setDateAdded(february)
                 .setEurosPerLitre(1D)
                 .setLitres(1D);
@@ -46,7 +43,23 @@ public class FuelStockLocatorIT extends ArquillianBase {
     }
 
     @Test
-    public void tse() {
-        // this.cut.getReleasesBetween(left, right, vehicle);
+    public void mustFetchReleasesBetween() {
+        final Vehicle dukeCar = this.getCreatedAndPersistedDukeCar();
+        final Date january = this.getMonth(0);
+        final Date february = this.getMonth(1);
+        final Date march = this.getMonth(2);
+
+        final StockRelease releaseFebruary = new StockRelease().setDateReleased(february).setLitres(1D);
+        this.em.persist(releaseFebruary);
+        final StockRelease releaseMarch = new StockRelease().setDateReleased(march).setLitres(1D);
+        this.em.persist(releaseMarch);
+
+        FuelStock stock = new FuelStock().setVehicle(dukeCar);
+        this.em.persist(stock);
+        stock.release(releaseFebruary).release(releaseMarch);
+        stock = this.em.merge(stock);
+
+        final List<StockRelease> actualResult = this.cut.getReleasesBetween(january, march, dukeCar);
+        assertThat(actualResult).hasSize(1).contains(releaseFebruary);
     }
 }

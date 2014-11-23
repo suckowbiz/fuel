@@ -26,9 +26,6 @@ import biz.suckow.fuel.business.refueling.entity.StockAddition;
 import biz.suckow.fuel.business.refueling.entity.StockRelease;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
-/**
- * @author tobias
- */
 public class FuelStockLocator {
     @Inject
     private EntityManager em;
@@ -44,8 +41,13 @@ public class FuelStockLocator {
     }
 
     public List<StockRelease> getReleasesBetween(final Date left, final Date right, final Vehicle vehicle) {
-        // TODO Auto-generated method stub
-        return null;
+        final List<StockRelease> result = this.em.createNamedQuery(FuelStock.QueryReleasesBetween.NAME,
+                StockRelease.class)
+                .setParameter(FuelStock.QueryReleasesBetween.DATE_LEFT, left)
+                .setParameter(FuelStock.QueryReleasesBetween.DATE_RIGHT, right)
+                .setParameter(FuelStock.QueryReleasesBetween.VEHICLE, vehicle)
+                .getResultList();
+        return result;
     }
 
 }
