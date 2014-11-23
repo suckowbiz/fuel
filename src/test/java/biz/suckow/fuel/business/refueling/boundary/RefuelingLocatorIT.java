@@ -14,7 +14,6 @@ import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.ArquillianBase;
-import biz.suckow.fuel.business.owner.entity.Owner;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
@@ -27,11 +26,7 @@ public class RefuelingLocatorIT extends ArquillianBase {
     @Test
     @Transactional(value = TransactionMode.ROLLBACK)
     public void mustReturnEmptyForNonExistingFilledUps() {
-        final Owner duke = new Owner().setOwnername("duke");
-        this.em.persist(duke);
-
-        final Vehicle dukeCar = new Vehicle().setOwner(duke).setVehiclename("duke-car");
-        this.em.persist(dukeCar);
+        final Vehicle dukeCar = this.getCreatedAndPersistedDukeCar();
 
         final Date march = this.getMonth(2);
 
@@ -45,11 +40,7 @@ public class RefuelingLocatorIT extends ArquillianBase {
     @Test
     @Transactional(value = TransactionMode.ROLLBACK)
     public void mustFetchFilledUpWithMissingConsumptionOrdered() {
-        final Owner duke = new Owner().setOwnername("duke");
-        this.em.persist(duke);
-
-        final Vehicle dukeCar = new Vehicle().setOwner(duke).setVehiclename("duke-car");
-        this.em.persist(dukeCar);
+        final Vehicle dukeCar = this.getCreatedAndPersistedDukeCar();
 
         final Date january = this.getMonth(0);
         final Date february = this.getMonth(1);
@@ -77,13 +68,9 @@ public class RefuelingLocatorIT extends ArquillianBase {
     @Test
     @Transactional(value = TransactionMode.ROLLBACK)
     public void mustFetchPartialsBetween() {
-        final Owner duke = new Owner().setOwnername("duke");
-        this.em.persist(duke);
+        final Vehicle dukeCar = this.getCreatedAndPersistedDukeCar();
 
-        final Vehicle dukeCar = new Vehicle().setOwner(duke).setVehiclename("duke-car");
-        this.em.persist(dukeCar);
-
-        final Vehicle oakCar = new Vehicle().setOwner(duke).setVehiclename("oak-car");
+        final Vehicle oakCar = new Vehicle().setOwner(dukeCar.getOwner()).setVehiclename("oak-car");
         this.em.persist(oakCar);
 
         final Date january = this.getMonth(0);
@@ -116,13 +103,9 @@ public class RefuelingLocatorIT extends ArquillianBase {
     @Test
     @Transactional(value = TransactionMode.ROLLBACK)
     public void mustFetchLatestFillUpBefore() {
-        final Owner duke = new Owner().setOwnername("duke");
-        this.em.persist(duke);
+        final Vehicle dukeCar = this.getCreatedAndPersistedDukeCar();
 
-        final Vehicle dukeCar = new Vehicle().setOwner(duke).setVehiclename("duke-car");
-        this.em.persist(dukeCar);
-
-        final Vehicle oakCar = new Vehicle().setOwner(duke).setVehiclename("oak-car");
+        final Vehicle oakCar = new Vehicle().setOwner(dukeCar.getOwner()).setVehiclename("oak-car");
         this.em.persist(oakCar);
 
         final Date january = this.getMonth(0);

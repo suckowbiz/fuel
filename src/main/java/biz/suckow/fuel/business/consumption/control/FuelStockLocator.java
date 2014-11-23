@@ -33,7 +33,6 @@ public class FuelStockLocator {
     @Inject
     private EntityManager em;
 
-    // TODO test
     public List<StockAddition> getAdditionsBetween(final Date left, final Date right, final Vehicle vehicle) {
         final List<StockAddition> result = this.em.createNamedQuery(FuelStock.QueryAdditionsBetween.NAME,
                 StockAddition.class)

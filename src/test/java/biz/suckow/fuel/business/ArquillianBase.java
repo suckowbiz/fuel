@@ -31,6 +31,9 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
 import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
 
+import biz.suckow.fuel.business.owner.entity.Owner;
+import biz.suckow.fuel.business.vehicle.entity.Vehicle;
+
 @ArquillianSuiteDeployment
 @Transactional(value = TransactionMode.ROLLBACK)
 public abstract class ArquillianBase extends Arquillian {
@@ -54,5 +57,18 @@ public abstract class ArquillianBase extends Arquillian {
                                 .asFile())
                         .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                         .addAsResource("persistence.xml", "META-INF/persistence.xml");
+    }
+
+    protected Vehicle getCreatedAndPersistedDukeCar() {
+        final Owner owner = new Owner();
+        owner.setOwnername("duke");
+        this.em.persist(owner);
+
+        final Vehicle vehicle = new Vehicle();
+        vehicle.setOwner(owner);
+        vehicle.setVehiclename("duke-car");
+        this.em.persist(vehicle);
+
+        return vehicle;
     }
 }

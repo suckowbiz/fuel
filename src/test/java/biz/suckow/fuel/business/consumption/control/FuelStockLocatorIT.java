@@ -11,7 +11,6 @@ import javax.inject.Inject;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.ArquillianBase;
-import biz.suckow.fuel.business.owner.entity.Owner;
 import biz.suckow.fuel.business.refueling.entity.FuelStock;
 import biz.suckow.fuel.business.refueling.entity.StockAddition;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
@@ -21,16 +20,8 @@ public class FuelStockLocatorIT extends ArquillianBase {
     private FuelStockLocator cut;
 
     @Test
-    public void f() {
-        final Owner owner = new Owner();
-        owner.setOwnername("duke");
-        this.em.persist(owner);
-
-        final Vehicle vehicle = new Vehicle();
-        vehicle.setOwner(owner);
-        vehicle.setVehiclename("duke-car");
-        this.em.persist(vehicle);
-
+    public void mustFetchAdditionsBetween() {
+        final Vehicle dukeCar = this.getCreatedAndPersistedDukeCar();
         final Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.MONTH, 0);
         final Date january = calendar.getTime();
@@ -45,12 +36,17 @@ public class FuelStockLocatorIT extends ArquillianBase {
         final StockAddition additionMarch = new StockAddition().setDateAdded(march).setEurosPerLitre(1D).setLitres(1D);
         this.em.persist(additionMarch);
 
-        FuelStock stock = new FuelStock().setVehicle(vehicle);
+        FuelStock stock = new FuelStock().setVehicle(dukeCar);
         this.em.persist(stock);
         stock.add(additionFebruary).add(additionMarch);
         stock = this.em.merge(stock);
 
-        final List<StockAddition> actualResult = this.cut.getAdditionsBetween(january, march, vehicle);
+        final List<StockAddition> actualResult = this.cut.getAdditionsBetween(january, march, dukeCar);
         assertThat(actualResult).hasSize(1).contains(additionFebruary);
+    }
+
+    @Test
+    public void tse() {
+        // this.cut.getReleasesBetween(left, right, vehicle);
     }
 }
