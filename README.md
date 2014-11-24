@@ -18,7 +18,7 @@ Unit tests are supported by [Surefire Plugin](http://maven.apache.org/surefire/m
     mvn test
 
 ###Integration Tests
-To run integration tests the [Failsafe Plugin](http://maven.apache.org/surefire/maven-failsafe-plugin/) is used. Together with invokation of the Failsafe Plugin an embedded JBoss Wildfly server is launched.
+To run integration tests the [Failsafe Plugin](http://maven.apache.org/surefire/maven-failsafe-plugin/) is used. Together with invocation of the Failsafe Plugin an embedded JBoss server is launched.
 
 Run with: 
 	

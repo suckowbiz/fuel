@@ -15,9 +15,6 @@
  */
 package biz.suckow.fuel.business;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
@@ -33,9 +30,6 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
 import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
-
-import biz.suckow.fuel.business.owner.entity.Owner;
-import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @ArquillianSuiteDeployment
 @Transactional(value = TransactionMode.ROLLBACK)
@@ -55,29 +49,10 @@ public abstract class ArquillianBase extends Arquillian {
                 .addAsLibraries(resolver.resolve("org.assertj:assertj-guava").withTransitivity().asFile())
                 .addAsLibraries(
                         resolver.importDependencies(ScopeType.COMPILE, ScopeType.RUNTIME)
-                        .resolve()
-                        .withTransitivity()
-                        .asFile())
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsResource("persistence.xml", "META-INF/persistence.xml");
-    }
-
-    protected Vehicle getCreatedAndPersistedDukeCar() {
-        final Owner owner = new Owner();
-        owner.setOwnername("duke");
-        this.em.persist(owner);
-
-        final Vehicle vehicle = new Vehicle();
-        vehicle.setOwner(owner);
-        vehicle.setVehiclename("duke-car");
-        this.em.persist(vehicle);
-
-        return vehicle;
-    }
-
-    protected Date getMonth(final int month) {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MONTH, month);
-        return calendar.getTime();
+                                .resolve()
+                                .withTransitivity()
+                                .asFile())
+                        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                        .addAsResource("persistence.xml", "META-INF/persistence.xml");
     }
 }

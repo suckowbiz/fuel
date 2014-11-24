@@ -6,11 +6,12 @@ import org.hibernate.exception.ConstraintViolationException;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.ArquillianBase;
+import biz.suckow.fuel.business.TestHelper;
 
 public class VehicleIT extends ArquillianBase {
     @Test
     public void mustNotPersistDuplicateVehicle() {
-        final Vehicle dukeCar = this.getCreatedAndPersistedDukeCar();
+        final Vehicle dukeCar = TestHelper.getCreatedAndPersistedDukeCar(this.em);
 
         try {
             final Vehicle vehicle = new Vehicle();

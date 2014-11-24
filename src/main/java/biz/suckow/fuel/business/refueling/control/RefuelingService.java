@@ -26,8 +26,12 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 // TODO test
 public class RefuelingService {
+    private final EntityManager em;
+
     @Inject
-    private EntityManager em;
+    public RefuelingService(final EntityManager em) {
+        this.em = em;
+    }
 
     public Vehicle fullTankRefuel(final Vehicle vehicle, final Double kilometre, final Double litres,
             final Double eurosPerLitre, final Date date, final String memo) {

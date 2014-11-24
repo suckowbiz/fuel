@@ -10,6 +10,7 @@ import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.ArquillianBase;
+import biz.suckow.fuel.business.TestHelper;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 import com.google.common.base.Optional;
@@ -21,7 +22,7 @@ public class VehicleLocatorIT extends ArquillianBase {
     @Test
     @Transactional(TransactionMode.ROLLBACK)
     public void mustFetchExistingVehicle() {
-        final Vehicle dukeCar = this.getCreatedAndPersistedDukeCar();
+        final Vehicle dukeCar = TestHelper.getCreatedAndPersistedDukeCar(this.em);
         final Vehicle actualResult = this.cut.getVehicle(dukeCar.getOwner().getOwnername(), dukeCar.getVehiclename())
                 .get();
         assertThat(actualResult).isNotNull();

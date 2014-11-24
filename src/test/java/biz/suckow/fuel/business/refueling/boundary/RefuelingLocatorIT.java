@@ -13,6 +13,7 @@ import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.ArquillianBase;
+import biz.suckow.fuel.business.TestHelper;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
@@ -25,9 +26,9 @@ public class RefuelingLocatorIT extends ArquillianBase {
     @Test
     @Transactional(value = TransactionMode.ROLLBACK)
     public void mustReturnEmptyForNonExistingFilledUps() {
-        final Vehicle dukeCar = this.getCreatedAndPersistedDukeCar();
+        final Vehicle dukeCar = TestHelper.getCreatedAndPersistedDukeCar(this.em);
 
-        final Date march = this.getMonth(2);
+        final Date march = TestHelper.getMonth(2);
 
         final Refueling refuelingMarchPartial = this.createRefueling(dukeCar, march, false);
         this.em.persist(refuelingMarchPartial);
@@ -39,11 +40,11 @@ public class RefuelingLocatorIT extends ArquillianBase {
     @Test
     @Transactional(value = TransactionMode.ROLLBACK)
     public void mustFetchFilledUpWithMissingConsumptionOrdered() {
-        final Vehicle dukeCar = this.getCreatedAndPersistedDukeCar();
+        final Vehicle dukeCar = TestHelper.getCreatedAndPersistedDukeCar(this.em);
 
-        final Date january = this.getMonth(0);
-        final Date february = this.getMonth(1);
-        final Date march = this.getMonth(2);
+        final Date january = TestHelper.getMonth(0);
+        final Date february = TestHelper.getMonth(1);
+        final Date march = TestHelper.getMonth(2);
 
         Refueling refueling = this.createRefueling(dukeCar, january, true);
         this.em.persist(refueling);
@@ -67,15 +68,15 @@ public class RefuelingLocatorIT extends ArquillianBase {
     @Test
     @Transactional(value = TransactionMode.ROLLBACK)
     public void mustFetchPartialsBetween() {
-        final Vehicle dukeCar = this.getCreatedAndPersistedDukeCar();
+        final Vehicle dukeCar = TestHelper.getCreatedAndPersistedDukeCar(this.em);
 
         final Vehicle oakCar = new Vehicle().setOwner(dukeCar.getOwner()).setVehiclename("oak-car");
         this.em.persist(oakCar);
 
-        final Date january = this.getMonth(0);
-        final Date february = this.getMonth(1);
-        final Date march = this.getMonth(2);
-        final Date april = this.getMonth(3);
+        final Date january = TestHelper.getMonth(0);
+        final Date february = TestHelper.getMonth(1);
+        final Date march = TestHelper.getMonth(2);
+        final Date april = TestHelper.getMonth(3);
 
         final Refueling partialFebruaryDuke = this.createRefueling(dukeCar, february, false);
         this.em.persist(partialFebruaryDuke);
@@ -102,15 +103,15 @@ public class RefuelingLocatorIT extends ArquillianBase {
     @Test
     @Transactional(value = TransactionMode.ROLLBACK)
     public void mustFetchLatestFillUpBefore() {
-        final Vehicle dukeCar = this.getCreatedAndPersistedDukeCar();
+        final Vehicle dukeCar = TestHelper.getCreatedAndPersistedDukeCar(this.em);
 
         final Vehicle oakCar = new Vehicle().setOwner(dukeCar.getOwner()).setVehiclename("oak-car");
         this.em.persist(oakCar);
 
-        final Date january = this.getMonth(0);
-        final Date february = this.getMonth(1);
-        final Date march = this.getMonth(2);
-        final Date april = this.getMonth(3);
+        final Date january = TestHelper.getMonth(0);
+        final Date february = TestHelper.getMonth(1);
+        final Date march = TestHelper.getMonth(2);
+        final Date april = TestHelper.getMonth(3);
 
         final Refueling fillUpJanuary = this.createRefueling(dukeCar, january, true);
         this.em.persist(fillUpJanuary);
@@ -124,7 +125,7 @@ public class RefuelingLocatorIT extends ArquillianBase {
         final Refueling fillUpApril = this.createRefueling(dukeCar, april, true);
         this.em.persist(fillUpApril);
 
-        final Optional<Refueling> actualResult = this.cut.getLatestFilledUpBefore(april);
+        final Optional<Refueling> actualResult = this.cut.getFillUpBefore(april);
         assertThat(actualResult).isPresent().contains(fillUpFebruary);
     }
 

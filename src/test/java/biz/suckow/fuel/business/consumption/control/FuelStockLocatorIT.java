@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.ArquillianBase;
+import biz.suckow.fuel.business.TestHelper;
 import biz.suckow.fuel.business.refueling.entity.FuelStock;
 import biz.suckow.fuel.business.refueling.entity.StockAddition;
 import biz.suckow.fuel.business.refueling.entity.StockRelease;
@@ -21,10 +22,10 @@ public class FuelStockLocatorIT extends ArquillianBase {
 
     @Test
     public void mustFetchAdditionsBetween() {
-        final Vehicle dukeCar = this.getCreatedAndPersistedDukeCar();
-        final Date january = this.getMonth(0);
-        final Date february = this.getMonth(1);
-        final Date march = this.getMonth(2);
+        final Vehicle dukeCar = TestHelper.getCreatedAndPersistedDukeCar(this.em);
+        final Date january = TestHelper.getMonth(0);
+        final Date february = TestHelper.getMonth(1);
+        final Date march = TestHelper.getMonth(2);
 
         final StockAddition additionFebruary = new StockAddition().setDateAdded(february)
                 .setEurosPerLitre(1D)
@@ -44,10 +45,10 @@ public class FuelStockLocatorIT extends ArquillianBase {
 
     @Test
     public void mustFetchReleasesBetween() {
-        final Vehicle dukeCar = this.getCreatedAndPersistedDukeCar();
-        final Date january = this.getMonth(0);
-        final Date february = this.getMonth(1);
-        final Date march = this.getMonth(2);
+        final Vehicle dukeCar = TestHelper.getCreatedAndPersistedDukeCar(this.em);
+        final Date january = TestHelper.getMonth(0);
+        final Date february = TestHelper.getMonth(1);
+        final Date march = TestHelper.getMonth(2);
 
         final StockRelease releaseFebruary = new StockRelease().setDateReleased(february).setLitres(1D);
         this.em.persist(releaseFebruary);

@@ -27,8 +27,12 @@ import biz.suckow.fuel.business.refueling.entity.StockRelease;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 public class FuelStockLocator {
+    private final EntityManager em;
+
     @Inject
-    private EntityManager em;
+    public FuelStockLocator(final EntityManager em) {
+        this.em = em;
+    }
 
     public List<StockAddition> getAdditionsBetween(final Date left, final Date right, final Vehicle vehicle) {
         final List<StockAddition> result = this.em.createNamedQuery(FuelStock.QueryAdditionsBetween.NAME,

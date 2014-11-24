@@ -15,6 +15,7 @@
  */
 package biz.suckow.fuel.business.consumption.boundary;
 
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -26,9 +27,8 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
-import biz.suckow.fuel.business.consumption.control.FuelConsumptionMaths;
+import biz.suckow.fuel.business.consumption.control.FuelConsumptionCalculator;
 import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuel.business.refueling.boundary.RefuelingLocator;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
@@ -43,15 +43,15 @@ public class FuelConsumptionScheduler {
     private RefuelingLocator locator;
 
     @Inject
-    private FuelConsumptionMaths maths;
+    private FuelConsumptionCalculator maths;
 
     @Inject
     private Logger logger;
 
-    @PersistenceContext
+    @Inject
     private EntityManager em;
 
-    AtomicBoolean isRunning = new AtomicBoolean(false);
+    private final AtomicBoolean isRunning = new AtomicBoolean(false);
 
     // TODO test
     @Schedule(hour = "*", minute = "*", second = "*/30", persistent = false)
@@ -65,11 +65,11 @@ public class FuelConsumptionScheduler {
         try {
             refuelings = this.locator.getFilledUpAndMissingConsumptionOldestFirst();
             for (Refueling refueling : refuelings) {
-                final Optional<Double> possibleResult = this.maths.calculate(refueling);
+                final Optional<BigDecimal> possibleResult = this.maths.computeConsumptionFor(refueling);
                 if (possibleResult.isPresent()) {
                     final FuelConsumption consumption = new FuelConsumption();
                     consumption.setDateComputed(refueling.getDateRefueled());
-                    consumption.setLitresPerKilometre(possibleResult.get());
+                    consumption.setLitresPerKilometre(possibleResult.get().doubleValue());
                     this.em.persist(consumption);
 
                     refueling.setConsumption(consumption);

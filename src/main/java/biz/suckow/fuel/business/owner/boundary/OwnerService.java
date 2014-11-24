@@ -20,15 +20,12 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
-import biz.suckow.fuel.business.app.entity.BaseEntity;
 import biz.suckow.fuel.business.owner.entity.Owner;
 
 import com.google.common.base.Optional;
 
 @Stateless
-public class OwnerService extends BaseEntity {
-    private static final long serialVersionUID = -218334641369264690L;
-
+public class OwnerService {
     @Inject
     private EntityManager em;
 

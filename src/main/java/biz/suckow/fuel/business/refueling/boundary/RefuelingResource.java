@@ -35,12 +35,10 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 @Path("refuelings")
 @Stateless
 public class RefuelingResource {
-
     // TODO verify: because once a full refueling is added and the consumption is calculated the addition of previous
     // partial refuelings cannot be accepted!
-
     @Inject
-    private RefuelingService service;
+    private RefuelingService refuelingService;
 
     @Inject
     private VehicleLocator vehicleService;
@@ -58,7 +56,7 @@ public class RefuelingResource {
     public Response refuel(@PathParam("ownername") final String ownername,
             @PathParam("vehiclename") final String vehiclename, final RefuelingMeta meta) {
         final Vehicle vehicle = this.vehicleService.getVehicle(ownername, vehiclename).get();
-        this.service.fullTankRefuel(vehicle, meta.kilometre, meta.litresToTank, meta.eurosPerLitre, meta.date,
+        this.refuelingService.fullTankRefuel(vehicle, meta.kilometre, meta.litresToTank, meta.eurosPerLitre, meta.date,
                 meta.memo);
         return Response.ok().build();
     }
@@ -69,7 +67,7 @@ public class RefuelingResource {
     public Response partialRefuel(@PathParam("ownername") final String ownername,
             @PathParam("vehiclename") final String vehiclename, final RefuelingMeta meta) {
         final Vehicle vehicle = this.vehicleService.getVehicle(ownername, vehiclename).get();
-        this.service.partialTankRefuel(vehicle, meta.litresToTank, meta.eurosPerLitre, meta.date, meta.memo);
+        this.refuelingService.partialTankRefuel(vehicle, meta.litresToTank, meta.eurosPerLitre, meta.date, meta.memo);
         return Response.ok().build();
     }
 
@@ -79,7 +77,7 @@ public class RefuelingResource {
     public Response toTankAndStock(@PathParam("ownername") final String ownername,
             @PathParam("vehiclename") final String vehiclename, final RefuelingMeta meta) {
         final Vehicle vehicle = this.vehicleService.getVehicle(ownername, vehiclename).get();
-        this.service.fullTankAndStockRefuel(vehicle, meta.kilometre, meta.litresToTank, meta.litresToStock,
+        this.refuelingService.fullTankAndStockRefuel(vehicle, meta.kilometre, meta.litresToTank, meta.litresToStock,
                 meta.eurosPerLitre, meta.date, meta.memo);
         return Response.ok().build();
     }
@@ -90,7 +88,7 @@ public class RefuelingResource {
     public Response refuelStock(@PathParam("ownername") final String ownername,
             @PathParam("vehiclename") final String vehiclename, final RefuelingMeta meta) {
         final Vehicle vehicle = this.vehicleService.getVehicle(ownername, vehiclename).get();
-        this.service.stockAddition(vehicle, meta.litresToStock, meta.eurosPerLitre, meta.date, meta.memo);
+        this.refuelingService.stockAddition(vehicle, meta.litresToStock, meta.eurosPerLitre, meta.date, meta.memo);
         return Response.ok().build();
     }
 
