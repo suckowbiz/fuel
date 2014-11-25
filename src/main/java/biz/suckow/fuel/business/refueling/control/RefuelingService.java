@@ -17,21 +17,22 @@ package biz.suckow.fuel.business.refueling.control;
 
 import java.util.Date;
 
+import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import biz.suckow.fuel.business.consumption.entity.FillUpEvent;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.refueling.entity.StockAddition;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 // TODO test
 public class RefuelingService {
-    private final EntityManager em;
+    @Inject
+    private EntityManager em;
 
     @Inject
-    public RefuelingService(final EntityManager em) {
-        this.em = em;
-    }
+    private Event<FillUpEvent> fillUpEvent;
 
     public Vehicle fullTankRefuel(final Vehicle vehicle, final Double kilometre, final Double litres,
             final Double eurosPerLitre, final Date date, final String memo) {
@@ -43,6 +44,9 @@ public class RefuelingService {
                 .fillUp(true)
                 .build();
         this.em.persist(refueling);
+
+        final FillUpEvent event = new FillUpEvent().setRefuelingId(refueling.getId());
+        this.fillUpEvent.fire(event);
 
         vehicle.addRefueling(refueling);
         return this.em.merge(vehicle);
