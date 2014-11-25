@@ -24,16 +24,17 @@ import org.jboss.arquillian.container.test.api.OverProtocol;
 import org.jboss.arquillian.testng.Arquillian;
 import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
 import org.jboss.arquillian.transaction.api.annotation.Transactional;
+import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
-import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
 
 @ArquillianSuiteDeployment
 @Transactional(value = TransactionMode.ROLLBACK)
 public abstract class ArquillianBase extends Arquillian {
+    private static final String UNIT_TEST_PATTERN = ".*Test.*";
     @Inject
     protected EntityManager em;
 
@@ -42,17 +43,13 @@ public abstract class ArquillianBase extends Arquillian {
     public static WebArchive createDeployment() {
         final PomEquippedResolveStage resolver = Maven.resolver().loadPomFromFile("pom.xml");
         return ShrinkWrap.create(WebArchive.class)
-                .addPackages(true, "biz.suckow.fuel")
-                .addPackages(true, "org.h2")
-                .addPackages(true, "com.google")
-                .addAsLibraries(resolver.resolve("org.assertj:assertj-core").withTransitivity().asFile())
-                .addAsLibraries(resolver.resolve("org.assertj:assertj-guava").withTransitivity().asFile())
-                .addAsLibraries(
-                        resolver.importDependencies(ScopeType.COMPILE, ScopeType.RUNTIME)
-                                .resolve()
-                                .withTransitivity()
-                                .asFile())
-                        .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                        .addAsResource("persistence.xml", "META-INF/persistence.xml");
+                .addPackages(true, Filters.exclude(ArquillianBase.UNIT_TEST_PATTERN), "biz.suckow.fuel.business")
+                .addClass(TestHelper.class)
+                .addAsLibraries(resolver.resolve("com.h2database:h2").withoutTransitivity().asFile())
+                .addAsLibraries(resolver.resolve("org.assertj:assertj-core").withoutTransitivity().asFile())
+                .addAsLibraries(resolver.resolve("org.assertj:assertj-guava").withoutTransitivity().asFile())
+                .addAsLibraries(resolver.importRuntimeDependencies().resolve().withoutTransitivity().asFile())
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+                .addAsResource("persistence.xml", "META-INF/persistence.xml");
     }
 }
