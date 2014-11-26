@@ -23,13 +23,16 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.NotNull;
 
 import biz.suckow.fuel.business.app.entity.BaseEntity;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name = FuelStock.QueryAdditionsBetween.NAME,
+    @NamedQuery(name = FuelStock.QueryByVehicle.NAME, query = "SELECT f FROM FuelStock f WHERE f.vehicle = :"
+            + FuelStock.QueryByVehicle.VEHICLE),
+            @NamedQuery(name = FuelStock.QueryAdditionsBetween.NAME,
             query = "SELECT a FROM FuelStock fs JOIN fs.additions a JOIN fs.vehicle v WHERE v = :"
                     + FuelStock.QueryAdditionsBetween.VEHICLE + " AND a.dateAdded > :"
                     + FuelStock.QueryAdditionsBetween.DATE_LEFT + " AND a.dateAdded < :"
@@ -47,8 +50,14 @@ public class FuelStock extends BaseEntity {
     @OneToMany
     private Set<StockRelease> releases;
 
+    @NotNull
     @OneToOne
     private Vehicle vehicle;
+
+    public static final class QueryByVehicle {
+        public static final String NAME = "FuelStock.byVehicle";
+        public static final String VEHICLE = "vehicle";
+    }
 
     public static final class QueryAdditionsBetween {
         public static final String NAME = "FuelStock.refuelingsBetween";

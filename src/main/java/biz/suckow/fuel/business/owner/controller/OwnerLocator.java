@@ -13,30 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package biz.suckow.fuel.business.vehicle.boundary;
+package biz.suckow.fuel.business.owner.controller;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
-import biz.suckow.fuel.business.vehicle.entity.Vehicle;
+import biz.suckow.fuel.business.owner.entity.Owner;
 
 import com.google.common.base.Optional;
 
-public class VehicleLocator {
+@Stateless
+public class OwnerLocator {
     @Inject
     private EntityManager em;
 
-    public Optional<Vehicle> getVehicle(final String ownername, final String vehiclename) {
-        Vehicle result = null;
+    public Optional<Owner> getOwner(final String ownername) {
+        Owner result = null;
         try {
-            result = this.em.createNamedQuery(Vehicle.QueryByOwnerAndVehicle.NAME, Vehicle.class)
-                    .setParameter(Vehicle.QueryByOwnerAndVehicle.OWNERNAME, ownername)
-                    .setParameter(Vehicle.QueryByOwnerAndVehicle.VEHICLENAME, vehiclename)
+            result = (Owner) this.em.createNamedQuery(Owner.QueryByOwnernameIgnoreCase.NAME)
+                    .setParameter(Owner.QueryByOwnernameIgnoreCase.OWNERNAME, ownername)
                     .getSingleResult();
         } catch (final NoResultException e) {
             /* NOP */
         }
         return Optional.fromNullable(result);
     }
+
 }

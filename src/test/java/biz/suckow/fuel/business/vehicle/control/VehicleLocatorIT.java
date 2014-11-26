@@ -1,4 +1,4 @@
-package biz.suckow.fuel.business.vehicle.boundary;
+package biz.suckow.fuel.business.vehicle.control;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.guava.api.Assertions.assertThat;
@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.ArquillianBase;
 import biz.suckow.fuel.business.TestHelper;
+import biz.suckow.fuel.business.refueling.control.VehicleLocator;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 import com.google.common.base.Optional;

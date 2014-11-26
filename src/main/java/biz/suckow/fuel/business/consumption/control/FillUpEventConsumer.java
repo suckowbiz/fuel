@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package biz.suckow.fuel.business.consumption.boundary;
+package biz.suckow.fuel.business.consumption.control;
 
 import java.math.BigDecimal;
 
@@ -24,11 +24,9 @@ import javax.enterprise.event.TransactionPhase;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import biz.suckow.fuel.business.consumption.control.FuelConsumptionCalculator;
 import biz.suckow.fuel.business.consumption.entity.FillUpEvent;
 import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
-import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 import com.google.common.base.Optional;
 
@@ -42,25 +40,14 @@ public class FillUpEventConsumer {
 
     @Asynchronous
     public void consume(@Observes(during = TransactionPhase.AFTER_SUCCESS) final FillUpEvent event) {
-        Refueling refueling = this.em.find(Refueling.class, event.getRefuelingId());
+        final Refueling refueling = this.em.find(Refueling.class, event.getRefuelingId());
         final Optional<BigDecimal> possibleResult = this.maths.computeConsumptionFor(refueling);
         if (possibleResult.isPresent()) {
             final FuelConsumption consumption = new FuelConsumption();
             consumption.setDateComputed(refueling.getDateRefueled());
             consumption.setLitresPerKilometre(possibleResult.get().doubleValue());
+            consumption.setVehicle(refueling.getVehicle());
             this.em.persist(consumption);
-
-            // TODO think: is it better to decouple refueling from consuption to avoid lock exeptions? what about
-            // optimistic lockin ..it is missing
-            refueling.setConsumption(consumption);
-            refueling = this.em.merge(refueling);
-
-            // TODO better not store consumption to vehicle and to refueling to be independent
-            // TODO use optimistic locking at all?
-            // a consumption has a refueling ! and has a vehicle!
-            final Vehicle vehicle = refueling.getVehicle();
-            vehicle.addFuelConsuption(consumption);
-            this.em.merge(vehicle);
         }
     }
 }

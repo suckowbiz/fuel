@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package biz.suckow.fuel.business.refueling.boundary;
+package biz.suckow.fuel.business.refueling.control;
 
 import java.util.Date;
 import java.util.List;
@@ -30,12 +30,6 @@ import com.google.common.base.Optional;
 public class RefuelingLocator {
     @Inject
     private EntityManager em;
-
-    public List<Refueling> getFilledUpAndMissingConsumptionOldestFirst() {
-        final List<Refueling> result = this.em.createNamedQuery(
-                Refueling.BY_FILLED_UP_AND_MISSING_CONSUMPTION_OLDEST_FIRST, Refueling.class).getResultList();
-        return result;
-    }
 
     public Optional<Refueling> getFillUpBefore(final Date date) {
         final List<Refueling> refuelings = this.em.createNamedQuery(Refueling.QueryLatestByFilledUpBeforeDate.NAME,

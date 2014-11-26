@@ -19,10 +19,13 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import biz.suckow.fuel.business.app.entity.BaseEntity;
+import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Entity
 public class FuelConsumption extends BaseEntity {
@@ -35,8 +38,21 @@ public class FuelConsumption extends BaseEntity {
     @Column(nullable = false)
     private Double litresPerKilometre;
 
+    @NotNull
+    @OneToOne(optional = false)
+    private Vehicle vehicle;
+
     public Date getDateComputed() {
         return this.dateComputed;
+    }
+
+    public Vehicle getVehicle() {
+        return this.vehicle;
+    }
+
+    public FuelConsumption setVehicle(final Vehicle vehicle) {
+        this.vehicle = vehicle;
+        return this;
     }
 
     public FuelConsumption setDateComputed(final Date dateComputed) {

@@ -5,3 +5,4 @@ target/
 .tern-project
 nb-configuration.xml
 test-output
+/bin/

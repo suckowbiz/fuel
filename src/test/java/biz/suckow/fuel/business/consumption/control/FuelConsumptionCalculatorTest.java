@@ -18,7 +18,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.TestHelper;
-import biz.suckow.fuel.business.refueling.boundary.RefuelingLocator;
+import biz.suckow.fuel.business.refueling.control.RefuelingLocator;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.refueling.entity.StockAddition;
 import biz.suckow.fuel.business.refueling.entity.StockRelease;

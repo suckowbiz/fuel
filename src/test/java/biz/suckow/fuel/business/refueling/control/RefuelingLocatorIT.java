@@ -1,4 +1,4 @@
-package biz.suckow.fuel.business.refueling.boundary;
+package biz.suckow.fuel.business.refueling.control;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.guava.api.Assertions.assertThat;
@@ -14,6 +14,7 @@ import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.ArquillianBase;
 import biz.suckow.fuel.business.TestHelper;
+import biz.suckow.fuel.business.refueling.control.RefuelingLocator;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
@@ -22,48 +23,6 @@ import com.google.common.base.Optional;
 public class RefuelingLocatorIT extends ArquillianBase {
     @Inject
     private RefuelingLocator cut;
-
-    @Test
-    @Transactional(value = TransactionMode.ROLLBACK)
-    public void mustReturnEmptyForNonExistingFilledUps() {
-        final Vehicle dukeCar = TestHelper.getCreatedAndPersistedDukeCar(this.em);
-
-        final Date march = TestHelper.getMonth(2);
-
-        final Refueling refuelingMarchPartial = this.createRefueling(dukeCar, march, false);
-        this.em.persist(refuelingMarchPartial);
-
-        final List<Refueling> actualResult = this.cut.getFilledUpAndMissingConsumptionOldestFirst();
-        assertThat(actualResult).isEmpty();
-    }
-
-    @Test
-    @Transactional(value = TransactionMode.ROLLBACK)
-    public void mustFetchFilledUpWithMissingConsumptionOrdered() {
-        final Vehicle dukeCar = TestHelper.getCreatedAndPersistedDukeCar(this.em);
-
-        final Date january = TestHelper.getMonth(0);
-        final Date february = TestHelper.getMonth(1);
-        final Date march = TestHelper.getMonth(2);
-
-        Refueling refueling = this.createRefueling(dukeCar, january, true);
-        this.em.persist(refueling);
-
-        refueling = this.createRefueling(dukeCar, february, true);
-        this.em.persist(refueling);
-
-        refueling = this.createRefueling(dukeCar, march, true);
-        this.em.persist(refueling);
-
-        final Refueling refuelingMarchPartial = this.createRefueling(dukeCar, march, false);
-        this.em.persist(refuelingMarchPartial);
-
-        final List<Refueling> actualResult = this.cut.getFilledUpAndMissingConsumptionOldestFirst();
-        assertThat(actualResult).hasSize(3);
-        assertThat(actualResult.get(0).getDateRefueled()).isEqualTo(march);
-        assertThat(actualResult.get(1).getDateRefueled()).isEqualTo(february);
-        assertThat(actualResult.get(2).getDateRefueled()).isEqualTo(january);
-    }
 
     @Test
     @Transactional(value = TransactionMode.ROLLBACK)

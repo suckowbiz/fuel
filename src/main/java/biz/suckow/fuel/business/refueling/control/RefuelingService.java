@@ -34,7 +34,7 @@ public class RefuelingService {
     @Inject
     private Event<FillUpEvent> fillUpEvent;
 
-    public Vehicle fullTankRefuel(final Vehicle vehicle, final Double kilometre, final Double litres,
+    public void fullTankRefuel(final Vehicle vehicle, final Double kilometre, final Double litres,
             final Double eurosPerLitre, final Date date, final String memo) {
         final Refueling refueling = new Refueling.Builder().eurosPerLitre(eurosPerLitre)
                 .litres(litres)
@@ -42,33 +42,29 @@ public class RefuelingService {
                 .memo(memo)
                 .dateRefueled(date)
                 .fillUp(true)
+                .vehicle(vehicle)
                 .build();
         this.em.persist(refueling);
 
         final FillUpEvent event = new FillUpEvent().setRefuelingId(refueling.getId());
         this.fillUpEvent.fire(event);
-
-        vehicle.addRefueling(refueling);
-        return this.em.merge(vehicle);
     }
 
-    public Vehicle partialTankRefuel(final Vehicle vehicle, final Double litres, final Double euros, final Date date,
+    public void partialTankRefuel(final Vehicle vehicle, final Double litres, final Double euros, final Date date,
             final String memo) {
         final Refueling refueling = new Refueling.Builder().litres(litres)
                 .eurosPerLitre(euros)
                 .dateRefueled(date)
                 .memo(memo)
+                .vehicle(vehicle)
                 .build();
         this.em.persist(refueling);
-
-        vehicle.addRefueling(refueling);
-        return this.em.merge(vehicle);
     }
 
     public void fullTankAndStockRefuel(final Vehicle vehicle, final Double kilometre, final Double litresTank,
             final Double litresStock, final Double euros, final Date date, final String memo) {
-        final Vehicle mergedVehicle = this.fullTankRefuel(vehicle, kilometre, litresTank, euros, date, memo);
-        this.stockAddition(mergedVehicle, litresStock, euros, date, null);
+        this.fullTankRefuel(vehicle, kilometre, litresTank, euros, date, memo);
+        this.stockAddition(vehicle, litresStock, euros, date, null);
     }
 
     public void stockAddition(final Vehicle vehicle, final Double litres, final Double euros, final Date date,
@@ -79,7 +75,6 @@ public class RefuelingService {
                 .setMemo(memo);
         this.em.persist(addition);
 
-        vehicle.getFuelStock().add(addition);
-        this.em.merge(vehicle);
+        // TODO get stock for vehicle and add the addtion
     }
 }

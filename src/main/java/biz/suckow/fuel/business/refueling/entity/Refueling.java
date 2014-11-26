@@ -22,7 +22,6 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMin;
@@ -30,26 +29,20 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import biz.suckow.fuel.business.app.entity.BaseEntity;
-import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = Refueling.QueryPartialsBetween.NAME,
-                query = "SELECT r FROM Refueling r WHERE r.isFillUp = false AND r.dateRefueled > :"
-                        + Refueling.QueryPartialsBetween.DATE_LEFT + " AND r.dateRefueled < :"
-                        + Refueling.QueryPartialsBetween.DATE_RIGHT + " AND r.vehicle = :"
-                        + Refueling.QueryPartialsBetween.VEHICLE),
-        @NamedQuery(name = Refueling.QueryLatestByFilledUpBeforeDate.NAME,
-                query = "SELECT r FROM Refueling r WHERE r.isFillUp = true " + "AND r.dateRefueled < :"
-                            + Refueling.QueryLatestByFilledUpBeforeDate.DATE + " ORDER BY r.dateRefueled DESC "),
-        @NamedQuery(
-                name = Refueling.BY_FILLED_UP_AND_MISSING_CONSUMPTION_OLDEST_FIRST,
-                query = "SELECT r FROM Refueling r WHERE r.isFillUp = true AND r.consumption IS NULL ORDER BY r.dateRefueled DESC") })
+    @NamedQuery(name = Refueling.QueryPartialsBetween.NAME,
+            query = "SELECT r FROM Refueling r WHERE r.isFillUp = false AND r.dateRefueled > :"
+                    + Refueling.QueryPartialsBetween.DATE_LEFT + " AND r.dateRefueled < :"
+                    + Refueling.QueryPartialsBetween.DATE_RIGHT + " AND r.vehicle = :"
+                    + Refueling.QueryPartialsBetween.VEHICLE),
+                    @NamedQuery(name = Refueling.QueryLatestByFilledUpBeforeDate.NAME,
+                    query = "SELECT r FROM Refueling r WHERE r.isFillUp = true " + "AND r.dateRefueled < :"
+                        + Refueling.QueryLatestByFilledUpBeforeDate.DATE + " ORDER BY r.dateRefueled DESC ") })
 public class Refueling extends BaseEntity {
     private static final long serialVersionUID = 9175526663957115977L;
-
-    public static final String BY_FILLED_UP_AND_MISSING_CONSUMPTION_OLDEST_FIRST = "Vehicle.byMissingConsumptionOldestFirst";
 
     public static final class QueryPartialsBetween {
         public static final String NAME = "Refueling.partialRefuelingsBetween";
@@ -141,9 +134,6 @@ public class Refueling extends BaseEntity {
     @Column(nullable = false)
     private Boolean isFillUp;
 
-    @OneToOne
-    private FuelConsumption consumption;
-
     @ManyToOne
     private Vehicle vehicle;
 
@@ -153,14 +143,6 @@ public class Refueling extends BaseEntity {
 
     public void setVehicle(final Vehicle vehicle) {
         this.vehicle = vehicle;
-    }
-
-    public FuelConsumption getConsumption() {
-        return this.consumption;
-    }
-
-    public void setConsumption(final FuelConsumption consumption) {
-        this.consumption = consumption;
     }
 
     public Boolean getIsFillUp() {

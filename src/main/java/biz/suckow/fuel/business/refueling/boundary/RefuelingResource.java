@@ -27,8 +27,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import biz.suckow.fuel.business.refueling.control.RefuelingService;
+import biz.suckow.fuel.business.refueling.control.VehicleLocator;
 import biz.suckow.fuel.business.refueling.entity.RefuelingMeta;
-import biz.suckow.fuel.business.vehicle.boundary.VehicleLocator;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 // TODO test

@@ -15,24 +15,18 @@
  */
 package biz.suckow.fuel.business.vehicle.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+
+import org.hibernate.validator.constraints.NotEmpty;
 
 import biz.suckow.fuel.business.app.entity.BaseEntity;
-import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuel.business.owner.entity.Owner;
-import biz.suckow.fuel.business.refueling.entity.FuelStock;
-import biz.suckow.fuel.business.refueling.entity.Refueling;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehiclename", "owner_id" }))
@@ -48,26 +42,14 @@ public class Vehicle extends BaseEntity {
         public static final String VEHICLENAME = "vehiclename";
     }
 
+    @NotNull
+    @NotEmpty
     @Column(nullable = false)
     private String vehiclename;
 
+    @NotNull
     @ManyToOne(optional = false)
     private Owner owner;
-
-    @OneToOne(mappedBy = "vehicle")
-    @JoinColumn(unique = true)
-    private FuelStock fuelStock;
-
-    @OneToMany(mappedBy = "vehicle")
-    private Set<Refueling> refuelings;
-
-    @OneToMany
-    private Set<FuelConsumption> fuelConsumptions;
-
-    public Vehicle() {
-        this.fuelConsumptions = new HashSet<>();
-        this.refuelings = new HashSet<>();
-    }
 
     public Vehicle setVehiclename(final String vehiclename) {
         this.vehiclename = vehiclename;
@@ -81,28 +63,6 @@ public class Vehicle extends BaseEntity {
     public Vehicle setOwner(final Owner owner) {
         this.owner = owner;
         return this;
-    }
-
-    public Vehicle addFuelConsuption(final FuelConsumption consumption) {
-        this.fuelConsumptions.add(consumption);
-        return this;
-    }
-
-    public Vehicle addRefueling(final Refueling refueling) {
-        this.refuelings.add(refueling);
-        return this;
-    }
-
-    public FuelStock getFuelStock() {
-        return this.fuelStock;
-    }
-
-    public Set<Refueling> getRefuelings() {
-        return this.refuelings;
-    }
-
-    public Set<FuelConsumption> getFuelConsumptions() {
-        return this.fuelConsumptions;
     }
 
     public String getVehiclename() {

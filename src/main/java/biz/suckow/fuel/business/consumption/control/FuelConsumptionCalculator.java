@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
-import biz.suckow.fuel.business.refueling.boundary.RefuelingLocator;
+import biz.suckow.fuel.business.refueling.control.RefuelingLocator;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.refueling.entity.StockAddition;
 import biz.suckow.fuel.business.refueling.entity.StockRelease;

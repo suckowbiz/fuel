@@ -21,6 +21,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import biz.suckow.fuel.business.app.entity.BaseEntity;
 
@@ -28,6 +29,7 @@ import biz.suckow.fuel.business.app.entity.BaseEntity;
 public class StockRelease extends BaseEntity {
     private static final long serialVersionUID = 7021516650764717192L;
 
+    @NotNull
     @Column(nullable = false)
     private Double litres;
 

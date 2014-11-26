@@ -1,4 +1,4 @@
-package biz.suckow.fuel.business.owner.boundary;
+package biz.suckow.fuel.business.owner.control;
 
 import static org.assertj.guava.api.Assertions.assertThat;
 
@@ -7,13 +7,14 @@ import javax.inject.Inject;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.ArquillianBase;
+import biz.suckow.fuel.business.owner.controller.OwnerLocator;
 import biz.suckow.fuel.business.owner.entity.Owner;
 
 import com.google.common.base.Optional;
 
 public class OwnerServiceIT extends ArquillianBase {
     @Inject
-    private OwnerService cut;
+    private OwnerLocator cut;
 
     @Test
     public void ownernameMustBeUnique() {
