@@ -28,6 +28,9 @@ Debug with [Failsafe Debug](http://maven.apache.org/surefire/maven-failsafe-plug
 
     mvn -Dmaven.failsafe.debug verify
     
+###Eclipse Setup
+Run ``mvn eclipse:eclipse eclipse:configure-workspace install``.
+
 ###Test from Eclipse
 ###Setup
   - install TestNG Plugin from within Eclipse using Marketplace
