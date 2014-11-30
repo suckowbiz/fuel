@@ -6,9 +6,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>biz.suckow</groupId>
 	<artifactId>fuelservice</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
 	<parent>
 		<groupId>biz.suckow</groupId>
 		<artifactId>fuel</artifactId>
@@ -22,7 +20,7 @@
 	<inceptionYear>2014</inceptionYear>
 
 	<build>
-		<finalName>${artifactId}-${version}</finalName>
+		<finalName>${project.artifactId}-${project.version}</finalName>
 		<plugins>
 			<!-- Added to support integration tests during $ mvn verify -->
 			<plugin>
