@@ -22,26 +22,26 @@ package biz.suckow.fuel.business;
 
 import java.util.Calendar;
 import java.util.Date;
-
-import javax.persistence.EntityManager;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import biz.suckow.fuel.business.owner.entity.Owner;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
-public class EntityFactory {
-    public static final String DEFAULT_OWNER_NAME = "duke";
-    public static final String DEFAULT_VEHICLE_NAME = "duke-car";
-
-    public static Vehicle createdAndPersistOwnerWithCar(final EntityManager em) {
-        final Owner owner = new Owner().setOwnername(EntityFactory.DEFAULT_OWNER_NAME);
-        em.persist(owner);
-
-        final Vehicle vehicle = new Vehicle().setOwner(owner).setVehicleName(EntityFactory.DEFAULT_VEHICLE_NAME);
-        em.persist(vehicle);
-
-        return vehicle;
+public class TestHelper {
+    protected static AtomicInteger uniqueness = new AtomicInteger(0);
+    
+    public static Owner createDuke() {
+	return new Owner().setOwnername("duke");
+    }
+    
+    public static Vehicle createDukeCar(Owner owner) {
+	return new Vehicle().setOwner(owner).setVehicleName("duke-car");
     }
 
+    public static String getUniqueness() {
+	return String.valueOf(uniqueness.getAndAdd(1));
+    }
+    
     public static Date getMonth(final int month) {
         final Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.MONTH, month);
