@@ -35,8 +35,7 @@ import biz.suckow.fuel.business.owner.entity.Owner;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehiclename", "owner_id" }))
-@NamedQuery(name = Vehicle.FIND_BY_OWNERS_AND_VEHICLES_NAME,
-        query = "SELECT v FROM Vehicle v WHERE v.vehicleName = :vehicleName AND v.owner.ownerName = :ownerName")
+@NamedQuery(name = Vehicle.FIND_BY_OWNERS_AND_VEHICLES_NAME, query = "SELECT v FROM Vehicle v WHERE v.vehicleName = :vehicleName AND v.owner.ownerName = :ownerName")
 public class Vehicle extends BaseEntity {
     private static final long serialVersionUID = -5360751385120611439L;
     private static final String PREFIX = "biz.suckow.fuel.business.vehicle.entity.";
@@ -53,20 +52,20 @@ public class Vehicle extends BaseEntity {
     private Owner owner;
 
     public Vehicle setVehicleName(final String vehiclename) {
-        this.vehicleName = vehiclename;
-        return this;
+	this.vehicleName = vehiclename;
+	return this;
     }
 
     public Owner getOwner() {
-        return this.owner;
+	return this.owner;
     }
 
     public Vehicle setOwner(final Owner owner) {
-        this.owner = owner;
-        return this;
+	this.owner = owner;
+	return this;
     }
 
     public String getVehiclename() {
-        return this.vehicleName;
+	return this.vehicleName;
     }
 }

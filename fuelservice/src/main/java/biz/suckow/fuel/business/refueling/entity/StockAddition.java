@@ -55,39 +55,39 @@ public class StockAddition extends BaseEntity {
     private String memo;
 
     public Date getDateRefueled() {
-        return this.dateAdded;
+	return this.dateAdded;
     }
 
     public StockAddition setDateAdded(final Date date) {
-        this.dateAdded = date;
-        return this;
+	this.dateAdded = date;
+	return this;
     }
 
     public Double getEurosPerLitre() {
-        return this.eurosPerLitre;
+	return this.eurosPerLitre;
     }
 
     public StockAddition setEurosPerLitre(final Double eurosPerLitre) {
-        this.eurosPerLitre = eurosPerLitre;
-        return this;
+	this.eurosPerLitre = eurosPerLitre;
+	return this;
     }
 
     public Double getLitres() {
-        return this.litres;
+	return this.litres;
     }
 
     public StockAddition setLitres(final Double litres) {
-        this.litres = litres;
-        return this;
+	this.litres = litres;
+	return this;
     }
 
     public String getMemo() {
-        return this.memo;
+	return this.memo;
     }
 
     public StockAddition setMemo(final String memo) {
-        this.memo = memo;
-        return this;
+	this.memo = memo;
+	return this;
     }
 
 }

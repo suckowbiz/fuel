@@ -41,25 +41,22 @@ public class RefuelingLocator {
     }
 
     public Optional<Refueling> getFillUpBefore(final Date date) {
-        final List<Refueling> refuelings = this.em.createNamedQuery(Refueling.FIND_BY_FILLED_UP_AND_DATE_BEFORE,
-                Refueling.class)
-                .setParameter("right", date, TemporalType.TIMESTAMP)
-                .getResultList();
-        Optional<Refueling> result = Optional.absent();
-        if (refuelings.size() > 0) {
-            result = Optional.of(refuelings.get(0));
-        }
-        return result;
+	final List<Refueling> refuelings = this.em
+		.createNamedQuery(Refueling.FIND_BY_FILLED_UP_AND_DATE_BEFORE, Refueling.class)
+		.setParameter("right", date, TemporalType.TIMESTAMP).getResultList();
+	Optional<Refueling> result = Optional.absent();
+	if (refuelings.size() > 0) {
+	    result = Optional.of(refuelings.get(0));
+	}
+	return result;
     }
 
     public List<Refueling> getPartialRefuelingsBetween(final Date left, final Date right, final Vehicle vehicle) {
-        final List<Refueling> result = this.em.createNamedQuery(Refueling.FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN,
-                Refueling.class)
-                .setParameter("left", left)
-                .setParameter("right", right)
-                .setParameter("vehicle", vehicle)
-                .getResultList();
-        return result;
+	final List<Refueling> result = this.em
+		.createNamedQuery(Refueling.FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN, Refueling.class)
+		.setParameter("left", left).setParameter("right", right).setParameter("vehicle", vehicle)
+		.getResultList();
+	return result;
     }
 
 }

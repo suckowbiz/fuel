@@ -20,7 +20,6 @@ package biz.suckow.fuel.business.owner.controller;
  * #L%
  */
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -29,21 +28,23 @@ import biz.suckow.fuel.business.owner.entity.Owner;
 
 import com.google.common.base.Optional;
 
-@Stateless
 public class OwnerLocator {
-    @Inject
     private EntityManager em;
 
+    @Inject
+    public OwnerLocator(EntityManager em) {
+	this.em = em;
+    }
+
     public Optional<Owner> getOwner(final String ownername) {
-        Owner result = null;
-        try {
-            result = (Owner) this.em.createNamedQuery(Owner.QueryByOwnernameIgnoreCase.NAME)
-                    .setParameter(Owner.QueryByOwnernameIgnoreCase.OWNERNAME, ownername)
-                    .getSingleResult();
-        } catch (final NoResultException e) {
-            /* NOP */
-        }
-        return Optional.fromNullable(result);
+	Owner result = null;
+	try {
+	    result = (Owner) this.em.createNamedQuery(Owner.QueryByOwnernameIgnoreCase.NAME)
+		    .setParameter(Owner.QueryByOwnernameIgnoreCase.OWNERNAME, ownername).getSingleResult();
+	} catch (final NoResultException e) {
+	    /* NOP */
+	}
+	return Optional.fromNullable(result);
     }
 
 }

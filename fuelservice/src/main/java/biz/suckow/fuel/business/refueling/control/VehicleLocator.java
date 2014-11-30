@@ -37,15 +37,13 @@ public class VehicleLocator {
     }
 
     public Optional<Vehicle> getVehicle(final String ownername, final String vehiclename) {
-        Vehicle result = null;
-        try {
-            result = this.em.createNamedQuery(Vehicle.FIND_BY_OWNERS_AND_VEHICLES_NAME, Vehicle.class)
-                    .setParameter("ownername", ownername)
-                    .setParameter("vehiclename", vehiclename)
-                    .getSingleResult();
-        } catch (final NoResultException e) {
-            /* NOP */
-        }
-        return Optional.fromNullable(result);
+	Vehicle result = null;
+	try {
+	    result = this.em.createNamedQuery(Vehicle.FIND_BY_OWNERS_AND_VEHICLES_NAME, Vehicle.class)
+		    .setParameter("ownerName", ownername).setParameter("vehicleName", vehiclename).getSingleResult();
+	} catch (final NoResultException e) {
+	    /* NOP */
+	}
+	return Optional.fromNullable(result);
     }
 }

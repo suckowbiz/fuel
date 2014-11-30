@@ -33,13 +33,13 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Entity
 @NamedQuery(name = Owner.QueryByOwnernameIgnoreCase.NAME, query = "SELECT o FROM Owner o "
-        + "WHERE LOWER(o.ownerName) = LOWER(:" + Owner.QueryByOwnernameIgnoreCase.OWNERNAME + ")")
+	+ "WHERE LOWER(o.ownerName) = LOWER(:" + Owner.QueryByOwnernameIgnoreCase.OWNERNAME + ")")
 public class Owner extends BaseEntity {
     private static final long serialVersionUID = -2640121939957877859L;
 
     public static final class QueryByOwnernameIgnoreCase {
-        public static final String NAME = "Owner.byOwnername";
-        public static final String OWNERNAME = "ownername";
+	public static final String NAME = "Owner.byOwnername";
+	public static final String OWNERNAME = "ownername";
     }
 
     @OneToMany(mappedBy = "owner")
@@ -49,20 +49,20 @@ public class Owner extends BaseEntity {
     private String ownerName;
 
     public Owner() {
-        this.vehicles = new HashSet<>();
+	this.vehicles = new HashSet<>();
     }
 
     public String getOwnername() {
-        return this.ownerName;
+	return this.ownerName;
     }
 
     public Owner setOwnername(final String ownername) {
-        this.ownerName = ownername;
-        return this;
+	this.ownerName = ownername;
+	return this;
     }
 
     public Set<Vehicle> getVehicles() {
-        return this.vehicles;
+	return this.vehicles;
     }
 
 }

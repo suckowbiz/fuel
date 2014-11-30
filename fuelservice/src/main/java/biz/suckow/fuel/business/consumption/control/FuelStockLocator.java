@@ -36,27 +36,23 @@ public class FuelStockLocator {
 
     @Inject
     public FuelStockLocator(final EntityManager em) {
-        this.em = em;
+	this.em = em;
     }
 
     public List<StockAddition> getAdditionsBetween(final Date left, final Date right, final Vehicle vehicle) {
-        final List<StockAddition> result = this.em.createNamedQuery(
-                FuelStock.FIND_ADDITIONS_BY_VEHICLE_AND_DATE_BETWEEN, StockAddition.class)
-                .setParameter("left", left)
-                .setParameter("right", right)
-                .setParameter("vehicle", vehicle)
-                .getResultList();
-        return result;
+	final List<StockAddition> result = this.em
+		.createNamedQuery(FuelStock.FIND_ADDITIONS_BY_VEHICLE_AND_DATE_BETWEEN, StockAddition.class)
+		.setParameter("left", left).setParameter("right", right).setParameter("vehicle", vehicle)
+		.getResultList();
+	return result;
     }
 
     public List<StockRelease> getReleasesBetween(final Date left, final Date right, final Vehicle vehicle) {
-        final List<StockRelease> result = this.em.createNamedQuery(FuelStock.FIND_RELEASES_BY_VEHCILE_AND_DATE_BETWEEN,
-                StockRelease.class)
-                .setParameter("left", left)
-                .setParameter("right", right)
-                .setParameter("vehicle", vehicle)
-                .getResultList();
-        return result;
+	final List<StockRelease> result = this.em
+		.createNamedQuery(FuelStock.FIND_RELEASES_BY_VEHCILE_AND_DATE_BETWEEN, StockRelease.class)
+		.setParameter("left", left).setParameter("right", right).setParameter("vehicle", vehicle)
+		.getResultList();
+	return result;
     }
 
 }

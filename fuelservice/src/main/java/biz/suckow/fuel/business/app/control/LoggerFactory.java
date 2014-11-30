@@ -28,6 +28,6 @@ import javax.enterprise.inject.spi.InjectionPoint;
 public class LoggerFactory {
     @Produces
     public Logger produceLogger(final InjectionPoint ip) {
-        return Logger.getLogger(ip.getMember().getDeclaringClass().getName());
+	return Logger.getLogger(ip.getMember().getDeclaringClass().getName());
     }
 }

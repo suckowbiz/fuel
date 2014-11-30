@@ -37,7 +37,8 @@ import org.easymock.MockType;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import biz.suckow.fuel.business.EntityFactory;
+import biz.suckow.fuel.business.TestHelper;
+import biz.suckow.fuel.business.owner.entity.Owner;
 import biz.suckow.fuel.business.refueling.control.RefuelingLocator;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
 import biz.suckow.fuel.business.refueling.entity.StockAddition;
@@ -59,102 +60,103 @@ public class FuelConsumptionCalculatorTest extends EasyMockSupport {
 
     @BeforeClass
     public void BeforeClass() {
-        injectMocks(this);
+	injectMocks(this);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void nonFillUpMustFail() {
-        final Refueling refueling = new Refueling.Builder().kilometre(100D)
-                .litres(10D)
-                .dateRefueled(new Date())
-                .fillUp(false)
-                .build();
-        new FuelConsumptionCalculator(this.refuelingLocatorMock, this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumptionFor(refueling);
+	Refueling refueling = new Refueling.Builder().kilometre(100D).litres(10D).dateRefueled(new Date())
+		.fillUp(false).build();
+	new FuelConsumptionCalculator(this.refuelingLocatorMock, this.fuelStockLocatorMock, Logger.getAnonymousLogger())
+		.computeConsumptionFor(refueling);
     }
 
     @Test
     public void mustNotComputeWithoutPredecessor() {
-        this.resetAll();
-        expect(this.refuelingLocatorMock.getFillUpBefore(anyObject(Date.class))).andStubReturn(
-                Optional.<Refueling> absent());
-        this.replayAll();
+	this.resetAll();
+	expect(this.refuelingLocatorMock.getFillUpBefore(anyObject(Date.class))).andStubReturn(
+		Optional.<Refueling> absent());
+	this.replayAll();
 
-        final Refueling refueling = new Refueling.Builder().kilometre(100D)
-                .litres(10D)
-                .dateRefueled(new Date())
-                .fillUp(true)
-                .build();
+	Refueling refueling = new Refueling.Builder().kilometre(100D).litres(10D).dateRefueled(new Date()).fillUp(true)
+		.build();
 
-        final Optional<BigDecimal> actualResult = new FuelConsumptionCalculator(this.refuelingLocatorMock,
-                this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumptionFor(refueling);
-        assertThat(actualResult).isAbsent();
+	Optional<BigDecimal> actualResult = new FuelConsumptionCalculator(this.refuelingLocatorMock,
+		this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumptionFor(refueling);
+	assertThat(actualResult).isAbsent();
     }
 
     @Test
     public void simpleComputationMustSucceed() {
-        final Date january = EntityFactory.getMonth(0);
-        final Date february = EntityFactory.getMonth(1);
-        final Vehicle vehicle = EntityFactory.createdAndPersistOwnerWithCar(this.emMock);
-        final Refueling refuelingBefore = new Refueling.Builder().kilometre(100D)
-                .litres(10D)
-                .dateRefueled(january)
-                .fillUp(true)
-                .build();
-        final Refueling refueling = new Refueling.Builder().kilometre(200D)
-                .litres(10D)
-                .dateRefueled(february)
-                .fillUp(true)
-                .vehicle(vehicle)
-                .build();
+	Date january = TestHelper.getMonth(0);
+	Date february = TestHelper.getMonth(1);
+	
+	Owner duke = TestHelper.createDuke();
+	Vehicle vehicle = TestHelper.createDukeCar(duke);
+	
+	Refueling refuelingBefore = new Refueling.Builder().kilometre(100D).litres(10D).dateRefueled(january)
+		.fillUp(true).build();
+	Refueling refueling = new Refueling.Builder().kilometre(200D).litres(10D).dateRefueled(february).fillUp(true)
+		.vehicle(vehicle).build();
 
-        this.resetAll();
-        expect(this.refuelingLocatorMock.getFillUpBefore(february)).andStubReturn(Optional.of(refuelingBefore));
-        expect(this.fuelStockLocatorMock.getAdditionsBetween(january, february, vehicle)).andStubReturn(
-                Lists.<StockAddition> newArrayList());
-        expect(this.refuelingLocatorMock.getPartialRefuelingsBetween(january, february, vehicle)).andStubReturn(
-                Lists.<Refueling> newArrayList());
-        expect(this.fuelStockLocatorMock.getReleasesBetween(january, february, vehicle)).andStubReturn(
-                Lists.<StockRelease> newArrayList());
-        this.replayAll();
+	this.resetAll();
+	expect(this.refuelingLocatorMock.getFillUpBefore(february)).andStubReturn(Optional.of(refuelingBefore));
+	expect(this.fuelStockLocatorMock.getAdditionsBetween(january, february, vehicle)).andStubReturn(
+		Lists.<StockAddition> newArrayList());
+	expect(this.refuelingLocatorMock.getPartialRefuelingsBetween(january, february, vehicle)).andStubReturn(
+		Lists.<Refueling> newArrayList());
+	expect(this.fuelStockLocatorMock.getReleasesBetween(january, february, vehicle)).andStubReturn(
+		Lists.<StockRelease> newArrayList());
+	this.replayAll();
 
-        final Optional<BigDecimal> actualResult = new FuelConsumptionCalculator(this.refuelingLocatorMock,
-                this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumptionFor(refueling);
-        assertThat(actualResult).isPresent();
-        assertThat(actualResult.get().doubleValue()).isEqualTo(10D / 100D);
+	Optional<BigDecimal> actualResult = new FuelConsumptionCalculator(this.refuelingLocatorMock,
+		this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumptionFor(refueling);
+	assertThat(actualResult).isPresent();
+	assertThat(actualResult.get().doubleValue()).isEqualTo(10D / 100D);
     }
     //
-    // public Optional<Double> computeConsumptionFor(final Refueling refueling) {
+    // public Optional<Double> computeConsumptionFor( Refueling refueling) {
     // Preconditions.checkArgument(refueling.getIsFillUp());
     //
     // Double result = null;
-    // final Date refuelingDate = refueling.getDateRefueled();
-    // final Optional<Refueling> possibleLastFillUp = this.refuelingLocator.getFillUpBefore(refuelingDate);
+    // Date refuelingDate = refueling.getDateRefueled();
+    // Optional<Refueling> possibleLastFillUp =
+    // this.refuelingLocator.getFillUpBefore(refuelingDate);
     // if (possibleLastFillUp.isPresent()) {
-    // final Vehicle vehicle = refueling.getVehicle();
-    // final Date lastFillUpDate = possibleLastFillUp.get().getDateRefueled();
+    // Vehicle vehicle = refueling.getVehicle();
+    // Date lastFillUpDate = possibleLastFillUp.get().getDateRefueled();
     //
     // Double litres = refueling.getLitres();
-    // litres += this.getLitresConsumedFromStock(lastFillUpDate, refuelingDate, vehicle);
-    // litres += this.getLitresRefueledBetween(lastFillUpDate, refuelingDate, vehicle);
+    // litres += this.getLitresConsumedFromStock(lastFillUpDate, refuelingDate,
+    // vehicle);
+    // litres += this.getLitresRefueledBetween(lastFillUpDate, refuelingDate,
+    // vehicle);
     //
-    // final Double distance = refueling.getKilometre() - possibleLastFillUp.get().getKilometre();
+    // Double distance = refueling.getKilometre() -
+    // possibleLastFillUp.get().getKilometre();
     // result = litres / distance;
     // }
     // return Optional.fromNullable(result);
     // }
     //
-    // private Double getLitresRefueledBetween(final Date left, final Date right, final Vehicle vehicle) {
-    // final List<Refueling> partials = this.refuelingLocator.getPartialRefuelingsBetween(left, right, vehicle);
-    // final Double result = this.sumRefueledLitres(partials);
+    // private Double getLitresRefueledBetween( Date left, Date right, Vehicle
+    // vehicle) {
+    // List<Refueling> partials =
+    // this.refuelingLocator.getPartialRefuelingsBetween(left, right, vehicle);
+    // Double result = this.sumRefueledLitres(partials);
     // return result;
     // }
     //
-    // private Double getLitresConsumedFromStock(final Date left, final Date right, final Vehicle vehicle) {
-    // final List<StockAddition> stockAdditions = this.fuelStockLocator.getAdditionsBetween(left, right, vehicle);
-    // final Double litresAddedToStock = this.sumStockAdditionsLitres(stockAdditions);
+    // private Double getLitresConsumedFromStock( Date left, Date right, Vehicle
+    // vehicle) {
+    // List<StockAddition> stockAdditions =
+    // this.fuelStockLocator.getAdditionsBetween(left, right, vehicle);
+    // Double litresAddedToStock = this.sumStockAdditionsLitres(stockAdditions);
     //
-    // final List<StockRelease> stockReleases = this.fuelStockLocator.getReleasesBetween(left, right, vehicle);
-    // final Double litresReleasedFromStock = this.sumStockReleaseLitres(stockReleases);
+    // List<StockRelease> stockReleases =
+    // this.fuelStockLocator.getReleasesBetween(left, right, vehicle);
+    // Double litresReleasedFromStock =
+    // this.sumStockReleaseLitres(stockReleases);
     //
     // Double result = litresAddedToStock - litresReleasedFromStock;
     // if (result < 0) {
@@ -163,25 +165,25 @@ public class FuelConsumptionCalculatorTest extends EasyMockSupport {
     // return result;
     // }
     //
-    // private Double sumStockReleaseLitres(final List<StockRelease> releases) {
+    // private Double sumStockReleaseLitres( List<StockRelease> releases) {
     // Double result = 0D;
-    // for (final StockRelease release : releases) {
+    // for ( StockRelease release : releases) {
     // result += release.getLitres();
     // }
     // return result;
     // }
     //
-    // private Double sumRefueledLitres(final List<Refueling> refuelings) {
+    // private Double sumRefueledLitres( List<Refueling> refuelings) {
     // Double result = 0D;
-    // for (final Refueling refueling : refuelings) {
+    // for ( Refueling refueling : refuelings) {
     // result += refueling.getLitres();
     // }
     // return result;
     // }
     //
-    // private Double sumStockAdditionsLitres(final List<StockAddition> additions) {
+    // private Double sumStockAdditionsLitres( List<StockAddition> additions) {
     // Double result = 0D;
-    // for (final StockAddition addition : additions) {
+    // for ( StockAddition addition : additions) {
     // result += addition.getLitres();
     // }
     // return result;

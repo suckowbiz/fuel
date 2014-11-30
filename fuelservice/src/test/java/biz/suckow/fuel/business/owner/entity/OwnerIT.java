@@ -25,20 +25,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.hibernate.exception.ConstraintViolationException;
 import org.testng.annotations.Test;
 
-import biz.suckow.fuel.business.ArquillianBase;
+import biz.suckow.fuel.business.PersistenceSupport;
+import biz.suckow.fuel.business.TestHelper;
 
-public class OwnerIT extends ArquillianBase {
+public class OwnerIT extends PersistenceSupport {
     @Test
     public void doublicateOwnernameMustNotPerist() {
-        final Owner duke = new Owner().setOwnername("duke");
-        this.em.persist(duke);
+	Owner duke = TestHelper.createDuke();
+	em.persist(duke);
 
-        final Owner duke2 = new Owner().setOwnername("duke");
-
-        try {
-            this.em.persist(duke2);
-        } catch (final Throwable t) {
-            assertThat(t).hasCauseInstanceOf(ConstraintViolationException.class);
-        }
+	try {
+	    em.persist(TestHelper.createDuke());
+	} catch (Throwable t) {
+	    assertThat(t).hasCauseInstanceOf(ConstraintViolationException.class);
+	}
     }
 }

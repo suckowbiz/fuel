@@ -20,19 +20,28 @@ package biz.suckow.fuel.business.app.control;
  * #L%
  */
 
-import javax.inject.Inject;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import org.testng.Assert;
+import java.util.logging.Logger;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+
 import org.testng.annotations.Test;
 
 import biz.suckow.fuel.business.ArquillianBase;
 
+// move such heavy metal it to another project fuelservice-st (system test)
 public class ExternalsFactoryIT extends ArquillianBase {
     @Inject
-    private LoggerFactory factory;
+    private EntityManager em;
+    
+    @Inject
+    private Logger logger;
 
     @Test
-    public void procudeLogger() {
-        Assert.assertNotNull(this.factory);
+    public void injectionMustSucceed() {
+        assertThat(this.logger).isNotNull();
+        assertThat(this.em).isNotNull();
     }
 }

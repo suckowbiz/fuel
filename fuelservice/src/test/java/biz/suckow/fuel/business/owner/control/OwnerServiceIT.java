@@ -22,25 +22,30 @@ package biz.suckow.fuel.business.owner.control;
 
 import static org.assertj.guava.api.Assertions.assertThat;
 
-import javax.inject.Inject;
-
 import org.testng.annotations.Test;
 
-import biz.suckow.fuel.business.ArquillianBase;
+import biz.suckow.fuel.business.PersistenceSupport;
+import biz.suckow.fuel.business.TestHelper;
 import biz.suckow.fuel.business.owner.controller.OwnerLocator;
 import biz.suckow.fuel.business.owner.entity.Owner;
 
 import com.google.common.base.Optional;
 
-public class OwnerServiceIT extends ArquillianBase {
-    @Inject
-    private OwnerLocator cut;
+public class OwnerServiceIT extends PersistenceSupport {
+    private OwnerLocator cut = new OwnerLocator(em);
 
     @Test
-    public void ownernameMustBeUnique() {
-        final Owner duke = new Owner().setOwnername("duke");
-        this.em.persist(duke);
-        final Optional<Owner> actualResult = this.cut.getOwner("duke");
-        assertThat(actualResult).isPresent().contains(duke);
+    public void locateOwnerMustSucceed() {
+	Owner duke = TestHelper.createDuke();
+	em.persist(duke);
+
+	Optional<Owner> actualResult = this.cut.getOwner("duke");
+	assertThat(actualResult).isPresent().contains(duke);
+    }
+
+    @Test
+    public void locateNonExistingOwnerMustFail() {
+	Optional<Owner> actualResult = this.cut.getOwner("duke");
+	assertThat(actualResult).isAbsent();
     }
 }

@@ -50,7 +50,7 @@ public abstract class ArquillianBase extends Arquillian {
         final PomEquippedResolveStage resolver = Maven.resolver().loadPomFromFile("pom.xml");
         return ShrinkWrap.create(WebArchive.class)
                 .addPackages(true, Filters.exclude(ArquillianBase.UNIT_TEST_PATTERN), "biz.suckow.fuel.business")
-                .addClass(EntityFactory.class)
+                .addClass(TestHelper.class)
                 .addAsLibraries(resolver.resolve("org.easymock:easymock").withoutTransitivity().asFile())
                 .addAsLibraries(resolver.resolve("com.h2database:h2").withoutTransitivity().asFile())
                 .addAsLibraries(resolver.resolve("org.assertj:assertj-core").withoutTransitivity().asFile())

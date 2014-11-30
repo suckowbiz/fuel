@@ -45,14 +45,14 @@ public class FillUpEventConsumer {
 
     @Asynchronous
     public void consume(@Observes(during = TransactionPhase.AFTER_SUCCESS) final FillUpEvent event) {
-        final Refueling refueling = this.em.find(Refueling.class, event.getRefuelingId());
-        final Optional<BigDecimal> possibleResult = this.maths.computeConsumptionFor(refueling);
-        if (possibleResult.isPresent()) {
-            final FuelConsumption consumption = new FuelConsumption();
-            consumption.setDateComputed(refueling.getDateRefueled());
-            consumption.setLitresPerKilometre(possibleResult.get().doubleValue());
-            consumption.setVehicle(refueling.getVehicle());
-            this.em.persist(consumption);
-        }
+	final Refueling refueling = this.em.find(Refueling.class, event.getRefuelingId());
+	final Optional<BigDecimal> possibleResult = this.maths.computeConsumptionFor(refueling);
+	if (possibleResult.isPresent()) {
+	    final FuelConsumption consumption = new FuelConsumption();
+	    consumption.setDateComputed(refueling.getDateRefueled());
+	    consumption.setLitresPerKilometre(possibleResult.get().doubleValue());
+	    consumption.setVehicle(refueling.getVehicle());
+	    this.em.persist(consumption);
+	}
     }
 }

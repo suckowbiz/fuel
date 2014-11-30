@@ -48,29 +48,29 @@ public class FuelConsumption extends BaseEntity {
     private Vehicle vehicle;
 
     public Date getDateComputed() {
-        return this.dateComputed;
+	return this.dateComputed;
     }
 
     public Vehicle getVehicle() {
-        return this.vehicle;
+	return this.vehicle;
     }
 
     public FuelConsumption setVehicle(final Vehicle vehicle) {
-        this.vehicle = vehicle;
-        return this;
+	this.vehicle = vehicle;
+	return this;
     }
 
     public FuelConsumption setDateComputed(final Date dateComputed) {
-        this.dateComputed = dateComputed;
-        return this;
+	this.dateComputed = dateComputed;
+	return this;
     }
 
     public Double getLitresPerKilometre() {
-        return this.litresPerKilometre;
+	return this.litresPerKilometre;
     }
 
     public FuelConsumption setLitresPerKilometre(final Double litresPerKilometre) {
-        this.litresPerKilometre = litresPerKilometre;
-        return this;
+	this.litresPerKilometre = litresPerKilometre;
+	return this;
     }
 }

@@ -38,72 +38,70 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = Refueling.FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN,
-                query = "SELECT r FROM Refueling r WHERE r.isFillUp = false AND r.dateRefueled > :left "
-                        + "AND r.dateRefueled < :right AND r.vehicle = :vehicle"),
-        @NamedQuery(name = Refueling.FIND_BY_FILLED_UP_AND_DATE_BEFORE,
-                query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
-                        + "AND r.dateRefueled < :right ORDER BY r.dateRefueled DESC ") })
+	@NamedQuery(name = Refueling.FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN, query = "SELECT r FROM Refueling r WHERE r.isFillUp = false AND r.dateRefueled > :left "
+		+ "AND r.dateRefueled < :right AND r.vehicle = :vehicle"),
+	@NamedQuery(name = Refueling.FIND_BY_FILLED_UP_AND_DATE_BEFORE, query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
+		+ "AND r.dateRefueled < :right ORDER BY r.dateRefueled DESC ") })
 public class Refueling extends BaseEntity {
     private static final long serialVersionUID = 9175526663957115977L;
     private static final String PREFIX = "biz.suckow.fuel.business.refueling.entity.";
     public static final String FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN = Refueling.PREFIX
-            + "findByVehicleAndRefuelDate";
+	    + "findByVehicleAndRefuelDate";
     public static final String FIND_BY_FILLED_UP_AND_DATE_BEFORE = Refueling.PREFIX + "findByFilledUpAndDateBefore";
 
     public static final class Builder {
-        private final Refueling refueling;
+	private final Refueling refueling;
 
-        /**
-         * Standard constructor to initiate optional/ default values.
-         */
-        public Builder() {
-            this.refueling = new Refueling();
-            this.refueling.setDateRefueled(new Date());
-            this.refueling.setIsFillUp(false);
-        }
+	/**
+	 * Standard constructor to initiate optional/ default values.
+	 */
+	public Builder() {
+	    this.refueling = new Refueling();
+	    this.refueling.setDateRefueled(new Date());
+	    this.refueling.setIsFillUp(false);
+	}
 
-        public Builder eurosPerLitre(final Double value) {
-            this.refueling.setEurosPerLitre(value);
-            return this;
-        }
+	public Builder eurosPerLitre(final Double value) {
+	    this.refueling.setEurosPerLitre(value);
+	    return this;
+	}
 
-        public Builder litres(final Double value) {
-            this.refueling.setLitres(value);
-            return this;
-        }
+	public Builder litres(final Double value) {
+	    this.refueling.setLitres(value);
+	    return this;
+	}
 
-        public Builder kilometre(final Double value) {
-            this.refueling.setKilometre(value);
-            return this;
-        }
+	public Builder kilometre(final Double value) {
+	    this.refueling.setKilometre(value);
+	    return this;
+	}
 
-        public Builder memo(final String memo) {
-            this.refueling.setMemo(memo);
-            return this;
-        }
+	public Builder memo(final String memo) {
+	    this.refueling.setMemo(memo);
+	    return this;
+	}
 
-        public Builder dateRefueled(final Date date) {
-            this.refueling.setDateRefueled(date);
-            return this;
-        }
+	public Builder dateRefueled(final Date date) {
+	    this.refueling.setDateRefueled(date);
+	    return this;
+	}
 
-        public Builder fillUp(final boolean value) {
-            this.refueling.setIsFillUp(value);
-            return this;
-        }
+	public Builder fillUp(final boolean value) {
+	    this.refueling.setIsFillUp(value);
+	    return this;
+	}
 
-        public Builder vehicle(final Vehicle vehicle) {
-            this.refueling.setVehicle(vehicle);
-            return this;
-        }
+	public Builder vehicle(final Vehicle vehicle) {
+	    this.refueling.setVehicle(vehicle);
+	    return this;
+	}
 
-        public Refueling build() {
-            if (this.refueling.getIsFillUp() && this.refueling.getKilometre() == null) {
-                throw new IllegalArgumentException("Combination of filled up refueling with missing kilometre.");
-            }
-            return this.refueling;
-        }
+	public Refueling build() {
+	    if (this.refueling.getIsFillUp() && this.refueling.getKilometre() == null) {
+		throw new IllegalArgumentException("Combination of filled up refueling with missing kilometre.");
+	    }
+	    return this.refueling;
+	}
     }
 
     @NotNull
@@ -134,59 +132,59 @@ public class Refueling extends BaseEntity {
     private Vehicle vehicle;
 
     public Vehicle getVehicle() {
-        return this.vehicle;
+	return this.vehicle;
     }
 
     public void setVehicle(final Vehicle vehicle) {
-        this.vehicle = vehicle;
+	this.vehicle = vehicle;
     }
 
     public Boolean getIsFillUp() {
-        return this.isFillUp;
+	return this.isFillUp;
     }
 
     public void setIsFillUp(final Boolean isFillUp) {
-        this.isFillUp = isFillUp;
+	this.isFillUp = isFillUp;
     }
 
     public Date getDateRefueled() {
-        return this.dateRefueled;
+	return this.dateRefueled;
     }
 
     public void setDateRefueled(final Date dateRefueled) {
-        this.dateRefueled = dateRefueled;
+	this.dateRefueled = dateRefueled;
     }
 
     public Double getEurosPerLitre() {
-        return this.eurosPerLitre;
+	return this.eurosPerLitre;
     }
 
     public void setEurosPerLitre(final Double eurosPerLitre) {
-        this.eurosPerLitre = eurosPerLitre;
+	this.eurosPerLitre = eurosPerLitre;
     }
 
     public Double getLitres() {
-        return this.litres;
+	return this.litres;
     }
 
     public void setLitres(final Double litres) {
-        this.litres = litres;
+	this.litres = litres;
     }
 
     public String getMemo() {
-        return this.memo;
+	return this.memo;
     }
 
     public void setMemo(final String memo) {
-        this.memo = memo;
+	this.memo = memo;
     }
 
     public void setKilometre(final Double kilometre) {
-        this.kilometre = kilometre;
+	this.kilometre = kilometre;
     }
 
     public Double getKilometre() {
-        return this.kilometre;
+	return this.kilometre;
     }
 
 }
