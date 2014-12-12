@@ -10,10 +10,11 @@ This is a tool to manage refueling/fuel consumption of your vehicle(s). Its arti
 
 For build management maven is used. 
 
-###Unit Tests
+#Testing
+##Unit Tests
 Unit tests are supported by Maven [Surefire Plugin](http://maven.apache.org/surefire/maven-surefire-plugin/). To run Unit Tets use your IDE or by command line:   ``mvn test``
 
-###Integration Tests
+##Integration Tests
 To run integration tests the Maven [Failsafe Plugin](http://maven.apache.org/surefire/maven-failsafe-plugin/) is used. Together with invocation of the Failsafe Plugin an embedded JBoss server is launched.
 
 Run with:   ``mvn verify``
@@ -23,7 +24,7 @@ Debug with [Failsafe Debug](http://maven.apache.org/surefire/maven-failsafe-plug
 ##Automated Tests
 Tests are triggered automatically on scm commit via a web hook at [drone.io](drone.io) but can be triggered manually as well (see below).
 
-###Arquillian Test from Eclipse
+##Arquillian Test from Eclipse
 ###Setup
   - install TestNG Plugin from within Eclipse using Marketplace
   - install JBoss Tools with Arquillian support as "install new software" 
