@@ -1,3 +1,5 @@
+Drone.io automated ... [![Build Status](https://drone.io/bitbucket.org/tsuckow/fuel/status.png)](https://drone.io/bitbucket.org/tsuckow/fuel/latest)
+
 #What is it?
 You are reading the README.md file distributed with the root pom of a project that contains tooling to manage vehicle refuelings.
 
@@ -9,21 +11,18 @@ This is a tool to manage refueling/fuel consumption of your vehicle(s). Its arti
 For build management maven is used. 
 
 ###Unit Tests
-Unit tests are supported by [Surefire Plugin](http://maven.apache.org/surefire/maven-surefire-plugin/). To run Unit Tets use your IDE or by command line:   ``mvn test``
+Unit tests are supported by Maven [Surefire Plugin](http://maven.apache.org/surefire/maven-surefire-plugin/). To run Unit Tets use your IDE or by command line:   ``mvn test``
 
 ###Integration Tests
-To run integration tests the [Failsafe Plugin](http://maven.apache.org/surefire/maven-failsafe-plugin/) is used. Together with invocation of the Failsafe Plugin an embedded JBoss server is launched.
+To run integration tests the Maven [Failsafe Plugin](http://maven.apache.org/surefire/maven-failsafe-plugin/) is used. Together with invocation of the Failsafe Plugin an embedded JBoss server is launched.
 
 Run with:   ``mvn verify``
 	
 Debug with [Failsafe Debug](http://maven.apache.org/surefire/maven-failsafe-plugin/examples/debugging.html):   ``mvn -Dmaven.failsafe.debug verify``
 
-
 ##Automated Tests
 Tests are triggered automatically on scm commit via a web hook at [drone.io](drone.io) but can be triggered manually as well (see below).
 
-Actual state: [![Build Status](https://drone.io/bitbucket.org/tsuckow/fuel/status.png)](https://drone.io/bitbucket.org/tsuckow/fuel/latest)
-    
 ###Arquillian Test from Eclipse
 ###Setup
   - install TestNG Plugin from within Eclipse using Marketplace
