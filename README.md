@@ -41,7 +41,7 @@ Tests are triggered automatically on scm commit via a web hook at [drone.io](dro
 Now you are ready to run/debug from within Eclipse by right clickinga test and selecting "Run/Debug As -> TestNG Test".
 
 ### Eclipse
-Useful static imports: ``org.assertj.guava.api.Assertions.*`` and ``org.assertj.core.api.Assertions.*``
+Useful static import types for "favourites": ``org.easymock.EasyMock.``, ``org.assertj.guava.api.Assertions.*`` and ``org.assertj.core.api.Assertions.*``
     
 # License
 The software is available under [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
