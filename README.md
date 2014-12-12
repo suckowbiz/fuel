@@ -1,9 +1,14 @@
+#What is it
+You are reading the README.md file located with the root pom of a project that contains tooling to manage vehicle refuelings.
+
+For further information please see README.md distributed with child pom(s).
+
 #Fuel
-A tool to manage vehicle refuelings based on Java EE 7 stack meant to be run on JBoss Wildfly (but should be portable to any other Java EE compliant server). Developed under principles of [Clean Code](http://de.wikipedia.org/wiki/Clean_Code).
+This is a tool to manage vehicle refuelings based on Java EE 7 stack meant to be run on JBoss Wildfly (but should be portable to any other Java EE compliant server). Developed under consideration of the principles of [Clean Code](http://de.wikipedia.org/wiki/Clean_Code).
 
-Maven is used for build management.
+For build management maven is used. 
 
-Main purpose of this project is being taken as reference for Java EE development.
+The main purpose of this project is being taken as reference for Java EE development.
 
 ##Automated Tests
 Tests are triggered automatically on scm commit via a web hook at [drone.io](drone.io) but can be triggered manually as well (see below).
