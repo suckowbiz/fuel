@@ -39,6 +39,9 @@ Tests are triggered automatically on scm commit via a web hook at [drone.io](dro
 ``JBoss Tools->Arquillian->Enable default VM arguments`` (enable "Add the default VM arguments to the JUnit/TestNG launch configurations") and add ``-Djava.util.logging.manager=org.jboss.logmanager.LogManager`` and  ``-Djboss.home=target/wildfly-8.1.0.Final``
 
 Now you are ready to run/debug from within Eclipse by right clickinga test and selecting "Run/Debug As -> TestNG Test".
+
+### Eclipse
+Useful static imports: ` `org.assertj.guava.api.Assertions.*`` and ``org.assertj.core.api.Assertions.*``
     
 # License
 The software is available under [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
