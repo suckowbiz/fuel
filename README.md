@@ -9,20 +9,14 @@ This is a tool to manage refueling/fuel consumption of your vehicle(s). Its arti
 For build management maven is used. 
 
 ###Unit Tests
-Unit tests are supported by [Surefire Plugin](http://maven.apache.org/surefire/maven-surefire-plugin/). To run Unit Tets use your IDE or by command line: 
-
-  ``mvn test``
+Unit tests are supported by [Surefire Plugin](http://maven.apache.org/surefire/maven-surefire-plugin/). To run Unit Tets use your IDE or by command line:   ``mvn test``
 
 ###Integration Tests
 To run integration tests the [Failsafe Plugin](http://maven.apache.org/surefire/maven-failsafe-plugin/) is used. Together with invocation of the Failsafe Plugin an embedded JBoss server is launched.
 
-Run with: 
-
-  ``mvn verify``
+Run with:   ``mvn verify``
 	
-Debug with [Failsafe Debug](http://maven.apache.org/surefire/maven-failsafe-plugin/examples/debugging.html): 
-
-  ``mvn -Dmaven.failsafe.debug verifyi``
+Debug with [Failsafe Debug](http://maven.apache.org/surefire/maven-failsafe-plugin/examples/debugging.html):   ``mvn -Dmaven.failsafe.debug verify``
 
 
 ##Automated Tests
