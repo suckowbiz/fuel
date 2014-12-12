@@ -9,7 +9,7 @@ For further information please see README.md distributed with child pom(s).
 # Vehicle Refuelings?
 This is a tool to manage refueling/fuel consumption of your vehicle(s). Its artifacts are based on Java EE 7 stack meant to be run on JBoss Wildfly (but should be portable to any other Java EE compliant server). Developed under consideration of the principles of [Clean Code](http://de.wikipedia.org/wiki/Clean_Code) with the purpose to have a reference project reflecting state of the art Java EE 7 instrumentation.
 
-For build management maven is used. 
+For build management maven is used. Get started with ``mvn clean install eclipse:eclipse``.
 
 # Testing
 ## Unit Tests
@@ -33,12 +33,15 @@ Tests are triggered automatically on scm commit via a web hook at [drone.io](dro
 ### Setup
   - install TestNG Plugin from within Eclipse using Marketplace
   - install JBoss Tools with Arquillian support as "install new software" 
-  ``http://download.jboss.org/jbosstools/targetplatforms/jbosstoolstarget/luna/``
+  ``http://download.jboss.org/jbosstools/updates/stable/luna/``
   
 ### Configuration
 ``JBoss Tools->Arquillian->Enable default VM arguments`` (enable "Add the default VM arguments to the JUnit/TestNG launch configurations") and add ``-Djava.util.logging.manager=org.jboss.logmanager.LogManager`` and  ``-Djboss.home=target/wildfly-8.1.0.Final``
 
 Now you are ready to run/debug from within Eclipse by right clickinga test and selecting "Run/Debug As -> TestNG Test".
+
+### Eclipse
+Useful static import types for *Preferences->Java->Editor->Content Assist->Favourites*: ``org.easymock.EasyMock``, ``org.assertj.guava.api.Assertions`` and ``org.assertj.core.api.Assertions``
     
 # License
 The software is available under [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
