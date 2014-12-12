@@ -1,32 +1,34 @@
-#What is it
-You are reading the README.md file located with the root pom of a project that contains tooling to manage vehicle refuelings.
+#What is it?
+You are reading the README.md file distributed with the root pom of a project that contains tooling to manage vehicle refuelings.
 
 For further information please see README.md distributed with child pom(s).
 
-#Fuel
-This is a tool to manage vehicle refuelings based on Java EE 7 stack meant to be run on JBoss Wildfly (but should be portable to any other Java EE compliant server). Developed under consideration of the principles of [Clean Code](http://de.wikipedia.org/wiki/Clean_Code).
+#Vehicle Refuelings?
+This is a tool to manage refueling/fuel consumption of your vehicle(s). Its artifacts are based on Java EE 7 stack meant to be run on JBoss Wildfly (but should be portable to any other Java EE compliant server). Developed under consideration of the principles of [Clean Code](http://de.wikipedia.org/wiki/Clean_Code) with the purpose to have a reference project reflecting state of the art Java EE 7 instrumentation.
 
 For build management maven is used. 
 
-The main purpose of this project is being taken as reference for Java EE development.
-
-##Automated Tests
-Tests are triggered automatically on scm commit via a web hook at [drone.io](drone.io) but can be triggered manually as well (see below).
-
-Actual state: [![Build Status](https://drone.io/bitbucket.org/tsuckow/fuel/status.png)](https://drone.io/bitbucket.org/tsuckow/fuel/latest)
-
 ###Unit Tests
 Unit tests are supported by [Surefire Plugin](http://maven.apache.org/surefire/maven-surefire-plugin/). To run Unit Tets use your IDE or by command line: 
+
   ``mvn test``
 
 ###Integration Tests
 To run integration tests the [Failsafe Plugin](http://maven.apache.org/surefire/maven-failsafe-plugin/) is used. Together with invocation of the Failsafe Plugin an embedded JBoss server is launched.
 
 Run with: 
+
   ``mvn verify``
 	
 Debug with [Failsafe Debug](http://maven.apache.org/surefire/maven-failsafe-plugin/examples/debugging.html): 
+
   ``mvn -Dmaven.failsafe.debug verifyi``
+
+
+##Automated Tests
+Tests are triggered automatically on scm commit via a web hook at [drone.io](drone.io) but can be triggered manually as well (see below).
+
+Actual state: [![Build Status](https://drone.io/bitbucket.org/tsuckow/fuel/status.png)](https://drone.io/bitbucket.org/tsuckow/fuel/latest)
     
 ###Arquillian Test from Eclipse
 ###Setup
