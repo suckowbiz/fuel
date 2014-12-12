@@ -102,14 +102,14 @@
 		<dependency>
 			<groupId>org.jboss.arquillian.extension</groupId>
 			<artifactId>arquillian-transaction-jta</artifactId>
-			<version>${version.arquillian-transaction}</version>
+			<version>${version.arquillian-transaction-jta}</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Added to have an Arquillian WildFly 8 embedded container adapter. -->
 		<dependency>
 			<groupId>org.wildfly</groupId>
 			<artifactId>wildfly-arquillian-container-embedded</artifactId>
-			<version>${version.wildfly-arquillian}</version>
+			<version>${version.wildfly-arquillian-container-embedded}</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Added to have an Arquillian WildFly 8 container runtime. -->
@@ -117,7 +117,7 @@
 		<dependency>
 			<groupId>org.wildfly</groupId>
 			<artifactId>wildfly-embedded</artifactId>
-			<version>${version.wildfly-arquillian}</version>
+			<version>${version.wildfly-embedded}</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Added to ease the procedure of creating a .war that Arquillian deploys 
@@ -147,7 +147,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<version>1.2.140</version>
+			<version>${version.h2}</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Added to have in-memory database for integration tests. -->
