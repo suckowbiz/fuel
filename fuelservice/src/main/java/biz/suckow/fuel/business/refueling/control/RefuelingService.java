@@ -22,50 +22,42 @@ package biz.suckow.fuel.business.refueling.control;
 
 import java.util.Date;
 
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
 
-import biz.suckow.fuel.business.consumption.entity.FillUpEvent;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
-import biz.suckow.fuel.business.refueling.entity.StockAddition;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
-// TODO test
 public class RefuelingService {
-    @Inject
-    private EntityManager em;
+    private FillUpEventGun gun;
+    private RefuelingStore refuelingStore;
+    private AdditionStore additionStore;
 
     @Inject
-    private Event<FillUpEvent> fillUpEvent;
+    public RefuelingService(RefuelingStore refuelingStore, AdditionStore additionStore, FillUpEventGun gun) {
+	this.refuelingStore = refuelingStore;
+	this.additionStore = additionStore;
+	this.gun = gun;
+    }
 
     public void fullTankRefuel(final Vehicle vehicle, final Double kilometre, final Double litres,
 	    final Double eurosPerLitre, final Date date, final String memo) {
-	final Refueling refueling = new Refueling.Builder().eurosPerLitre(eurosPerLitre).litres(litres)
-		.kilometre(kilometre).memo(memo).dateRefueled(date).fillUp(true).vehicle(vehicle).build();
-	this.em.persist(refueling);
-
-	final FillUpEvent event = new FillUpEvent().setRefuelingId(refueling.getId());
-	this.fillUpEvent.fire(event);
+	Refueling refueling = this.refuelingStore.storeFillUp(eurosPerLitre, litres, kilometre, memo, date, vehicle);
+	this.gun.fire(refueling.getId());
     }
 
     public void partialTankRefuel(final Vehicle vehicle, final Double litres, final Double euros, final Date date,
 	    final String memo) {
-	final Refueling refueling = new Refueling.Builder().litres(litres).eurosPerLitre(euros).dateRefueled(date)
-		.memo(memo).vehicle(vehicle).build();
-	this.em.persist(refueling);
+	this.refuelingStore.storePartialRefueling(euros, litres, memo, date, vehicle);
     }
 
     public void fullTankAndStockRefuel(final Vehicle vehicle, final Double kilometre, final Double litresTank,
 	    final Double litresStock, final Double euros, final Date date, final String memo) {
 	this.fullTankRefuel(vehicle, kilometre, litresTank, euros, date, memo);
-	this.stockAddition(vehicle, litresStock, euros, date, null);
+	this.stockAddition(vehicle, litresStock, euros, date, memo);
     }
 
     public void stockAddition(final Vehicle vehicle, final Double litres, final Double euros, final Date date,
 	    final String memo) {
-	final StockAddition addition = new StockAddition().setDateAdded(date).setEurosPerLitre(euros).setLitres(litres)
-		.setMemo(memo);
-	this.em.persist(addition);
+	this.additionStore.store(date,euros,litres,memo);
     }
 }
