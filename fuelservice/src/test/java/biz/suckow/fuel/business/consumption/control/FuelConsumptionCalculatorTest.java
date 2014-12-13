@@ -9,9 +9,9 @@ package biz.suckow.fuel.business.consumption.control;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -68,7 +68,7 @@ public class FuelConsumptionCalculatorTest extends EasyMockSupport {
 	Refueling refueling = new Refueling.Builder().kilometre(100D).litres(10D).dateRefueled(new Date())
 		.fillUp(false).build();
 	new FuelConsumptionCalculator(this.refuelingLocatorMock, this.fuelStockLocatorMock, Logger.getAnonymousLogger())
-		.computeConsumptionFor(refueling);
+	.computeConsumptionFor(refueling);
     }
 
     @Test
@@ -86,14 +86,14 @@ public class FuelConsumptionCalculatorTest extends EasyMockSupport {
 	assertThat(actualResult).isAbsent();
     }
 
-    @Test
+    @Test(description = "Simple case of refueling and consuming this refueling.")
     public void simpleComputationMustSucceed() {
 	Date january = TestHelper.getMonth(0);
 	Date february = TestHelper.getMonth(1);
-	
+
 	Owner duke = TestHelper.createDuke();
 	Vehicle vehicle = TestHelper.createDukeCar(duke);
-	
+
 	Refueling refuelingBefore = new Refueling.Builder().kilometre(100D).litres(10D).dateRefueled(january)
 		.fillUp(true).build();
 	Refueling refueling = new Refueling.Builder().kilometre(200D).litres(10D).dateRefueled(february).fillUp(true)
@@ -114,78 +114,48 @@ public class FuelConsumptionCalculatorTest extends EasyMockSupport {
 	assertThat(actualResult).isPresent();
 	assertThat(actualResult.get().doubleValue()).isEqualTo(10D / 100D);
     }
-    //
-    // public Optional<Double> computeConsumptionFor( Refueling refueling) {
-    // Preconditions.checkArgument(refueling.getIsFillUp());
-    //
-    // Double result = null;
-    // Date refuelingDate = refueling.getDateRefueled();
-    // Optional<Refueling> possibleLastFillUp =
-    // this.refuelingLocator.getFillUpBefore(refuelingDate);
-    // if (possibleLastFillUp.isPresent()) {
-    // Vehicle vehicle = refueling.getVehicle();
-    // Date lastFillUpDate = possibleLastFillUp.get().getDateRefueled();
-    //
-    // Double litres = refueling.getLitres();
-    // litres += this.getLitresConsumedFromStock(lastFillUpDate, refuelingDate,
-    // vehicle);
-    // litres += this.getLitresRefueledBetween(lastFillUpDate, refuelingDate,
-    // vehicle);
-    //
-    // Double distance = refueling.getKilometre() -
-    // possibleLastFillUp.get().getKilometre();
-    // result = litres / distance;
-    // }
-    // return Optional.fromNullable(result);
-    // }
-    //
-    // private Double getLitresRefueledBetween( Date left, Date right, Vehicle
-    // vehicle) {
-    // List<Refueling> partials =
-    // this.refuelingLocator.getPartialRefuelingsBetween(left, right, vehicle);
-    // Double result = this.sumRefueledLitres(partials);
-    // return result;
-    // }
-    //
-    // private Double getLitresConsumedFromStock( Date left, Date right, Vehicle
-    // vehicle) {
-    // List<StockAddition> stockAdditions =
-    // this.fuelStockLocator.getAdditionsBetween(left, right, vehicle);
-    // Double litresAddedToStock = this.sumStockAdditionsLitres(stockAdditions);
-    //
-    // List<StockRelease> stockReleases =
-    // this.fuelStockLocator.getReleasesBetween(left, right, vehicle);
-    // Double litresReleasedFromStock =
-    // this.sumStockReleaseLitres(stockReleases);
-    //
-    // Double result = litresAddedToStock - litresReleasedFromStock;
-    // if (result < 0) {
-    // result *= -1; // in case more consumed than added within this interval
-    // }
-    // return result;
-    // }
-    //
-    // private Double sumStockReleaseLitres( List<StockRelease> releases) {
-    // Double result = 0D;
-    // for ( StockRelease release : releases) {
-    // result += release.getLitres();
-    // }
-    // return result;
-    // }
-    //
-    // private Double sumRefueledLitres( List<Refueling> refuelings) {
-    // Double result = 0D;
-    // for ( Refueling refueling : refuelings) {
-    // result += refueling.getLitres();
-    // }
-    // return result;
-    // }
-    //
-    // private Double sumStockAdditionsLitres( List<StockAddition> additions) {
-    // Double result = 0D;
-    // for ( StockAddition addition : additions) {
-    // result += addition.getLitres();
-    // }
-    // return result;
-    // }
+
+    @Test(description = "Have a refueling with consideration of stock and consumption of this refueling and stock.")
+    public void asdf() {
+	Date january = TestHelper.getMonth(0);
+	Date february = TestHelper.getMonth(1);
+	Date march = TestHelper.getMonth(2);
+	Date april = TestHelper.getMonth(3);
+
+	Owner duke = TestHelper.createDuke();
+	Vehicle vehicle = TestHelper.createDukeCar(duke);
+
+	double litresPartiallyRefueled = 20D;
+	double litresFilledUp = 40D;
+	double litresToStock = 5D;
+	double litresFromStock = 5D;
+	double kilometresLastFillUp = 100D;
+	double kilometresFilledUp = 1100D;
+	double expectedConsumption = (litresFilledUp + litresPartiallyRefueled + litresToStock - litresFromStock)
+		/ (kilometresFilledUp - kilometresLastFillUp);
+
+	Refueling partialRefueling = new Refueling.Builder().litres(litresPartiallyRefueled).dateRefueled(march)
+		.fillUp(false).build();
+	Refueling refuelingBefore = new Refueling.Builder().kilometre(kilometresLastFillUp).litres(litresFilledUp)
+		.dateRefueled(january).fillUp(true).build();
+	Refueling refueling = new Refueling.Builder().kilometre(kilometresFilledUp).litres(litresFilledUp)
+		.dateRefueled(april).fillUp(true).vehicle(vehicle).build();
+	StockAddition addition = new StockAddition().setDateAdded(february).setLitres(litresToStock);
+	StockRelease release = new StockRelease().setDateReleased(march).setLitres(litresFromStock);
+
+	this.resetAll();
+	expect(this.refuelingLocatorMock.getFillUpBefore(april)).andStubReturn(Optional.of(refuelingBefore));
+	expect(this.fuelStockLocatorMock.getAdditionsBetween(january, april, vehicle)).andStubReturn(
+		Lists.<StockAddition> newArrayList(addition));
+	expect(this.refuelingLocatorMock.getPartialRefuelingsBetween(january, april, vehicle)).andStubReturn(
+		Lists.<Refueling> newArrayList(partialRefueling));
+	expect(this.fuelStockLocatorMock.getReleasesBetween(january, april, vehicle)).andStubReturn(
+		Lists.<StockRelease> newArrayList(release));
+	this.replayAll();
+
+	Optional<BigDecimal> actualResult = new FuelConsumptionCalculator(this.refuelingLocatorMock,
+		this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumptionFor(refueling);
+	assertThat(actualResult).isPresent();
+	assertThat(actualResult.get().doubleValue()).isEqualTo(expectedConsumption);
+    }
 }
