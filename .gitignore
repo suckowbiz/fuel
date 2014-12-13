@@ -6,3 +6,4 @@ target/
 nb-configuration.xml
 test-output
 /bin/
+fuelservice/derby.log
