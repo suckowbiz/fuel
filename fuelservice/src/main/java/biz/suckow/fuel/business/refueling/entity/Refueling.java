@@ -38,10 +38,10 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Entity
 @NamedQueries({
-	@NamedQuery(name = Refueling.FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN, query = "SELECT r FROM Refueling r WHERE r.isFillUp = false AND r.dateRefueled > :left "
-		+ "AND r.dateRefueled < :right AND r.vehicle = :vehicle"),
-	@NamedQuery(name = Refueling.FIND_BY_FILLED_UP_AND_DATE_BEFORE, query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
-		+ "AND r.dateRefueled < :right ORDER BY r.dateRefueled DESC ") })
+    @NamedQuery(name = Refueling.FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN, query = "SELECT r FROM Refueling r WHERE r.isFillUp = false AND r.dateRefueled > :left "
+	    + "AND r.dateRefueled < :right AND r.vehicle = :vehicle"),
+	    @NamedQuery(name = Refueling.FIND_BY_FILLED_UP_AND_DATE_BEFORE, query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
+		    + "AND r.dateRefueled < :right ORDER BY r.dateRefueled DESC ") })
 public class Refueling extends BaseEntity {
     private static final long serialVersionUID = 9175526663957115977L;
     private static final String PREFIX = "biz.suckow.fuel.business.refueling.entity.";
@@ -97,9 +97,8 @@ public class Refueling extends BaseEntity {
 	}
 
 	public Refueling build() {
-	    if (this.refueling.getIsFillUp() && this.refueling.getKilometre() == null) {
+	    if (this.refueling.getIsFillUp() && this.refueling.getKilometre() == null)
 		throw new IllegalArgumentException("Combination of filled up refueling with missing kilometre.");
-	    }
 	    return this.refueling;
 	}
     }
@@ -135,8 +134,9 @@ public class Refueling extends BaseEntity {
 	return this.vehicle;
     }
 
-    public void setVehicle(final Vehicle vehicle) {
+    public Refueling setVehicle(final Vehicle vehicle) {
 	this.vehicle = vehicle;
+	return this;
     }
 
     public Boolean getIsFillUp() {
@@ -151,8 +151,9 @@ public class Refueling extends BaseEntity {
 	return this.dateRefueled;
     }
 
-    public void setDateRefueled(final Date dateRefueled) {
+    public Refueling setDateRefueled(final Date dateRefueled) {
 	this.dateRefueled = dateRefueled;
+	return this;
     }
 
     public Double getEurosPerLitre() {

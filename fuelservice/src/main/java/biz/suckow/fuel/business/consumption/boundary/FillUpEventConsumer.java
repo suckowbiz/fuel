@@ -1,4 +1,4 @@
-package biz.suckow.fuel.business.consumption.control;
+package biz.suckow.fuel.business.consumption.boundary;
 
 /*
  * #%L
@@ -29,6 +29,7 @@ import javax.enterprise.event.TransactionPhase;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
+import biz.suckow.fuel.business.consumption.control.FuelConsumptionCalculator;
 import biz.suckow.fuel.business.consumption.entity.FillUpEvent;
 import biz.suckow.fuel.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuel.business.refueling.entity.Refueling;
