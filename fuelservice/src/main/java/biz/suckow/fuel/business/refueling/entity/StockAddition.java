@@ -51,9 +51,6 @@ public class StockAddition extends BaseEntity {
     @Column(nullable = false)
     private Double litres;
 
-    @Column
-    private String memo;
-
     public Date getDateRefueled() {
 	return this.dateAdded;
     }
@@ -78,15 +75,6 @@ public class StockAddition extends BaseEntity {
 
     public StockAddition setLitres(final Double litres) {
 	this.litres = litres;
-	return this;
-    }
-
-    public String getMemo() {
-	return this.memo;
-    }
-
-    public StockAddition setMemo(final String memo) {
-	this.memo = memo;
 	return this;
     }
 

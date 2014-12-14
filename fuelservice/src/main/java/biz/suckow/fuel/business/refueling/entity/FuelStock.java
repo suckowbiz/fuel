@@ -35,6 +35,7 @@ import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 @Entity
 @NamedQueries({
+    @NamedQuery(name = FuelStock.FIND_BY_VEHICLE, query = "SELECT fs FROM FuelStock fs WHERE fs.vehicle = :vehicle"),
     @NamedQuery(name = FuelStock.FIND_ADDITIONS_BY_VEHICLE_AND_DATE_BETWEEN, query = "SELECT a FROM FuelStock fs JOIN fs.additions a JOIN fs.vehicle v WHERE v = :vehicle AND a.dateAdded > :left AND a.dateAdded < :right"),
     @NamedQuery(name = FuelStock.FIND_RELEASES_BY_VEHCILE_AND_DATE_BETWEEN, query = "SELECT sr FROM FuelStock fs JOIN fs.releases sr WHERE fs.vehicle = :vehicle "
 	    + "AND sr.dateReleased > :left AND sr.dateReleased < :right") })
@@ -42,6 +43,7 @@ public class FuelStock extends BaseEntity {
     private static final long serialVersionUID = 2386152541780890783L;
 
     private static final String PREFIX = "biz.suckow.fuel.business.refueling.entity";
+    public static final String FIND_BY_VEHICLE = FuelStock.PREFIX + "findByVehicle";
     public static final String FIND_ADDITIONS_BY_VEHICLE_AND_DATE_BETWEEN = FuelStock.PREFIX + "findAdditionsBetween";
     public static final String FIND_RELEASES_BY_VEHCILE_AND_DATE_BETWEEN = FuelStock.PREFIX + "findReleasesBetween";
 
@@ -63,6 +65,14 @@ public class FuelStock extends BaseEntity {
     public FuelStock add(final StockAddition addition) {
 	this.additions.add(addition);
 	return this;
+    }
+
+    public Set<StockAddition> getAdditions() {
+	return this.additions;
+    }
+
+    public Set<StockRelease> getReleases() {
+	return this.releases;
     }
 
     public FuelStock release(final StockRelease release) {

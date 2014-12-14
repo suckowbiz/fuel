@@ -20,44 +20,47 @@ package biz.suckow.fuel.business.refueling.control;
  * #L%
  */
 
-import java.util.Date;
-
 import javax.inject.Inject;
 
 import biz.suckow.fuel.business.refueling.entity.Refueling;
+import biz.suckow.fuel.business.refueling.entity.RefuelingMeta;
 import biz.suckow.fuel.business.vehicle.entity.Vehicle;
+
+import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
 
 public class RefuelingService {
     private FillUpEventGun gun;
     private RefuelingStore refuelingStore;
-    private AdditionStore additionStore;
+    private FuelStockStore stockStore;
+    private VehicleLocator vehicleLocator;
 
     @Inject
-    public RefuelingService(RefuelingStore refuelingStore, AdditionStore additionStore, FillUpEventGun gun) {
+    public RefuelingService(RefuelingStore refuelingStore, FuelStockStore stockStore, FillUpEventGun gun,
+	    VehicleLocator vehicleLocator) {
 	this.refuelingStore = refuelingStore;
-	this.additionStore = additionStore;
+	this.stockStore = stockStore;
 	this.gun = gun;
+	this.vehicleLocator = vehicleLocator;
     }
 
-    public void fullTankRefuel(final Vehicle vehicle, final Double kilometre, final Double litres,
-	    final Double eurosPerLitre, final Date date, final String memo) {
-	Refueling refueling = this.refuelingStore.storeFillUp(eurosPerLitre, litres, kilometre, memo, date, vehicle);
-	this.gun.fire(refueling.getId());
-    }
-
-    public void partialTankRefuel(final Vehicle vehicle, final Double litres, final Double euros, final Date date,
-	    final String memo) {
-	this.refuelingStore.storePartialRefueling(euros, litres, memo, date, vehicle);
-    }
-
-    public void fullTankAndStockRefuel(final Vehicle vehicle, final Double kilometre, final Double litresTank,
-	    final Double litresStock, final Double euros, final Date date, final String memo) {
-	this.fullTankRefuel(vehicle, kilometre, litresTank, euros, date, memo);
-	this.stockAddition(vehicle, litresStock, euros, date, memo);
-    }
-
-    public void stockAddition(final Vehicle vehicle, final Double litres, final Double euros, final Date date,
-	    final String memo) {
-	this.additionStore.store(date,euros,litres,memo);
+    public void add(String vehicleName, String ownerName, RefuelingMeta meta) {
+	// TODO handle previous additions /recalculate ...
+	Optional<Vehicle> possibleVehicle = this.vehicleLocator.getVehicle(ownerName, vehicleName);
+	Preconditions.checkState(possibleVehicle.isPresent());
+	if (meta.litresToStock > 0D) {
+	    this.stockStore.addition(possibleVehicle.get(), meta.date, meta.eurosPerLitre, meta.litresToStock);
+	}
+	if (meta.litresFromStock > 0D) {
+	    this.stockStore.release(possibleVehicle.get(), meta.date, meta.litresFromStock);
+	}
+	if (meta.isFull) {
+	    Refueling refueling = this.refuelingStore.storeFillUp(possibleVehicle.get(), meta.eurosPerLitre,
+		    meta.litresToTank, meta.kilometre, meta.memo, meta.date);
+	    this.gun.fire(refueling.getId());
+	} else {
+	    this.refuelingStore.storePartialRefueling(possibleVehicle.get(), meta.eurosPerLitre, meta.litresToTank,
+		    meta.memo, meta.date);
+	}
     }
 }

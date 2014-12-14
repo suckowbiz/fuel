@@ -32,9 +32,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import biz.suckow.fuel.business.refueling.control.RefuelingService;
-import biz.suckow.fuel.business.refueling.control.VehicleLocator;
 import biz.suckow.fuel.business.refueling.entity.RefuelingMeta;
-import biz.suckow.fuel.business.vehicle.entity.Vehicle;
 
 // TODO test
 @Path("refuelings")
@@ -46,9 +44,6 @@ public class RefuelingResource {
     @Inject
     private RefuelingService refuelingService;
 
-    @Inject
-    private VehicleLocator vehicleService;
-
     @GET
     @Path("index")
     @Produces(MediaType.TEXT_PLAIN)
@@ -57,45 +52,11 @@ public class RefuelingResource {
     }
 
     @POST
-    @Path("station/full/{ownername}/{vehiclename}")
+    @Path("add/{ownerName}/{vehicleName}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response refuel(@PathParam("ownername") final String ownername,
-	    @PathParam("vehiclename") final String vehiclename, final RefuelingMeta meta) {
-	final Vehicle vehicle = this.vehicleService.getVehicle(ownername, vehiclename).get();
-	this.refuelingService.fullTankRefuel(vehicle, meta.kilometre, meta.litresToTank, meta.eurosPerLitre, meta.date,
-		meta.memo);
+    public Response refuel(@PathParam("ownerName") final String ownerName,
+	    @PathParam("vehicleName") final String vehicleName, final RefuelingMeta meta) {
+	this.refuelingService.add(vehicleName, ownerName, meta);
 	return Response.ok().build();
     }
-
-    @POST
-    @Path("station/partial/{ownername}/{vehiclename}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response partialRefuel(@PathParam("ownername") final String ownername,
-	    @PathParam("vehiclename") final String vehiclename, final RefuelingMeta meta) {
-	final Vehicle vehicle = this.vehicleService.getVehicle(ownername, vehiclename).get();
-	this.refuelingService.partialTankRefuel(vehicle, meta.litresToTank, meta.eurosPerLitre, meta.date, meta.memo);
-	return Response.ok().build();
-    }
-
-    @POST
-    @Path("station/all/{ownername}/{vehiclename}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response toTankAndStock(@PathParam("ownername") final String ownername,
-	    @PathParam("vehiclename") final String vehiclename, final RefuelingMeta meta) {
-	final Vehicle vehicle = this.vehicleService.getVehicle(ownername, vehiclename).get();
-	this.refuelingService.fullTankAndStockRefuel(vehicle, meta.kilometre, meta.litresToTank, meta.litresToStock,
-		meta.eurosPerLitre, meta.date, meta.memo);
-	return Response.ok().build();
-    }
-
-    @POST
-    @Path("station/stock/{ownername}/{vehiclename}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response refuelStock(@PathParam("ownername") final String ownername,
-	    @PathParam("vehiclename") final String vehiclename, final RefuelingMeta meta) {
-	final Vehicle vehicle = this.vehicleService.getVehicle(ownername, vehiclename).get();
-	this.refuelingService.stockAddition(vehicle, meta.litresToStock, meta.eurosPerLitre, meta.date, meta.memo);
-	return Response.ok().build();
-    }
-
 }

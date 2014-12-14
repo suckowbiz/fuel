@@ -36,15 +36,15 @@ public class RefuelingStore {
 	this.em = em;
     }
 
-    public Refueling storeFillUp(Double eurosPerLitre, Double litres, Double kilometre, String memo, Date date,
-	    Vehicle vehicle) {
+    public Refueling storeFillUp(Vehicle vehicle, Double eurosPerLitre, Double litres, Double kilometre, String memo,
+	    Date date) {
 	final Refueling result = new Refueling.Builder().eurosPerLitre(eurosPerLitre).litres(litres)
 		.kilometre(kilometre).memo(memo).dateRefueled(date).fillUp(true).vehicle(vehicle).build();
 	this.em.persist(result);
 	return result;
     }
 
-    public void storePartialRefueling(Double euros, Double litres, String memo, Date date, Vehicle vehicle) {
+    public void storePartialRefueling(Vehicle vehicle, Double euros, Double litres, String memo, Date date) {
 	final Refueling refueling = new Refueling.Builder().litres(litres).eurosPerLitre(euros).dateRefueled(date)
 		.memo(memo).vehicle(vehicle).build();
 	this.em.persist(refueling);

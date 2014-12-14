@@ -28,9 +28,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class RefuelingMeta {
     public Date date;
     public String memo;
-    public Double kilometre;
-    public Double eurosPerLitre;
-    public Double litresToTank;
-    public Double litresToStock;
-    public Double litresReleasedFromStock;
+    public double kilometre;
+    public double eurosPerLitre;
+    public double litresToTank;
+    public double litresToStock;
+    public double litresFromStock;
+    public boolean isFull;
 }

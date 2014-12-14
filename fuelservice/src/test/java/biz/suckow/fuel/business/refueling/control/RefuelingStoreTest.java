@@ -78,8 +78,8 @@ public class RefuelingStoreTest extends EasyMockSupport {
 	expectLastCall();
 	this.replayAll();
 
-	new RefuelingStore(this.emMock).storePartialRefueling(expectedEuros, expectedLitres, expectedMemo,
-		expectedDate, expectedVehicle);
+	new RefuelingStore(this.emMock).storePartialRefueling(expectedVehicle, expectedEuros, expectedLitres,
+		expectedMemo, expectedDate);
 	this.verifyAll();
     }
 
@@ -100,8 +100,8 @@ public class RefuelingStoreTest extends EasyMockSupport {
 	this.emMock.persist(cmp(expectedRefueling, this.refuelingComparator, LogicalOperator.EQUAL));
 	this.replayAll();
 
-	new RefuelingStore(this.emMock).storeFillUp(expectedEuros, expectedLitres, expectedKilometres, expectedMemo,
-		expectedDate, expectedVehicle);
+	new RefuelingStore(this.emMock).storeFillUp(expectedVehicle, expectedEuros, expectedLitres, expectedKilometres,
+		expectedMemo, expectedDate);
 	this.verifyAll();
     }
 }
