@@ -40,23 +40,23 @@ import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
 @Transactional(value = TransactionMode.ROLLBACK)
 public abstract class ArquillianBase extends Arquillian {
     private static final String UNIT_TEST_PATTERN = ".*Test.*";
-    
+
     @Inject
     protected EntityManager em;
 
     @Deployment
     @OverProtocol("Servlet 3.0")
-    public static WebArchive createDeployment() {
-        final PomEquippedResolveStage resolver = Maven.resolver().loadPomFromFile("pom.xml");
-        return ShrinkWrap.create(WebArchive.class)
-                .addPackages(true, Filters.exclude(ArquillianBase.UNIT_TEST_PATTERN), "biz.suckow.fuel.business")
-                .addClass(TestHelper.class)
-                .addAsLibraries(resolver.resolve("org.easymock:easymock").withoutTransitivity().asFile())
-                .addAsLibraries(resolver.resolve("com.h2database:h2").withoutTransitivity().asFile())
-                .addAsLibraries(resolver.resolve("org.assertj:assertj-core").withoutTransitivity().asFile())
-                .addAsLibraries(resolver.resolve("org.assertj:assertj-guava").withoutTransitivity().asFile())
-                .addAsLibraries(resolver.importRuntimeDependencies().resolve().withoutTransitivity().asFile())
-                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-                .addAsResource("arquillian/persistence.xml", "META-INF/persistence.xml");
+    public static WebArchive deploy() {
+	final PomEquippedResolveStage resolver = Maven.resolver().loadPomFromFile("pom.xml");
+	return ShrinkWrap.create(WebArchive.class)
+		.addPackages(true, Filters.exclude(ArquillianBase.UNIT_TEST_PATTERN), "biz.suckow.fuel.business")
+		.addClass(TestHelper.class)
+		.addAsLibraries(resolver.resolve("org.easymock:easymock").withoutTransitivity().asFile())
+		.addAsLibraries(resolver.resolve("com.h2database:h2").withoutTransitivity().asFile())
+		.addAsLibraries(resolver.resolve("org.assertj:assertj-core").withoutTransitivity().asFile())
+		.addAsLibraries(resolver.resolve("org.assertj:assertj-guava").withoutTransitivity().asFile())
+		.addAsLibraries(resolver.importRuntimeDependencies().resolve().withoutTransitivity().asFile())
+		.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+		.addAsResource("arquillian/persistence.xml", "META-INF/persistence.xml");
     }
 }
