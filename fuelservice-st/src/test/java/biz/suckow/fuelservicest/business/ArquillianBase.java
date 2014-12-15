@@ -1,4 +1,4 @@
-package biz.suckow.fuelserviceit.business;
+package biz.suckow.fuelservicest.business;
 
 /*
  * #%L
@@ -33,8 +33,7 @@ import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
+import org.jboss.shrinkwrap.resolver.api.maven.archive.importer.MavenImporter;
 
 @ArquillianSuiteDeployment
 @Transactional(value = TransactionMode.ROLLBACK)
@@ -47,18 +46,19 @@ public abstract class ArquillianBase extends Arquillian {
     @Deployment
     @OverProtocol("Servlet 3.0")
     public static WebArchive deploy() {
-	final PomEquippedResolveStage resolver = Maven.resolver().loadPomFromFile("pom.xml");
+	//	final PomEquippedResolveStage resolver = Maven.resolver().loadPomFromFile("pom.xml");
 	return ShrinkWrap
-		.create(WebArchive.class)
+		.create(MavenImporter.class)
+		.loadPomFromFile("pom.xml")
+		.importBuildOutput()
+		.as(WebArchive.class)
+		//		.addAsLibraries(resolver.resolve("org.easymock:easymock").withoutTransitivity().asFile())
+		//		.addAsLibraries(resolver.resolve("com.h2database:h2").withoutTransitivity().asFile())
+		//		.addAsLibraries(resolver.resolve("org.assertj:assertj-core").withoutTransitivity().asFile())
+		//		.addAsLibraries(resolver.resolve("org.assertj:assertj-guava").withoutTransitivity().asFile())
+		//		.addAsLibraries(resolver.importRuntimeAndTestDependencies().resolve().withoutTransitivity().asFile())
 		.addPackages(true, Filters.exclude(ArquillianBase.UNIT_TEST_PATTERN),
-			"biz.suckow.fuelserviceit.business")
-			// .addAsLibraries(resolver.resolve("biz.suckow.fuel:fuelservice").withTransitivity().asFile())
-			.addAsLibraries(resolver.resolve("org.easymock:easymock").withoutTransitivity().asFile())
-			.addAsLibraries(resolver.resolve("com.h2database:h2").withoutTransitivity().asFile())
-			.addAsLibraries(resolver.resolve("org.assertj:assertj-core").withoutTransitivity().asFile())
-			.addAsLibraries(resolver.resolve("org.assertj:assertj-guava").withoutTransitivity().asFile())
-			.addAsLibraries(resolver.importRuntimeDependencies().resolve().withoutTransitivity().asFile())
-			.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
+			"biz.suckow.fuelservicest.business").addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
 			.addAsResource("arquillian/persistence.xml", "META-INF/persistence.xml");
     }
 }
