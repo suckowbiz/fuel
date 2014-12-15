@@ -8,14 +8,14 @@
 
 	<artifactId>fuelservice</artifactId>
 	<parent>
-		<groupId>biz.suckow</groupId>
-		<artifactId>fuel</artifactId>
+		<groupId>biz.suckow.fuel</groupId>
+		<artifactId>multifuel</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 
 	<packaging>war</packaging>
 
-	<name>fuelservice</name>
+	<name>${project.artifactId}</name>
 	<description>Provides fuel related services such as refueling.</description>
 	<inceptionYear>2014</inceptionYear>
 
@@ -38,39 +38,7 @@
 				<configuration>
 					<forkCount>1</forkCount>
 					<reuseForks>true</reuseForks>
-					<systemPropertyVariables>
-						<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-						<jboss.home>${jboss.home}</jboss.home>
-						<redirectTestOutputToFile>false</redirectTestOutputToFile>
-					</systemPropertyVariables>
 				</configuration>
-			</plugin>
-			<!-- Intentionally added to prepare wildfly for integration tests. -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>${version.maven-dependency-plugin}</version>
-				<executions>
-					<execution>
-						<id>unpack</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>org.wildfly</groupId>
-									<artifactId>wildfly-dist</artifactId>
-									<version>${version.wildfly-dist}</version>
-									<type>zip</type>
-									<overWrite>false</overWrite>
-									<outputDirectory>target</outputDirectory>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -90,65 +58,6 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-validator</artifactId>
-		</dependency>
-		<!-- TEST DEPENDENCIES -->
-		<!-- Arquillian TestNG integration. -->
-		<dependency>
-			<groupId>org.jboss.arquillian.testng</groupId>
-			<artifactId>arquillian-testng-container</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!-- Added to support the use of transations for tests (e.g. rollback). -->
-		<dependency>
-			<groupId>org.jboss.arquillian.extension</groupId>
-			<artifactId>arquillian-transaction-jta</artifactId>
-			<version>${version.arquillian-transaction-jta}</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- Added to have an Arquillian WildFly 8 embedded container adapter. -->
-		<dependency>
-			<groupId>org.wildfly</groupId>
-			<artifactId>wildfly-arquillian-container-embedded</artifactId>
-			<version>${version.wildfly-arquillian-container-embedded}</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- Added to have an Arquillian WildFly 8 container runtime. -->
-		<!-- https://docs.jboss.org/author/display/ARQ/WildFly+8.1.0+-+Embedded -->
-		<dependency>
-			<groupId>org.wildfly</groupId>
-			<artifactId>wildfly-embedded</artifactId>
-			<version>${version.wildfly-embedded}</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- Added to ease the procedure of creating a .war that Arquillian deploys 
-			for testing. -->
-		<dependency>
-			<groupId>org.jboss.shrinkwrap.resolver</groupId>
-			<artifactId>shrinkwrap-resolver-depchain</artifactId>
-			<scope>test</scope>
-			<type>pom</type>
-		</dependency>
-		<!-- Maven support for shrinkwrap. -->
-		<dependency>
-			<groupId>org.jboss.shrinkwrap.resolver</groupId>
-			<artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!-- Have a single deployment for all tests and avoid that for every IT 
-			a new server instance is launched. -->
-		<dependency>
-			<groupId>org.eu.ingwar.tools</groupId>
-			<artifactId>arquillian-suite-extension</artifactId>
-			<version>${version.arquillian-suite-extension}</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- Expecting persistence exceptions requires H2 dependency because H2 
-			is used for testing. -->
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>${version.h2}</version>
-			<scope>test</scope>
 		</dependency>
 		<!-- Added to have in-memory database for integration tests. -->
 		<dependency>
