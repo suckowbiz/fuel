@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Set these VM properties in your IDE debugger -Djava.util.logging.manager=org.jboss.logmanager.LogManager 
+	-Djboss.home=target/wildfly-8.1.0.Final -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>fuelservice-st</artifactId>
+	<parent>
+		<groupId>biz.suckow.fuel</groupId>
+		<artifactId>multifuel</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<packaging>war</packaging>
+
+	<name>${project.artifactId}</name>
+	<description>System tests for fuelservice.</description>
+	<inceptionYear>2014</inceptionYear>
+
+	<build>
+		<finalName>${project.artifactId}-${project.version}</finalName>
+		<plugins>
+			<!-- Added to support integration tests during $ mvn verify -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>${version.maven-failsafe-plugin}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<forkCount>1</forkCount>
+					<reuseForks>true</reuseForks>
+					<systemPropertyVariables>
+						<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+						<jboss.home>${jboss.home}</jboss.home>
+						<redirectTestOutputToFile>false</redirectTestOutputToFile>
+					</systemPropertyVariables>
+				</configuration>
+			</plugin>
+			<!-- Intentionally added to prepare wildfly for integration tests. -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>${version.maven-dependency-plugin}</version>
+				<executions>
+					<execution>
+						<id>unpack</id>
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.wildfly</groupId>
+									<artifactId>wildfly-dist</artifactId>
+									<version>${version.wildfly-dist}</version>
+									<type>zip</type>
+									<overWrite>false</overWrite>
+									<outputDirectory>target</outputDirectory>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin><plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <!-- web.xml is not mandatory since JavaEE 5 -->
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+          <overlays>
+         	<overlay>
+         		<groupId>biz.suckow.fuel</groupId>
+         		<artifactId>fuelservice</artifactId>
+         		<excludes>
+                	<exclude>WEB-INF/classes/META-INF/persistence.xml</exclude>
+                </excludes>
+         	</overlay>
+          </overlays>
+        </configuration>
+      </plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<!-- TEST DEPENDENCIES -->
+		<!-- Arquillian TestNG integration. -->
+		<dependency>
+			<groupId>org.jboss.arquillian.testng</groupId>
+			<artifactId>arquillian-testng-container</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Added to support the use of transations for tests (e.g. rollback). -->
+		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-transaction-jta</artifactId>
+			<version>${version.arquillian-transaction-jta}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Added to have an Arquillian WildFly 8 embedded container adapter. -->
+		<dependency>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-arquillian-container-embedded</artifactId>
+			<version>${version.wildfly-arquillian-container-embedded}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Added to have an Arquillian WildFly 8 container runtime. -->
+		<!-- https://docs.jboss.org/author/display/ARQ/WildFly+8.1.0+-+Embedded -->
+		<dependency>
+			<groupId>org.wildfly</groupId>
+			<artifactId>wildfly-embedded</artifactId>
+			<version>${version.wildfly-embedded}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Added to ease the procedure of creating a .war that Arquillian deploys 
+			for testing. -->
+		<dependency>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-depchain</artifactId>
+			<scope>test</scope>
+			<type>pom</type>
+		</dependency>
+		<!-- Maven support for shrinkwrap. -->
+		<dependency>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Have a single deployment for all tests and avoid that for every IT 
+			a new server instance is launched. -->
+		<dependency>
+			<groupId>org.eu.ingwar.tools</groupId>
+			<artifactId>arquillian-suite-extension</artifactId>
+			<version>${version.arquillian-suite-extension}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Expecting persistence exceptions requires H2 dependency because H2 
+			is used for testing. -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${version.h2}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Intentionally added to use the .war under test for .war overlay. See war-module configuration. -->
+		<dependency>
+			<groupId>biz.suckow.fuel</groupId>
+			<artifactId>fuelservice</artifactId>
+			<version>${project.parent.version}</version>
+			<type>war</type>
+			<scope>runtime</scope>
+		</dependency>
+	</dependencies>
+</project>

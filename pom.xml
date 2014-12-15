@@ -10,13 +10,14 @@
 	</prerequisites>
 
 
-	<groupId>biz.suckow</groupId>
-	<artifactId>fuel</artifactId>
+	<groupId>biz.suckow.fuel</groupId>
+	<artifactId>multifuel</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<packaging>pom</packaging>
 	<modules>
 		<module>fuelservice</module>
+		<module>fuelservice-st</module>
 	</modules>
 
 	<name>fuel</name>
