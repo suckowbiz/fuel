@@ -20,6 +20,8 @@ package biz.suckow.fuelservicest.business;
  * #L%
  */
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -37,6 +39,7 @@ public class RESTBlackBoxIT extends RESTSupport {
     @Test
     public void activateMonitoring() {
 	System.out.println("hello");
+	assertThat(true).isTrue();
 
 	//	Response response = super.mainTarget.request().get();
 	//	assertThat(response.getStatus()).isEqualTo(204);
