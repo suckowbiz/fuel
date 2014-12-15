@@ -108,7 +108,7 @@
 			<!-- Stack of Widfly conform hibernate versions. See https://github.com/wildfly/boms -->
 			<dependency>
 				<groupId>org.wildfly.bom</groupId>
-				<artifactId>jboss-javaee-7.0-with-hibernate</artifactId>
+				<artifactId>jboss-javaee-7.0-with-all</artifactId>
 				<version>${version.jboss-javaee-7.0-with-hibernate}</version>
 				<type>pom</type>
 				<scope>import</scope>
