@@ -9,9 +9,9 @@ package biz.suckow.fuelservicest.business;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,13 +24,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.ws.rs.core.Response;
 
+import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class RESTBlackBoxIT extends RESTSupport {
-
-
-    private String URI = "http://localhost:8080/fuelservice-st/resources/refuelings/index";
+    private final String URI = "http://localhost:8080/fuelservice-0.0.1-SNAPSHOT/resources/refuelings/index";
 
     @BeforeClass
     @Override
@@ -39,9 +38,10 @@ public class RESTBlackBoxIT extends RESTSupport {
     }
 
     @Test
+    @RunAsClient
     public void activateMonitoring() {
-	Response response = super.mainTarget.request().get();
-	assertThat(response.getStatus()).isEqualTo(204);
+	final Response response = super.target.request().get();
+	assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
     }
 
 }
