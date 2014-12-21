@@ -9,9 +9,9 @@ package biz.suckow.fuelservicest.business;
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,47 +20,23 @@ package biz.suckow.fuelservicest.business;
  * #L%
  */
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.container.test.api.OverProtocol;
 import org.jboss.arquillian.testng.Arquillian;
-import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
-import org.jboss.arquillian.transaction.api.annotation.Transactional;
-import org.jboss.shrinkwrap.api.Filters;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
 import org.jboss.shrinkwrap.resolver.api.maven.archive.importer.MavenImporter;
 
 @ArquillianSuiteDeployment
-@Transactional(value = TransactionMode.ROLLBACK)
 public abstract class ArquillianBase extends Arquillian {
-    private static final String UNIT_TEST_PATTERN = ".*Test.*";
-
-    @PersistenceContext
-    protected EntityManager em;
-
     @Deployment
     @OverProtocol("Servlet 3.0")
     public static WebArchive deploy() {
-	final PomEquippedResolveStage resolver = Maven.resolver().loadPomFromFile("pom.xml");
-	return ShrinkWrap
-		.create(MavenImporter.class, "fuelservice-st")
-		.loadPomFromFile("pom.xml")
-		.importBuildOutput()
-		.as(WebArchive.class)
-		//		.addAsLibraries(resolver.resolve("org.easymock:easymock").withoutTransitivity().asFile())
-		//		.addAsLibraries(resolver.resolve("com.h2database:h2").withoutTransitivity().asFile())
-		//		.addAsLibraries(resolver.resolve("org.assertj:assertj-core").withoutTransitivity().asFile())
-		//		.addAsLibraries(resolver.resolve("org.assertj:assertj-guava").withoutTransitivity().asFile())
-		.addAsLibraries(resolver.importRuntimeAndTestDependencies().resolve().withoutTransitivity().asFile())
-		.addPackages(true, Filters.exclude(ArquillianBase.UNIT_TEST_PATTERN),
-			"biz.suckow.fuelservicest.business").addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-			.addAsResource("arquillian/persistence.xml", "META-INF/persistence.xml");
+	final WebArchive war = ShrinkWrap.create(MavenImporter.class)
+		.loadPomFromFile("../fuelservice/pom.xml").importBuildOutput().as(WebArchive.class);
+	war.delete("META-INF/persistence.xml");
+	war.addAsResource("arquillian/persistence.xml", "META-INF/persistence.xml");
+	return war;
     }
 }
