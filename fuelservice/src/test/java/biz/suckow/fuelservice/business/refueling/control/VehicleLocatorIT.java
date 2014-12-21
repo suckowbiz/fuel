@@ -21,38 +21,37 @@ package biz.suckow.fuelservice.business.refueling.control;
  */
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.guava.api.Assertions.assertThat;
+
+import java.util.Optional;
 
 import org.testng.annotations.Test;
 
 import biz.suckow.fuelservice.business.PersistenceSupport;
 import biz.suckow.fuelservice.business.TestHelper;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
-import biz.suckow.fuelservice.business.refueling.control.VehicleLocator;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
-
-import com.google.common.base.Optional;
 
 public class VehicleLocatorIT extends PersistenceSupport {
 
-    private VehicleLocator cut = new VehicleLocator(em);
+    private final VehicleLocator cut = new VehicleLocator(em);
 
     @Test
     public void mustFetchExistingVehicle() {
-	Owner duke = TestHelper.createDuke();
+	final Owner duke = TestHelper.createDuke();
 	em.persist(duke);
 
-	Vehicle dukeCar = TestHelper.createDukeCar(duke);
+	final Vehicle dukeCar = TestHelper.createDukeCar(duke);
 	em.persist(dukeCar);
 
-	Vehicle actualResult = this.cut.getVehicle(dukeCar.getOwner().getOwnername(), dukeCar.getVehiclename()).get();
+	final Vehicle actualResult = this.cut.getVehicle(dukeCar.getOwner().getOwnername(), dukeCar.getVehiclename())
+		.get();
 	assertThat(actualResult).isNotNull();
 	assertThat(actualResult.getId()).isEqualTo(dukeCar.getId());
     }
 
     @Test
     public void mustNotFetchNonExistingVehicle() {
-	Optional<Vehicle> possibleVehicle = this.cut.getVehicle("duke", "duke-bike");
-	assertThat(possibleVehicle).isAbsent();
+	final Optional<Vehicle> possibleVehicle = this.cut.getVehicle("duke", "duke-bike");
+	assertThat(possibleVehicle.isPresent()).isFalse();
     }
 }

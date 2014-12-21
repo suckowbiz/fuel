@@ -38,10 +38,10 @@ import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Refueling.FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN, query = "SELECT r FROM Refueling r WHERE r.isFillUp = false AND r.dateRefueled > :left "
-	    + "AND r.dateRefueled < :right AND r.vehicle = :vehicle"),
-	    @NamedQuery(name = Refueling.FIND_BY_FILLED_UP_AND_DATE_BEFORE, query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
-		    + "AND r.dateRefueled < :right ORDER BY r.dateRefueled DESC ") })
+	@NamedQuery(name = Refueling.FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN, query = "SELECT r FROM Refueling r WHERE r.isFillUp = false AND r.dateRefueled > :left "
+		+ "AND r.dateRefueled < :right AND r.vehicle = :vehicle"),
+	@NamedQuery(name = Refueling.FIND_BY_FILLED_UP_AND_DATE_BEFORE, query = "SELECT r FROM Refueling r WHERE r.isFillUp = true "
+		+ "AND r.dateRefueled < :right ORDER BY r.dateRefueled DESC ") })
 public class Refueling extends BaseEntity {
     private static final long serialVersionUID = 9175526663957115977L;
     private static final String PREFIX = "biz.suckow.fuelservice.business.refueling.entity.";

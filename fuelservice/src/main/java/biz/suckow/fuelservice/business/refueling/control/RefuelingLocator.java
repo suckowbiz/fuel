@@ -22,6 +22,7 @@ package biz.suckow.fuelservice.business.refueling.control;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -30,13 +31,11 @@ import javax.persistence.TemporalType;
 import biz.suckow.fuelservice.business.refueling.entity.Refueling;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
-import com.google.common.base.Optional;
-
 public class RefuelingLocator {
-    private EntityManager em;
+    private final EntityManager em;
 
     @Inject
-    public RefuelingLocator(EntityManager em) {
+    public RefuelingLocator(final EntityManager em) {
 	this.em = em;
     }
 
@@ -44,7 +43,7 @@ public class RefuelingLocator {
 	final List<Refueling> refuelings = this.em
 		.createNamedQuery(Refueling.FIND_BY_FILLED_UP_AND_DATE_BEFORE, Refueling.class)
 		.setParameter("right", date, TemporalType.TIMESTAMP).getResultList();
-	Optional<Refueling> result = Optional.absent();
+	Optional<Refueling> result = Optional.empty();
 	if (refuelings.size() > 0) {
 	    result = Optional.of(refuelings.get(0));
 	}

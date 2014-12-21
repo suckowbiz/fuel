@@ -20,7 +20,9 @@ package biz.suckow.fuelservice.business.owner.control;
  * #L%
  */
 
-import static org.assertj.guava.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import java.util.Optional;
 
 import org.testng.annotations.Test;
 
@@ -29,23 +31,22 @@ import biz.suckow.fuelservice.business.TestHelper;
 import biz.suckow.fuelservice.business.owner.controller.OwnerLocator;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
 
-import com.google.common.base.Optional;
-
 public class OwnerServiceIT extends PersistenceSupport {
-    private OwnerLocator cut = new OwnerLocator(em);
+    private final OwnerLocator cut = new OwnerLocator(em);
 
     @Test
     public void locateOwnerMustSucceed() {
-	Owner duke = TestHelper.createDuke();
+	final Owner duke = TestHelper.createDuke();
 	em.persist(duke);
 
-	Optional<Owner> actualResult = this.cut.getOwner("duke");
-	assertThat(actualResult).isPresent().contains(duke);
+	final Optional<Owner> actualResult = this.cut.getOwner("duke");
+	assertThat(actualResult.isPresent());
+	assertThat(actualResult.get()).isSameAs(duke);
     }
 
     @Test
     public void locateNonExistingOwnerMustFail() {
-	Optional<Owner> actualResult = this.cut.getOwner("duke");
-	assertThat(actualResult).isAbsent();
+	final Optional<Owner> actualResult = this.cut.getOwner("duke");
+	assertThat(actualResult.isPresent()).isFalse();
     }
 }

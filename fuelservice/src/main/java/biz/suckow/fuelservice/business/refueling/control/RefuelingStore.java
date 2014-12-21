@@ -29,22 +29,22 @@ import biz.suckow.fuelservice.business.refueling.entity.Refueling;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 public class RefuelingStore {
-    private EntityManager em;
+    private final EntityManager em;
 
     @Inject
-    public RefuelingStore(EntityManager em) {
+    public RefuelingStore(final EntityManager em) {
 	this.em = em;
     }
 
-    public Refueling storeFillUp(Vehicle vehicle, Double eurosPerLitre, Double litres, Double kilometre, String memo,
-	    Date date) {
+    public Refueling storeFillUp(final Vehicle vehicle, final Double eurosPerLitre, final Double litres, final Double kilometre, final String memo,
+	    final Date date) {
 	final Refueling result = new Refueling.Builder().eurosPerLitre(eurosPerLitre).litres(litres)
 		.kilometre(kilometre).memo(memo).dateRefueled(date).fillUp(true).vehicle(vehicle).build();
 	this.em.persist(result);
 	return result;
     }
 
-    public void storePartialRefueling(Vehicle vehicle, Double euros, Double litres, String memo, Date date) {
+    public void storePartialRefueling(final Vehicle vehicle, final Double euros, final Double litres, final String memo, final Date date) {
 	final Refueling refueling = new Refueling.Builder().litres(litres).eurosPerLitre(euros).dateRefueled(date)
 		.memo(memo).vehicle(vehicle).build();
 	this.em.persist(refueling);

@@ -100,6 +100,8 @@ public class LoggerFactoryTest {
 	};
 
 	Logger actualLogger = new LoggerFactory().produceLogger(ip);
-	assertThat(actualLogger.getName()).contains(this.getClass().getName()); // logger appends $1
+	assertThat(actualLogger.getName()).contains(this.getClass().getName()); // logger
+										// appends
+										// $1
     }
 }

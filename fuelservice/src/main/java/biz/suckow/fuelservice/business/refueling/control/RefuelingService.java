@@ -20,42 +20,41 @@ package biz.suckow.fuelservice.business.refueling.control;
  * #L%
  */
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import biz.suckow.fuelservice.business.refueling.entity.Refueling;
 import biz.suckow.fuelservice.business.refueling.entity.RefuelingMeta;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
-import com.google.common.base.Optional;
-import com.google.common.base.Preconditions;
-
 public class RefuelingService {
-    private FillUpEventGun gun;
-    private RefuelingStore refuelingStore;
-    private FuelStockStore stockStore;
-    private VehicleLocator vehicleLocator;
+    private final FillUpEventGun gun;
+    private final RefuelingStore refuelingStore;
+    private final FuelStockStore stockStore;
+    private final VehicleLocator vehicleLocator;
 
     @Inject
-    public RefuelingService(RefuelingStore refuelingStore, FuelStockStore stockStore, FillUpEventGun gun,
-	    VehicleLocator vehicleLocator) {
+    public RefuelingService(final RefuelingStore refuelingStore, final FuelStockStore stockStore,
+	    final FillUpEventGun gun, final VehicleLocator vehicleLocator) {
 	this.refuelingStore = refuelingStore;
 	this.stockStore = stockStore;
 	this.gun = gun;
 	this.vehicleLocator = vehicleLocator;
     }
 
-    public void add(String vehicleName, String ownerName, RefuelingMeta meta) {
+    public void add(final String vehicleName, final String ownerName, final RefuelingMeta meta) {
 	// TODO handle previous additions /recalculate ...
-	Optional<Vehicle> possibleVehicle = this.vehicleLocator.getVehicle(ownerName, vehicleName);
-	Preconditions.checkState(possibleVehicle.isPresent());
+	final Optional<Vehicle> possibleVehicle = this.vehicleLocator.getVehicle(ownerName, vehicleName);
+	final Vehicle vehicle = possibleVehicle.orElseThrow(() -> new IllegalStateException("Vehicle missing."));
 	if (meta.litresToStock > 0D) {
-	    this.stockStore.addition(possibleVehicle.get(), meta.date, meta.eurosPerLitre, meta.litresToStock);
+	    this.stockStore.addition(vehicle, meta.date, meta.eurosPerLitre, meta.litresToStock);
 	}
 	if (meta.litresFromStock > 0D) {
 	    this.stockStore.release(possibleVehicle.get(), meta.date, meta.litresFromStock);
 	}
 	if (meta.isFull) {
-	    Refueling refueling = this.refuelingStore.storeFillUp(possibleVehicle.get(), meta.eurosPerLitre,
+	    final Refueling refueling = this.refuelingStore.storeFillUp(possibleVehicle.get(), meta.eurosPerLitre,
 		    meta.litresToTank, meta.kilometre, meta.memo, meta.date);
 	    this.gun.fire(refueling.getId());
 	} else {

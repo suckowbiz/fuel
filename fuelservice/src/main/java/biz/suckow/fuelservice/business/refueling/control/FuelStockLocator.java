@@ -21,6 +21,7 @@ package biz.suckow.fuelservice.business.refueling.control;
  */
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -28,19 +29,18 @@ import javax.persistence.EntityManager;
 import biz.suckow.fuelservice.business.refueling.entity.FuelStock;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
-import com.google.common.base.Optional;
-
 public class FuelStockLocator {
-    private EntityManager em;
+    private final EntityManager em;
 
     @Inject
-    public FuelStockLocator(EntityManager em) {
+    public FuelStockLocator(final EntityManager em) {
 	this.em = em;
     }
 
-    public Optional<FuelStock> locate(Vehicle vehicle) {
-	Optional<FuelStock> result = Optional.absent();
-	List<FuelStock> fuelStockItems = this.em.createNamedQuery(FuelStock.FIND_BY_VEHICLE, FuelStock.class).setParameter("vehicle", vehicle).getResultList();
+    public Optional<FuelStock> locate(final Vehicle vehicle) {
+	Optional<FuelStock> result = Optional.empty();
+	final List<FuelStock> fuelStockItems = this.em.createNamedQuery(FuelStock.FIND_BY_VEHICLE, FuelStock.class)
+		.setParameter("vehicle", vehicle).getResultList();
 	if (fuelStockItems.size() > 0) {
 	    result = Optional.of(fuelStockItems.get(0));
 	}

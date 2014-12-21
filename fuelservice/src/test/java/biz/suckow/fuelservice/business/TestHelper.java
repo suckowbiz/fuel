@@ -29,11 +29,11 @@ import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 public class TestHelper {
     protected static AtomicInteger uniqueness = new AtomicInteger(0);
-    
+
     public static Owner createDuke() {
 	return new Owner().setOwnername("duke");
     }
-    
+
     public static Vehicle createDukeCar(Owner owner) {
 	return new Vehicle().setOwner(owner).setVehicleName("duke-car");
     }
@@ -41,10 +41,10 @@ public class TestHelper {
     public static String getUniqueness() {
 	return String.valueOf(uniqueness.getAndAdd(1));
     }
-    
+
     public static Date getMonth(final int month) {
-        final Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.MONTH, month);
-        return calendar.getTime();
+	final Calendar calendar = Calendar.getInstance();
+	calendar.set(Calendar.MONTH, month);
+	return calendar.getTime();
     }
 }

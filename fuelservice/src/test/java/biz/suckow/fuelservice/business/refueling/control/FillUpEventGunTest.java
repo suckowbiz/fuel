@@ -47,7 +47,7 @@ public class FillUpEventGunTest extends EasyMockSupport {
 	this.cut = new FillUpEventGun(this.fillUpEventMock);
     }
 
-    @Test(expectedExceptions=NullPointerException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void fireMustFail() {
 	this.cut.fire(null);
     }

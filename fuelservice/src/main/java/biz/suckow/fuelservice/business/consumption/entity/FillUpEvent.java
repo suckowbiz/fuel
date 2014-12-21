@@ -20,7 +20,7 @@ package biz.suckow.fuelservice.business.consumption.entity;
  * #L%
  */
 
-import com.google.common.base.Preconditions;
+import java.util.Objects;
 
 public class FillUpEvent {
     private Long refuelingId;
@@ -30,7 +30,7 @@ public class FillUpEvent {
     }
 
     public FillUpEvent setRefuelingId(final Long refuelingId) {
-	Preconditions.checkNotNull(refuelingId);
+	Objects.requireNonNull(refuelingId, "Refueling id must not be null.");
 	this.refuelingId = refuelingId;
 	return this;
     }

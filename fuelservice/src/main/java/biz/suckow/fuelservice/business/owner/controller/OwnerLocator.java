@@ -20,19 +20,19 @@ package biz.suckow.fuelservice.business.owner.controller;
  * #L%
  */
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
 import biz.suckow.fuelservice.business.owner.entity.Owner;
 
-import com.google.common.base.Optional;
-
 public class OwnerLocator {
-    private EntityManager em;
+    private final EntityManager em;
 
     @Inject
-    public OwnerLocator(EntityManager em) {
+    public OwnerLocator(final EntityManager em) {
 	this.em = em;
     }
 
@@ -44,7 +44,7 @@ public class OwnerLocator {
 	} catch (final NoResultException e) {
 	    /* NOP */
 	}
-	return Optional.fromNullable(result);
+	return Optional.ofNullable(result);
     }
 
 }

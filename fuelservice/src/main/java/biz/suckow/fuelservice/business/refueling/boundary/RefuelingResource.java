@@ -27,7 +27,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -46,9 +45,8 @@ public class RefuelingResource {
 
     @GET
     @Path("index")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String index() {
-	return "Refuelings Resource";
+    public Response index() {
+	return Response.ok().entity(this.getClass().getSimpleName()).build();
     }
 
     @POST

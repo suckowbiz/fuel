@@ -20,19 +20,19 @@ package biz.suckow.fuelservice.business.refueling.control;
  * #L%
  */
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
-import com.google.common.base.Optional;
-
 public class VehicleLocator {
-    private EntityManager em;
+    private final EntityManager em;
 
     @Inject
-    public VehicleLocator(EntityManager em) {
+    public VehicleLocator(final EntityManager em) {
 	this.em = em;
     }
 
@@ -44,6 +44,6 @@ public class VehicleLocator {
 	} catch (final NoResultException e) {
 	    /* NOP */
 	}
-	return Optional.fromNullable(result);
+	return Optional.ofNullable(result);
     }
 }

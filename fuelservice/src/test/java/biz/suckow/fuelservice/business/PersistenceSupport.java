@@ -37,12 +37,12 @@ public abstract class PersistenceSupport extends EasyMockSupport {
 	em = Persistence.createEntityManagerFactory(PersistenceSupport.PERSISTENCE_UNIT_NAME).createEntityManager();
 	tx = em.getTransaction();
     }
-    
+
     @BeforeMethod
     protected void startTransaction() {
 	tx.begin();
     }
-    
+
     @AfterMethod
     protected void rollbackTransaction() {
 	tx.rollback();

@@ -28,7 +28,6 @@ import org.testng.annotations.Test;
 import biz.suckow.fuelservice.business.PersistenceSupport;
 import biz.suckow.fuelservice.business.TestHelper;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
-import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 /**
  * Integration tests for {@link Vehicle}.
@@ -37,10 +36,10 @@ public class VehicleIT extends PersistenceSupport {
 
     @Test(description = "The vehicle id must stay unique per owner to be able to identify an owners car by name.")
     public void vehicleNameMustBeUniqueForOwner() {
-	Owner duke = TestHelper.createDuke();
+	final Owner duke = TestHelper.createDuke();
 	em.persist(duke);
 
-	Vehicle dukeCar = TestHelper.createDukeCar(duke);
+	final Vehicle dukeCar = TestHelper.createDukeCar(duke);
 	em.persist(dukeCar);
 
 	try {

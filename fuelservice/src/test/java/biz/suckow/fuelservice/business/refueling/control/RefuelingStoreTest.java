@@ -25,6 +25,7 @@ import static org.easymock.EasyMock.expectLastCall;
 
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.EntityManager;
 
@@ -35,11 +36,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuelservice.business.owner.entity.Owner;
-import biz.suckow.fuelservice.business.refueling.control.RefuelingStore;
 import biz.suckow.fuelservice.business.refueling.entity.Refueling;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
-
-import com.google.common.base.Objects;
 
 public class RefuelingStoreTest extends EasyMockSupport {
     @Mock
@@ -50,28 +48,27 @@ public class RefuelingStoreTest extends EasyMockSupport {
 	injectMocks(this);
     }
 
-    private Comparator<Refueling> refuelingComparator = new Comparator<Refueling>() {
-	@Override
-	public int compare(Refueling o1, Refueling o2) {
-	    if (Objects.equal(o1.getEurosPerLitre(), o2.getEurosPerLitre())
-		    && Objects.equal(o1.getLitres(), o2.getLitres())
-		    && Objects.equal(o1.getKilometre(), o2.getKilometre()) && Objects.equal(o1.getMemo(), o2.getMemo())
-		    && Objects.equal(o1.getDateRefueled(), o2.getDateRefueled())
-		    && Objects.equal(o1.getIsFillUp(), o2.getIsFillUp())
-		    && Objects.equal(o1.getVehicle(), o2.getVehicle()))
-		return 0;
-	    return -1;
+    private final Comparator<Refueling> refuelingComparator = (o1, o2) -> {
+	if (Objects.equals(o1.getEurosPerLitre(), o2.getEurosPerLitre())
+		&& Objects.equals(o1.getLitres(), o2.getLitres())
+		&& Objects.equals(o1.getKilometre(), o2.getKilometre()) && Objects.equals(o1.getMemo(), o2.getMemo())
+		&& Objects.equals(o1.getDateRefueled(), o2.getDateRefueled())
+		&& Objects.equals(o1.getIsFillUp(), o2.getIsFillUp())
+		&& Objects.equals(o1.getVehicle(), o2.getVehicle())) {
+	    return 0;
 	}
+	return -1;
     };
 
     @Test
     public void storePartialRefuelingMustPersistExactly() {
-	Double expectedEuros = 1.22D;
-	Double expectedLitres = 42D;
-	String expectedMemo = "duke";
-	Date expectedDate = new Date();
-	Vehicle expectedVehicle = new Vehicle().setOwner(new Owner().setOwnername("duke")).setVehicleName("duke-car");
-	Refueling expectedRefueling = new Refueling.Builder().eurosPerLitre(expectedEuros).litres(expectedLitres)
+	final Double expectedEuros = 1.22D;
+	final Double expectedLitres = 42D;
+	final String expectedMemo = "duke";
+	final Date expectedDate = new Date();
+	final Vehicle expectedVehicle = new Vehicle().setOwner(new Owner().setOwnername("duke")).setVehicleName(
+		"duke-car");
+	final Refueling expectedRefueling = new Refueling.Builder().eurosPerLitre(expectedEuros).litres(expectedLitres)
 		.memo(expectedMemo).dateRefueled(expectedDate).fillUp(false).vehicle(expectedVehicle).build();
 
 	this.resetAll();
@@ -86,14 +83,15 @@ public class RefuelingStoreTest extends EasyMockSupport {
 
     @Test
     public void storeFillUpMustPersistExactly() {
-	Double expectedEuros = 1.22D;
-	Double expectedLitres = 42D;
-	Double expectedKilometres = 120000D;
-	String expectedMemo = "duke";
-	Date expectedDate = new Date();
-	Vehicle expectedVehicle = new Vehicle().setOwner(new Owner().setOwnername("duke")).setVehicleName("duke-car");
+	final Double expectedEuros = 1.22D;
+	final Double expectedLitres = 42D;
+	final Double expectedKilometres = 120000D;
+	final String expectedMemo = "duke";
+	final Date expectedDate = new Date();
+	final Vehicle expectedVehicle = new Vehicle().setOwner(new Owner().setOwnername("duke")).setVehicleName(
+		"duke-car");
 
-	Refueling expectedRefueling = new Refueling.Builder().eurosPerLitre(expectedEuros).litres(expectedLitres)
+	final Refueling expectedRefueling = new Refueling.Builder().eurosPerLitre(expectedEuros).litres(expectedLitres)
 		.kilometre(expectedKilometres).memo(expectedMemo).dateRefueled(expectedDate).fillUp(true)
 		.vehicle(expectedVehicle).build();
 

@@ -27,6 +27,8 @@ import static org.easymock.EasyMock.expectLastCall;
 import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.Objects;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
@@ -37,15 +39,11 @@ import org.easymock.TestSubject;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import biz.suckow.fuelservice.business.consumption.boundary.FillUpEventConsumer;
 import biz.suckow.fuelservice.business.consumption.control.FuelConsumptionCalculator;
 import biz.suckow.fuelservice.business.consumption.entity.FillUpEvent;
 import biz.suckow.fuelservice.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuelservice.business.refueling.entity.Refueling;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
-
-import com.google.common.base.Objects;
-import com.google.common.base.Optional;
 
 public class FillUpEventConsumerTest extends EasyMockSupport {
     @Mock
@@ -55,7 +53,7 @@ public class FillUpEventConsumerTest extends EasyMockSupport {
     private FuelConsumptionCalculator maths;
 
     @TestSubject
-    private FillUpEventConsumer cut = new FillUpEventConsumer();
+    private final FillUpEventConsumer cut = new FillUpEventConsumer();
 
     @BeforeClass
     private void setUp() {
@@ -64,23 +62,21 @@ public class FillUpEventConsumerTest extends EasyMockSupport {
 
     @Test
     public void consume() {
-	Refueling refueling = new Refueling().setDateRefueled(new Date()).setVehicle(new Vehicle());
-	FillUpEvent event = new FillUpEvent().setRefuelingId(42L);
-	FuelConsumption expectedConsumption = new FuelConsumption().setDateComputed(new Date())
+	final Refueling refueling = new Refueling().setDateRefueled(new Date()).setVehicle(new Vehicle());
+	final FillUpEvent event = new FillUpEvent().setRefuelingId(42L);
+	final FuelConsumption expectedConsumption = new FuelConsumption().setDateComputed(new Date())
 		.setLitresPerKilometre(6D).setVehicle(refueling.getVehicle());
-	Comparator<FuelConsumption> consumptionComparator = new Comparator<FuelConsumption>() {
-	    @Override
-	    public int compare(FuelConsumption o1, FuelConsumption o2) {
-		if (Objects.equal(o1.getVehicle(), o2.getVehicle()) &&  Objects.equal(o1.getLitresPerKilometre(), 1D)
-			&& (o1.getDateComputed() != null && o2.getDateComputed() != null))
-		    return 0;
-		return 1;
+	final Comparator<FuelConsumption> consumptionComparator = (o1, o2) -> {
+	    if (Objects.equals(o1.getVehicle(), o2.getVehicle()) && Objects.equals(o1.getLitresPerKilometre(), 1D)
+		    && (o1.getDateComputed() != null && o2.getDateComputed() != null)) {
+		return 0;
 	    }
+	    return 1;
 	};
 
 	this.resetAll();
 	expect(this.em.find(Refueling.class, event.getRefuelingId())).andStubReturn(refueling);
-	expect(this.maths.computeConsumptionFor(refueling)).andStubReturn(Optional.fromNullable(BigDecimal.ONE));
+	expect(this.maths.computeConsumptionFor(refueling)).andStubReturn(Optional.ofNullable(BigDecimal.ONE));
 	this.em.persist(cmp(expectedConsumption, consumptionComparator, LogicalOperator.EQUAL));
 	expectLastCall();
 	this.replayAll();

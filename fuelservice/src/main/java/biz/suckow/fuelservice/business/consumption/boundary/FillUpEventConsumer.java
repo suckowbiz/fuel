@@ -21,6 +21,7 @@ package biz.suckow.fuelservice.business.consumption.boundary;
  */
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
@@ -33,8 +34,6 @@ import biz.suckow.fuelservice.business.consumption.control.FuelConsumptionCalcul
 import biz.suckow.fuelservice.business.consumption.entity.FillUpEvent;
 import biz.suckow.fuelservice.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuelservice.business.refueling.entity.Refueling;
-
-import com.google.common.base.Optional;
 
 @Stateless
 public class FillUpEventConsumer {

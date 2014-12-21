@@ -43,23 +43,23 @@ public class FuelStockLocatorIT extends PersistenceSupport {
     public void mustFetchAdditionsBetween() {
 	Owner duke = TestHelper.createDuke();
 	em.persist(duke);
-	
+
 	Vehicle dukeCar = TestHelper.createDukeCar(duke);
 	em.persist(dukeCar);
-	
+
 	Date january = TestHelper.getMonth(0);
 	Date february = TestHelper.getMonth(1);
 	Date march = TestHelper.getMonth(2);
 
 	StockAddition additionFebruary = new StockAddition().setDateAdded(february).setEurosPerLitre(1D).setLitres(1D);
 	em.persist(additionFebruary);
-	
+
 	StockAddition additionMarch = new StockAddition().setDateAdded(march).setEurosPerLitre(1D).setLitres(1D);
 	em.persist(additionMarch);
 
 	FuelStock stock = new FuelStock().setVehicle(dukeCar);
 	em.persist(stock);
-	
+
 	stock.add(additionFebruary).add(additionMarch);
 	stock = em.merge(stock);
 
@@ -71,23 +71,23 @@ public class FuelStockLocatorIT extends PersistenceSupport {
     public void mustFetchReleasesBetween() {
 	Owner duke = TestHelper.createDuke();
 	em.persist(duke);
-	
+
 	Vehicle dukeCar = TestHelper.createDukeCar(duke);
 	em.persist(dukeCar);
-	
+
 	Date january = TestHelper.getMonth(0);
 	Date february = TestHelper.getMonth(1);
 	Date march = TestHelper.getMonth(2);
 
 	StockRelease releaseFebruary = new StockRelease().setDateReleased(february).setLitres(1D);
 	em.persist(releaseFebruary);
-	
+
 	StockRelease releaseMarch = new StockRelease().setDateReleased(march).setLitres(1D);
 	em.persist(releaseMarch);
 
 	FuelStock stock = new FuelStock().setVehicle(dukeCar);
 	em.persist(stock);
-	
+
 	stock.release(releaseFebruary).release(releaseMarch);
 	stock = em.merge(stock);
 

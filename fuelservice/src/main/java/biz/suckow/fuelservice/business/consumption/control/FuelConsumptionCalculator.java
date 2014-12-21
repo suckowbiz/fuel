@@ -23,6 +23,7 @@ package biz.suckow.fuelservice.business.consumption.control;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -32,9 +33,6 @@ import biz.suckow.fuelservice.business.refueling.entity.Refueling;
 import biz.suckow.fuelservice.business.refueling.entity.StockAddition;
 import biz.suckow.fuelservice.business.refueling.entity.StockRelease;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
-
-import com.google.common.base.Optional;
-import com.google.common.base.Preconditions;
 
 public class FuelConsumptionCalculator {
     private final RefuelingLocator refuelingLocator;
@@ -49,8 +47,10 @@ public class FuelConsumptionCalculator {
 	this.logger = logger;
     }
 
-    public Optional<BigDecimal> computeConsumptionFor(final Refueling refueling) {
-	Preconditions.checkArgument(refueling.getIsFillUp());
+    public java.util.Optional<BigDecimal> computeConsumptionFor(final Refueling refueling) {
+	if (refueling.getIsFillUp() == false) {
+	    throw new IllegalArgumentException("Refueling must not be a partial one.");
+	}
 
 	BigDecimal result = null;
 	final Date refuelingDate = refueling.getDateRefueled();
@@ -70,7 +70,7 @@ public class FuelConsumptionCalculator {
 		result = litres.divide(BigDecimal.valueOf(distance));
 	    }
 	}
-	return Optional.fromNullable(result);
+	return Optional.ofNullable(result);
     }
 
     private BigDecimal getLitresRefueledBetween(final Date left, final Date right, final Vehicle vehicle) {
@@ -89,9 +89,9 @@ public class FuelConsumptionCalculator {
 	BigDecimal result = litresAddedToStock.subtract(litresReleasedFromStock);
 	if (result.longValue() < 0L) {
 	    result = result.multiply(BigDecimal.valueOf(-1)); // in case more
-							      // consumed than
-							      // added within
-							      // this interval
+	    // consumed than
+	    // added within
+	    // this interval
 	}
 	return result;
     }
