@@ -36,7 +36,7 @@ Tests are triggered automatically on scm commit via a web hook at [drone.io](dro
   ``http://download.jboss.org/jbosstools/updates/stable/luna/``
   
 ### Configuration
-``JBoss Tools->Arquillian->Enable default VM arguments`` (enable "Add the default VM arguments to the JUnit/TestNG launch configurations") and add ``-Djava.util.logging.manager=org.jboss.logmanager.LogManager`` and  ``-Djboss.home=target/wildfly-8.1.0.Final``
+``JBoss Tools->Arquillian->Enable default VM arguments`` (enable "Add the default VM arguments to the JUnit/TestNG launch configurations") and add ``-Djava.util.logging.manager=org.jboss.logmanager.LogManager`` and  ``-Djboss.home=target/wildfly-8.2.0.Final``
 
 Now you are ready to run/debug from within Eclipse by right clickinga test and selecting "Run/Debug As -> TestNG Test".
 
