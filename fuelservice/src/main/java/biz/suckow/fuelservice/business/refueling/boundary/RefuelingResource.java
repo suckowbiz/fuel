@@ -44,7 +44,6 @@ public class RefuelingResource {
     private RefuelingService refuelingService;
 
     @GET
-    @Path("index")
     public Response index() {
 	return Response.ok().entity(this.getClass().getSimpleName()).build();
     }
