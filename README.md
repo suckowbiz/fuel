@@ -1,5 +1,5 @@
 # fuel
-Drone.io automated ... [![Build Status](https://drone.io/bitbucket.org/tsuckow/fuel/status.png)](https://drone.io/bitbucket.org/tsuckow/fuel/latest)
+Drone.io automated ... [![Build Status](https://drone.io/github.com/suckowbiz/fuel/status.png)](https://drone.io/github.com/suckowbiz/fuel/latest)
 
 # What is it?
 You are reading the README.md file distributed with the root pom of a project that contains tooling to manage vehicle refuellings.
