@@ -9,3 +9,4 @@ test-output
 fuelservice/derby.log
 .idea
 *.iml
+derby.log
