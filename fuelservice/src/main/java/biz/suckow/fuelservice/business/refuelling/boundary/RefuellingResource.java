@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.refueling.boundary;
+package biz.suckow.fuelservice.business.refuelling.boundary;
 
 /*
  * #%L
@@ -30,18 +30,18 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import biz.suckow.fuelservice.business.refueling.control.RefuelingService;
-import biz.suckow.fuelservice.business.refueling.entity.RefuelingMeta;
+import biz.suckow.fuelservice.business.refuelling.control.RefuellingService;
+import biz.suckow.fuelservice.business.refuelling.entity.RefuellingMeta;
 
 // TODO test
-@Path("refuelings")
+@Path("refuellings")
 @Stateless
-public class RefuelingResource {
-    // TODO verify: because once a full refueling is added and the consumption
+public class RefuellingResource {
+    // TODO verify: because once a full refuelling is added and the consumption
     // is calculated the addition of previous
     // partial refuelings cannot be accepted!
     @Inject
-    private RefuelingService refuelingService;
+    private RefuellingService refuellingService;
 
     @GET
     public Response index() {
@@ -52,8 +52,8 @@ public class RefuelingResource {
     @Path("add/{ownerName}/{vehicleName}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response refuel(@PathParam("ownerName") final String ownerName,
-	    @PathParam("vehicleName") final String vehicleName, final RefuelingMeta meta) {
-	this.refuelingService.add(vehicleName, ownerName, meta);
+	    @PathParam("vehicleName") final String vehicleName, final RefuellingMeta meta) {
+	this.refuellingService.add(vehicleName, ownerName, meta);
 	return Response.ok().build();
     }
 }

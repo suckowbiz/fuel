@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.refueling.control;
+package biz.suckow.fuelservice.business.refuelling.control;
 
 /*
  * #%L
@@ -26,9 +26,9 @@ import java.util.Optional;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import biz.suckow.fuelservice.business.refueling.entity.FuelStock;
-import biz.suckow.fuelservice.business.refueling.entity.StockAddition;
-import biz.suckow.fuelservice.business.refueling.entity.StockRelease;
+import biz.suckow.fuelservice.business.refuelling.entity.FuelStock;
+import biz.suckow.fuelservice.business.refuelling.entity.StockAddition;
+import biz.suckow.fuelservice.business.refuelling.entity.StockRelease;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 public class FuelStockStore {

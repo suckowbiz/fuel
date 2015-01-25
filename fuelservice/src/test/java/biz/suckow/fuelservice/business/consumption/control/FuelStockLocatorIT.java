@@ -29,11 +29,10 @@ import org.testng.annotations.Test;
 
 import biz.suckow.fuelservice.business.PersistenceSupport;
 import biz.suckow.fuelservice.business.TestHelper;
-import biz.suckow.fuelservice.business.consumption.control.FuelStockLocator;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
-import biz.suckow.fuelservice.business.refueling.entity.FuelStock;
-import biz.suckow.fuelservice.business.refueling.entity.StockAddition;
-import biz.suckow.fuelservice.business.refueling.entity.StockRelease;
+import biz.suckow.fuelservice.business.refuelling.entity.FuelStock;
+import biz.suckow.fuelservice.business.refuelling.entity.StockAddition;
+import biz.suckow.fuelservice.business.refuelling.entity.StockRelease;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 public class FuelStockLocatorIT extends PersistenceSupport {
@@ -61,7 +60,7 @@ public class FuelStockLocatorIT extends PersistenceSupport {
 	em.persist(stock);
 
 	stock.add(additionFebruary).add(additionMarch);
-	stock = em.merge(stock);
+	em.merge(stock);
 
 	List<StockAddition> actualResult = this.cut.getAdditionsBetween(january, march, dukeCar);
 	assertThat(actualResult).hasSize(1).contains(additionFebruary);
@@ -89,7 +88,7 @@ public class FuelStockLocatorIT extends PersistenceSupport {
 	em.persist(stock);
 
 	stock.release(releaseFebruary).release(releaseMarch);
-	stock = em.merge(stock);
+	em.merge(stock);
 
 	List<StockRelease> actualResult = this.cut.getReleasesBetween(january, march, dukeCar);
 	assertThat(actualResult).hasSize(1).contains(releaseFebruary);

@@ -32,6 +32,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
+import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 import org.easymock.EasyMockSupport;
 import org.easymock.LogicalOperator;
 import org.easymock.Mock;
@@ -42,7 +43,6 @@ import org.testng.annotations.Test;
 import biz.suckow.fuelservice.business.consumption.control.FuelConsumptionCalculator;
 import biz.suckow.fuelservice.business.consumption.entity.FillUpEvent;
 import biz.suckow.fuelservice.business.consumption.entity.FuelConsumption;
-import biz.suckow.fuelservice.business.refueling.entity.Refueling;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 public class FillUpEventConsumerTest extends EasyMockSupport {
@@ -62,10 +62,10 @@ public class FillUpEventConsumerTest extends EasyMockSupport {
 
     @Test
     public void consume() {
-	final Refueling refueling = new Refueling().setDateRefueled(new Date()).setVehicle(new Vehicle());
+	final Refuelling refuelling = new Refuelling().setDateRefueled(new Date()).setVehicle(new Vehicle());
 	final FillUpEvent event = new FillUpEvent().setRefuelingId(42L);
 	final FuelConsumption expectedConsumption = new FuelConsumption().setDateComputed(new Date())
-		.setLitresPerKilometre(6D).setVehicle(refueling.getVehicle());
+		.setLitresPerKilometre(6D).setVehicle(refuelling.getVehicle());
 	final Comparator<FuelConsumption> consumptionComparator = (o1, o2) -> {
 	    if (Objects.equals(o1.getVehicle(), o2.getVehicle()) && Objects.equals(o1.getLitresPerKilometre(), 1D)
 		    && (o1.getDateComputed() != null && o2.getDateComputed() != null)) {
@@ -75,8 +75,8 @@ public class FillUpEventConsumerTest extends EasyMockSupport {
 	};
 
 	this.resetAll();
-	expect(this.em.find(Refueling.class, event.getRefuelingId())).andStubReturn(refueling);
-	expect(this.maths.computeConsumptionFor(refueling)).andStubReturn(Optional.ofNullable(BigDecimal.ONE));
+	expect(this.em.find(Refuelling.class, event.getRefuelingId())).andStubReturn(refuelling);
+	expect(this.maths.computeConsumptionFor(refuelling)).andStubReturn(Optional.ofNullable(BigDecimal.ONE));
 	this.em.persist(cmp(expectedConsumption, consumptionComparator, LogicalOperator.EQUAL));
 	expectLastCall();
 	this.replayAll();

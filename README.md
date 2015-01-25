@@ -2,12 +2,12 @@
 Drone.io automated ... [![Build Status](https://drone.io/bitbucket.org/tsuckow/fuel/status.png)](https://drone.io/bitbucket.org/tsuckow/fuel/latest)
 
 # What is it?
-You are reading the README.md file distributed with the root pom of a project that contains tooling to manage vehicle refuelings.
+You are reading the README.md file distributed with the root pom of a project that contains tooling to manage vehicle refuellings.
 
 For further information please see README.md distributed with child pom(s).
 
 # Development Notes
-This is a tool to manage refueling/fuel consumption of your vehicle(s). Its artifacts are based on Java EE 7 stack meant to be run on JBoss Wildfly (but should be portable to any other Java EE compliant server). Developed under consideration of the principles of [Clean Code](http://de.wikipedia.org/wiki/Clean_Code) with the purpose to have a reference project reflecting state of the art Java EE 7 instrumentation.
+This is a tool to manage refuelling/fuel consumption of your vehicle(s). Its artifacts are based on Java EE 7 stack meant to be run on JBoss Wildfly (but should be portable to any other Java EE compliant server). Developed under consideration of the principles of [Clean Code](http://de.wikipedia.org/wiki/Clean_Code) with the purpose to have a reference project reflecting state of the art Java EE 7 instrumentation.
 
 For build management maven is used. Get started with ``mvn clean install eclipse:eclipse``.
 

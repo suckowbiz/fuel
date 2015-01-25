@@ -16,10 +16,10 @@
 		transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<class>biz.suckow.fuelservice.business.owner.entity.Owner</class>
-		<class>biz.suckow.fuelservice.business.refueling.entity.FuelStock</class>
-		<class>biz.suckow.fuelservice.business.refueling.entity.Refueling</class>
-		<class>biz.suckow.fuelservice.business.refueling.entity.StockAddition</class>
-		<class>biz.suckow.fuelservice.business.refueling.entity.StockRelease</class>
+		<class>biz.suckow.fuelservice.business.refuelling.entity.FuelStock</class>
+		<class>biz.suckow.fuelservice.business.refuelling.entity.Refuelling</class>
+		<class>biz.suckow.fuelservice.business.refuelling.entity.StockAddition</class>
+		<class>biz.suckow.fuelservice.business.refuelling.entity.StockRelease</class>
 		<class>biz.suckow.fuelservice.business.vehicle.entity.Vehicle</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>

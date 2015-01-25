@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.refueling.control;
+package biz.suckow.fuelservice.business.refuelling.control;
 
 /*
  * #%L
@@ -36,7 +36,7 @@ public class FillUpEventGun {
     }
 
     public void fire(final Long id) {
-	Objects.requireNonNull(id, "Refueling id must not be null.");
+	Objects.requireNonNull(id, "Refuelling id must not be null.");
 	final FillUpEvent event = new FillUpEvent().setRefuelingId(id);
 	this.fillUpEvent.fire(event);
     }

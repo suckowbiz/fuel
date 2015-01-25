@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.refueling.control;
+package biz.suckow.fuelservice.business.refuelling.control;
 
 /*
  * #%L
@@ -24,26 +24,26 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
-import biz.suckow.fuelservice.business.refueling.entity.Refueling;
-import biz.suckow.fuelservice.business.refueling.entity.RefuelingMeta;
+import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
+import biz.suckow.fuelservice.business.refuelling.entity.RefuellingMeta;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
-public class RefuelingService {
+public class RefuellingService {
     private final FillUpEventGun gun;
-    private final RefuelingStore refuelingStore;
+    private final RefuellingStore refuellingStore;
     private final FuelStockStore stockStore;
     private final VehicleLocator vehicleLocator;
 
     @Inject
-    public RefuelingService(final RefuelingStore refuelingStore, final FuelStockStore stockStore,
-	    final FillUpEventGun gun, final VehicleLocator vehicleLocator) {
-	this.refuelingStore = refuelingStore;
+    public RefuellingService(final RefuellingStore refuellingStore, final FuelStockStore stockStore,
+							 final FillUpEventGun gun, final VehicleLocator vehicleLocator) {
+	this.refuellingStore = refuellingStore;
 	this.stockStore = stockStore;
 	this.gun = gun;
 	this.vehicleLocator = vehicleLocator;
     }
 
-    public void add(final String vehicleName, final String ownerName, final RefuelingMeta meta) {
+    public void add(final String vehicleName, final String ownerName, final RefuellingMeta meta) {
 	// TODO handle previous additions /recalculate ...
 	final Optional<Vehicle> possibleVehicle = this.vehicleLocator.getVehicle(ownerName, vehicleName);
 	final Vehicle vehicle = possibleVehicle.orElseThrow(() -> new IllegalStateException("Vehicle missing."));
@@ -54,11 +54,11 @@ public class RefuelingService {
 	    this.stockStore.release(possibleVehicle.get(), meta.date, meta.litresFromStock);
 	}
 	if (meta.isFull) {
-	    final Refueling refueling = this.refuelingStore.storeFillUp(possibleVehicle.get(), meta.eurosPerLitre,
+	    final Refuelling refuelling = this.refuellingStore.storeFillUp(possibleVehicle.get(), meta.eurosPerLitre,
 		    meta.litresToTank, meta.kilometre, meta.memo, meta.date);
-	    this.gun.fire(refueling.getId());
+	    this.gun.fire(refuelling.getId());
 	} else {
-	    this.refuelingStore.storePartialRefueling(possibleVehicle.get(), meta.eurosPerLitre, meta.litresToTank,
+	    this.refuellingStore.storePartialRefueling(possibleVehicle.get(), meta.eurosPerLitre, meta.litresToTank,
 		    meta.memo, meta.date);
 	}
     }

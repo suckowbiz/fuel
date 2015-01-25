@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.refueling.control;
+package biz.suckow.fuelservice.business.refuelling.control;
 
 /*
  * #%L
@@ -25,29 +25,29 @@ import java.util.Date;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 
-import biz.suckow.fuelservice.business.refueling.entity.Refueling;
+import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
-public class RefuelingStore {
+public class RefuellingStore {
     private final EntityManager em;
 
     @Inject
-    public RefuelingStore(final EntityManager em) {
+    public RefuellingStore(final EntityManager em) {
 	this.em = em;
     }
 
-    public Refueling storeFillUp(final Vehicle vehicle, final Double eurosPerLitre, final Double litres, final Double kilometre, final String memo,
+    public Refuelling storeFillUp(final Vehicle vehicle, final Double eurosPerLitre, final Double litres, final Double kilometre, final String memo,
 	    final Date date) {
-	final Refueling result = new Refueling.Builder().eurosPerLitre(eurosPerLitre).litres(litres)
+	final Refuelling result = new Refuelling.Builder().eurosPerLitre(eurosPerLitre).litres(litres)
 		.kilometre(kilometre).memo(memo).dateRefueled(date).fillUp(true).vehicle(vehicle).build();
 	this.em.persist(result);
 	return result;
     }
 
     public void storePartialRefueling(final Vehicle vehicle, final Double euros, final Double litres, final String memo, final Date date) {
-	final Refueling refueling = new Refueling.Builder().litres(litres).eurosPerLitre(euros).dateRefueled(date)
+	final Refuelling refuelling = new Refuelling.Builder().litres(litres).eurosPerLitre(euros).dateRefueled(date)
 		.memo(memo).vehicle(vehicle).build();
-	this.em.persist(refueling);
+	this.em.persist(refuelling);
     }
 
 }

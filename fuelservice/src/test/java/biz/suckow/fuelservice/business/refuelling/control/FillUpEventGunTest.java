@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.refueling.control;
+package biz.suckow.fuelservice.business.refuelling.control;
 
 /*
  * #%L
@@ -33,7 +33,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuelservice.business.consumption.entity.FillUpEvent;
-import biz.suckow.fuelservice.business.refueling.control.FillUpEventGun;
 
 public class FillUpEventGunTest extends EasyMockSupport {
     @Mock

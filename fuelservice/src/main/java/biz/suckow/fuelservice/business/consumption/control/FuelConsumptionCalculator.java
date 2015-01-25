@@ -28,42 +28,42 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
-import biz.suckow.fuelservice.business.refueling.control.RefuelingLocator;
-import biz.suckow.fuelservice.business.refueling.entity.Refueling;
-import biz.suckow.fuelservice.business.refueling.entity.StockAddition;
-import biz.suckow.fuelservice.business.refueling.entity.StockRelease;
+import biz.suckow.fuelservice.business.refuelling.control.RefuellingLocator;
+import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
+import biz.suckow.fuelservice.business.refuelling.entity.StockAddition;
+import biz.suckow.fuelservice.business.refuelling.entity.StockRelease;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 public class FuelConsumptionCalculator {
-    private final RefuelingLocator refuelingLocator;
+    private final RefuellingLocator refuellingLocator;
     private final FuelStockLocator fuelStockLocator;
     private final Logger logger;
 
     @Inject
-    public FuelConsumptionCalculator(final RefuelingLocator refuelingLocator, final FuelStockLocator fuelStockLocator,
+    public FuelConsumptionCalculator(final RefuellingLocator refuellingLocator, final FuelStockLocator fuelStockLocator,
 	    final Logger logger) {
-	this.refuelingLocator = refuelingLocator;
+	this.refuellingLocator = refuellingLocator;
 	this.fuelStockLocator = fuelStockLocator;
 	this.logger = logger;
     }
 
-    public java.util.Optional<BigDecimal> computeConsumptionFor(final Refueling refueling) {
-	if (refueling.getIsFillUp() == false) {
-	    throw new IllegalArgumentException("Refueling must not be a partial one.");
+    public java.util.Optional<BigDecimal> computeConsumptionFor(final Refuelling refuelling) {
+	if (refuelling.getIsFillUp() == false) {
+	    throw new IllegalArgumentException("Refuelling must not be a partial one.");
 	}
 
 	BigDecimal result = null;
-	final Date refuelingDate = refueling.getDateRefueled();
-	final Optional<Refueling> possibleLastFillUp = this.refuelingLocator.getFillUpBefore(refuelingDate);
+	final Date refuelingDate = refuelling.getDateRefueled();
+	final Optional<Refuelling> possibleLastFillUp = this.refuellingLocator.getFillUpBefore(refuelingDate);
 	if (possibleLastFillUp.isPresent()) {
-	    final Vehicle vehicle = refueling.getVehicle();
+	    final Vehicle vehicle = refuelling.getVehicle();
 	    final Date lastFillUpDate = possibleLastFillUp.get().getDateRefueled();
 
-	    BigDecimal litres = BigDecimal.valueOf(refueling.getLitres());
+	    BigDecimal litres = BigDecimal.valueOf(refuelling.getLitres());
 	    litres = litres.add(this.getLitresConsumedFromStock(lastFillUpDate, refuelingDate, vehicle));
 	    litres = litres.add(this.getLitresRefueledBetween(lastFillUpDate, refuelingDate, vehicle));
 
-	    final Double distance = refueling.getKilometre() - possibleLastFillUp.get().getKilometre();
+	    final Double distance = refuelling.getKilometre() - possibleLastFillUp.get().getKilometre();
 	    if (distance == 0D) {
 		this.logger.warning("Cannot compute consumption because distance evaluates to zero!");
 	    } else {
@@ -74,7 +74,7 @@ public class FuelConsumptionCalculator {
     }
 
     private BigDecimal getLitresRefueledBetween(final Date left, final Date right, final Vehicle vehicle) {
-	final List<Refueling> partials = this.refuelingLocator.getPartialRefuelingsBetween(left, right, vehicle);
+	final List<Refuelling> partials = this.refuellingLocator.getPartialRefuelingsBetween(left, right, vehicle);
 	final BigDecimal result = this.sumRefueledLitres(partials);
 	return result;
     }
@@ -104,10 +104,10 @@ public class FuelConsumptionCalculator {
 	return BigDecimal.valueOf(result);
     }
 
-    private BigDecimal sumRefueledLitres(final List<Refueling> refuelings) {
+    private BigDecimal sumRefueledLitres(final List<Refuelling> refuellings) {
 	Double result = 0D;
-	for (final Refueling refueling : refuelings) {
-	    result += refueling.getLitres();
+	for (final Refuelling refuelling : refuellings) {
+	    result += refuelling.getLitres();
 	}
 	return BigDecimal.valueOf(result);
     }

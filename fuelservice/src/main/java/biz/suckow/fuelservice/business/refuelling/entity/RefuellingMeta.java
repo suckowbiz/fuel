@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.refueling.entity;
+package biz.suckow.fuelservice.business.refuelling.entity;
 
 /*
  * #%L
@@ -25,7 +25,7 @@ import java.util.Date;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class RefuelingMeta {
+public class RefuellingMeta {
     public Date date;
     public String memo;
     public double kilometre;

@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.refueling.control;
+package biz.suckow.fuelservice.business.refuelling.control;
 
 /*
  * #%L
@@ -29,7 +29,7 @@ import org.testng.annotations.Test;
 import biz.suckow.fuelservice.business.PersistenceSupport;
 import biz.suckow.fuelservice.business.TestHelper;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
-import biz.suckow.fuelservice.business.refueling.entity.FuelStock;
+import biz.suckow.fuelservice.business.refuelling.entity.FuelStock;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 public class FuelStockLocatorIT extends PersistenceSupport {

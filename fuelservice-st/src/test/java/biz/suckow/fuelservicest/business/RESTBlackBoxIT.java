@@ -29,7 +29,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 public class RESTBlackBoxIT extends RESTSupport {
-    private final String URI = "http://localhost:8080/fuelservice-0.0.1-SNAPSHOT/resources/refuelings/";
+    private final String URI = "http://localhost:8080/fuelservice-0.0.1-SNAPSHOT/resources/refuellings/";
 
     @BeforeClass
     @Override

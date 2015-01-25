@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 
+import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 import org.easymock.EasyMockSupport;
 import org.easymock.Mock;
 import org.easymock.MockType;
@@ -41,21 +42,20 @@ import org.testng.annotations.Test;
 
 import biz.suckow.fuelservice.business.TestHelper;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
-import biz.suckow.fuelservice.business.refueling.control.RefuelingLocator;
-import biz.suckow.fuelservice.business.refueling.entity.Refueling;
-import biz.suckow.fuelservice.business.refueling.entity.StockAddition;
-import biz.suckow.fuelservice.business.refueling.entity.StockRelease;
+import biz.suckow.fuelservice.business.refuelling.control.RefuellingLocator;
+import biz.suckow.fuelservice.business.refuelling.entity.StockAddition;
+import biz.suckow.fuelservice.business.refuelling.entity.StockRelease;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 public class FuelConsumptionCalculatorTest extends EasyMockSupport {
     @Mock
-    RefuelingLocator refuelingLocatorMock;
+	private RefuellingLocator refuellingLocatorMock;
 
     @Mock
-    FuelStockLocator fuelStockLocatorMock;
+    private FuelStockLocator fuelStockLocatorMock;
 
     @Mock(type = MockType.NICE)
-    EntityManager emMock;
+    private EntityManager emMock;
 
     @BeforeClass
     public void BeforeClass() {
@@ -64,28 +64,28 @@ public class FuelConsumptionCalculatorTest extends EasyMockSupport {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void nonFillUpMustFail() {
-	final Refueling refueling = new Refueling.Builder().kilometre(100D).litres(10D).dateRefueled(new Date())
+	final Refuelling refuelling = new Refuelling.Builder().kilometre(100D).litres(10D).dateRefueled(new Date())
 		.fillUp(false).build();
-	new FuelConsumptionCalculator(this.refuelingLocatorMock, this.fuelStockLocatorMock, Logger.getAnonymousLogger())
-		.computeConsumptionFor(refueling);
+	new FuelConsumptionCalculator(this.refuellingLocatorMock, this.fuelStockLocatorMock, Logger.getAnonymousLogger())
+		.computeConsumptionFor(refuelling);
     }
 
     @Test
     public void mustNotComputeWithoutPredecessor() {
 	this.resetAll();
-	expect(this.refuelingLocatorMock.getFillUpBefore(anyObject(Date.class))).andStubReturn(
-		Optional.<Refueling> empty());
+	expect(this.refuellingLocatorMock.getFillUpBefore(anyObject(Date.class))).andStubReturn(
+		Optional.<Refuelling> empty());
 	this.replayAll();
 
-	final Refueling refueling = new Refueling.Builder().kilometre(100D).litres(10D).dateRefueled(new Date())
+	final Refuelling refuelling = new Refuelling.Builder().kilometre(100D).litres(10D).dateRefueled(new Date())
 		.fillUp(true).build();
 
-	final Optional<BigDecimal> actualResult = new FuelConsumptionCalculator(this.refuelingLocatorMock,
-		this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumptionFor(refueling);
+	final Optional<BigDecimal> actualResult = new FuelConsumptionCalculator(this.refuellingLocatorMock,
+		this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumptionFor(refuelling);
 	assertThat(actualResult.isPresent()).isFalse();
     }
 
-    @Test(description = "Simple case of refueling and consuming this refueling.")
+    @Test(description = "Simple case of refuelling and consuming this refuelling.")
     public void simpleComputationMustSucceed() {
 	final Date january = TestHelper.getMonth(0);
 	final Date february = TestHelper.getMonth(1);
@@ -93,30 +93,30 @@ public class FuelConsumptionCalculatorTest extends EasyMockSupport {
 	final Owner duke = TestHelper.createDuke();
 	final Vehicle vehicle = TestHelper.createDukeCar(duke);
 
-	final Refueling refuelingBefore = new Refueling.Builder().kilometre(100D).litres(10D).dateRefueled(january)
+	final Refuelling refuellingBefore = new Refuelling.Builder().kilometre(100D).litres(10D).dateRefueled(january)
 		.fillUp(true).build();
-	final Refueling refueling = new Refueling.Builder().kilometre(200D).litres(10D).dateRefueled(february)
+	final Refuelling refuelling = new Refuelling.Builder().kilometre(200D).litres(10D).dateRefueled(february)
 		.fillUp(true).vehicle(vehicle).build();
 
 	this.resetAll();
-	expect(this.refuelingLocatorMock.getFillUpBefore(february)).andStubReturn(Optional.of(refuelingBefore));
+	expect(this.refuellingLocatorMock.getFillUpBefore(february)).andStubReturn(Optional.of(refuellingBefore));
 	expect(this.fuelStockLocatorMock.getAdditionsBetween(january, february, vehicle)).andStubReturn(
 		Collections.emptyList());
-	expect(this.refuelingLocatorMock.getPartialRefuelingsBetween(january, february, vehicle)).andStubReturn(
+	expect(this.refuellingLocatorMock.getPartialRefuelingsBetween(january, february, vehicle)).andStubReturn(
 		Collections.emptyList());
 	expect(this.fuelStockLocatorMock.getReleasesBetween(january, february, vehicle)).andStubReturn(
 		Collections.emptyList());
 	this.replayAll();
 
-	final Optional<BigDecimal> actualResult = new FuelConsumptionCalculator(this.refuelingLocatorMock,
-		this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumptionFor(refueling);
+	final Optional<BigDecimal> actualResult = new FuelConsumptionCalculator(this.refuellingLocatorMock,
+		this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumptionFor(refuelling);
 	assertThat(actualResult.isPresent());
 	assertThat(actualResult.get().doubleValue()).isEqualTo(10D / 100D);
 	this.verifyAll();
     }
 
     @SuppressWarnings("serial")
-    @Test(description = "Have a refueling with consideration of stock and consumption of this refueling and stock.")
+    @Test(description = "Have a refuelling with consideration of stock and consumption of this refuelling and stock.")
     public void complexRefuelingMustSucceed() {
 	final Date january = TestHelper.getMonth(0);
 	final Date february = TestHelper.getMonth(1);
@@ -135,27 +135,27 @@ public class FuelConsumptionCalculatorTest extends EasyMockSupport {
 	final double expectedConsumption = (litresFilledUp + litresPartiallyRefueled + litresToStock - litresFromStock)
 		/ (kilometresFilledUp - kilometresLastFillUp);
 
-	final Refueling partialRefueling = new Refueling.Builder().litres(litresPartiallyRefueled).dateRefueled(march)
+	final Refuelling partialRefuelling = new Refuelling.Builder().litres(litresPartiallyRefueled).dateRefueled(march)
 		.fillUp(false).build();
-	final Refueling refuelingBefore = new Refueling.Builder().kilometre(kilometresLastFillUp)
+	final Refuelling refuellingBefore = new Refuelling.Builder().kilometre(kilometresLastFillUp)
 		.litres(litresFilledUp).dateRefueled(january).fillUp(true).build();
-	final Refueling refueling = new Refueling.Builder().kilometre(kilometresFilledUp).litres(litresFilledUp)
+	final Refuelling refuelling = new Refuelling.Builder().kilometre(kilometresFilledUp).litres(litresFilledUp)
 		.dateRefueled(april).fillUp(true).vehicle(vehicle).build();
 	final StockAddition addition = new StockAddition().setDateAdded(february).setLitres(litresToStock);
 	final StockRelease release = new StockRelease().setDateReleased(march).setLitres(litresFromStock);
 
 	this.resetAll();
-	expect(this.refuelingLocatorMock.getFillUpBefore(april)).andStubReturn(Optional.of(refuelingBefore));
+	expect(this.refuellingLocatorMock.getFillUpBefore(april)).andStubReturn(Optional.of(refuellingBefore));
 	expect(this.fuelStockLocatorMock.getAdditionsBetween(january, april, vehicle)).andStubReturn(
 		Arrays.asList(addition));
-	expect(this.refuelingLocatorMock.getPartialRefuelingsBetween(january, april, vehicle)).andStubReturn(
-		Arrays.asList(partialRefueling));
+	expect(this.refuellingLocatorMock.getPartialRefuelingsBetween(january, april, vehicle)).andStubReturn(
+		Arrays.asList(partialRefuelling));
 	expect(this.fuelStockLocatorMock.getReleasesBetween(january, april, vehicle)).andStubReturn(
 		Arrays.asList(release));
 	this.replayAll();
 
-	final Optional<BigDecimal> actualResult = new FuelConsumptionCalculator(this.refuelingLocatorMock,
-		this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumptionFor(refueling);
+	final Optional<BigDecimal> actualResult = new FuelConsumptionCalculator(this.refuellingLocatorMock,
+		this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumptionFor(refuelling);
 	assertThat(actualResult.isPresent());
 	assertThat(actualResult.get().doubleValue()).isEqualTo(expectedConsumption);
 	this.verifyAll();

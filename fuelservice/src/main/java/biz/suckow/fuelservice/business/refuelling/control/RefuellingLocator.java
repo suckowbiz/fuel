@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.refueling.control;
+package biz.suckow.fuelservice.business.refuelling.control;
 
 /*
  * #%L
@@ -28,31 +28,31 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.TemporalType;
 
-import biz.suckow.fuelservice.business.refueling.entity.Refueling;
+import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
-public class RefuelingLocator {
+public class RefuellingLocator {
     private final EntityManager em;
 
     @Inject
-    public RefuelingLocator(final EntityManager em) {
+    public RefuellingLocator(final EntityManager em) {
 	this.em = em;
     }
 
-    public Optional<Refueling> getFillUpBefore(final Date date) {
-	final List<Refueling> refuelings = this.em
-		.createNamedQuery(Refueling.FIND_BY_FILLED_UP_AND_DATE_BEFORE, Refueling.class)
+    public Optional<Refuelling> getFillUpBefore(final Date date) {
+	final List<Refuelling> refuellings = this.em
+		.createNamedQuery(Refuelling.FIND_BY_FILLED_UP_AND_DATE_BEFORE, Refuelling.class)
 		.setParameter("right", date, TemporalType.TIMESTAMP).getResultList();
-	Optional<Refueling> result = Optional.empty();
-	if (refuelings.size() > 0) {
-	    result = Optional.of(refuelings.get(0));
+	Optional<Refuelling> result = Optional.empty();
+	if (refuellings.size() > 0) {
+	    result = Optional.of(refuellings.get(0));
 	}
 	return result;
     }
 
-    public List<Refueling> getPartialRefuelingsBetween(final Date left, final Date right, final Vehicle vehicle) {
-	final List<Refueling> result = this.em
-		.createNamedQuery(Refueling.FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN, Refueling.class)
+    public List<Refuelling> getPartialRefuelingsBetween(final Date left, final Date right, final Vehicle vehicle) {
+	final List<Refuelling> result = this.em
+		.createNamedQuery(Refuelling.FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN, Refuelling.class)
 		.setParameter("left", left).setParameter("right", right).setParameter("vehicle", vehicle)
 		.getResultList();
 	return result;

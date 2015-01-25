@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.refueling.control;
+package biz.suckow.fuelservice.business.refuelling.control;
 
 /*
  * #%L
@@ -33,13 +33,13 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import biz.suckow.fuelservice.business.TestHelper;
-import biz.suckow.fuelservice.business.refueling.entity.Refueling;
-import biz.suckow.fuelservice.business.refueling.entity.RefuelingMeta;
+import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
+import biz.suckow.fuelservice.business.refuelling.entity.RefuellingMeta;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
-public class RefuelingServiceTest extends EasyMockSupport {
+public class RefuellingServiceTest extends EasyMockSupport {
     @Mock
-    private RefuelingStore refuelingStoreMock;
+    private RefuellingStore refuellingStoreMock;
 
     @Mock
     private FuelStockStore storeMock;
@@ -50,12 +50,12 @@ public class RefuelingServiceTest extends EasyMockSupport {
     @Mock
     private VehicleLocator locatorMock;
 
-    private RefuelingService cut;
+    private RefuellingService cut;
 
     @BeforeClass
     private void beforeClass() {
 	injectMocks(this);
-	this.cut = new RefuelingService(this.refuelingStoreMock, this.storeMock, this.gunMock, this.locatorMock);
+	this.cut = new RefuellingService(this.refuellingStoreMock, this.storeMock, this.gunMock, this.locatorMock);
     }
 
     @Test(expectedExceptions = IllegalStateException.class)
@@ -69,7 +69,7 @@ public class RefuelingServiceTest extends EasyMockSupport {
     @Test
     public void fullTankAndStockRefuelMustPersistExactly() {
 	final Vehicle expectedVehicle = TestHelper.createDukeCar(TestHelper.createDuke());
-	final RefuelingMeta meta = new RefuelingMeta();
+	final RefuellingMeta meta = new RefuellingMeta();
 	meta.date = new Date();
 	meta.eurosPerLitre = 1D;
 	meta.litresToTank = 2D;
@@ -77,18 +77,18 @@ public class RefuelingServiceTest extends EasyMockSupport {
 	meta.litresFromStock = 10D;
 	meta.kilometre = 120000D;
 	meta.isFull = true;
-	meta.memo = "full-with-stock-refueling";
+	meta.memo = "full-with-stock-refuelling";
 
 	this.resetAll();
 	expect(this.locatorMock.getVehicle(expectedVehicle.getOwner().getOwnername(), expectedVehicle.getVehiclename()))
-		.andStubReturn(Optional.<Vehicle> ofNullable(expectedVehicle));
+		.andStubReturn(Optional.ofNullable(expectedVehicle));
 	this.storeMock.addition(expectedVehicle, meta.date, meta.eurosPerLitre, meta.litresToStock);
 	expectLastCall();
 	this.storeMock.release(expectedVehicle, meta.date, meta.litresFromStock);
 	expectLastCall();
 	expect(
-		this.refuelingStoreMock.storeFillUp(expectedVehicle, meta.eurosPerLitre, meta.litresToTank,
-			meta.kilometre, meta.memo, meta.date)).andStubReturn(new Refueling());
+		this.refuellingStoreMock.storeFillUp(expectedVehicle, meta.eurosPerLitre, meta.litresToTank,
+			meta.kilometre, meta.memo, meta.date)).andStubReturn(new Refuelling());
 	this.gunMock.fire(null);
 	expectLastCall();
 	this.replayAll();
@@ -100,16 +100,16 @@ public class RefuelingServiceTest extends EasyMockSupport {
     @Test
     public void partialTankRefuelMustPersistExactly() {
 	final Vehicle expectedVehicle = TestHelper.createDukeCar(TestHelper.createDuke());
-	final RefuelingMeta meta = new RefuelingMeta();
+	final RefuellingMeta meta = new RefuellingMeta();
 	meta.date = new Date();
 	meta.eurosPerLitre = 1D;
 	meta.litresToTank = 2D;
-	meta.memo = "partial-refueling";
+	meta.memo = "partial-refuelling";
 
 	this.resetAll();
 	expect(this.locatorMock.getVehicle(expectedVehicle.getOwner().getOwnername(), expectedVehicle.getVehiclename()))
-		.andStubReturn(Optional.<Vehicle> ofNullable(expectedVehicle));
-	this.refuelingStoreMock.storePartialRefueling(expectedVehicle, meta.eurosPerLitre, meta.litresToTank,
+		.andStubReturn(Optional.ofNullable(expectedVehicle));
+	this.refuellingStoreMock.storePartialRefueling(expectedVehicle, meta.eurosPerLitre, meta.litresToTank,
 		meta.memo, meta.date);
 	expectLastCall();
 	this.replayAll();

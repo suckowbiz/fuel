@@ -33,7 +33,7 @@ import javax.persistence.EntityManager;
 import biz.suckow.fuelservice.business.consumption.control.FuelConsumptionCalculator;
 import biz.suckow.fuelservice.business.consumption.entity.FillUpEvent;
 import biz.suckow.fuelservice.business.consumption.entity.FuelConsumption;
-import biz.suckow.fuelservice.business.refueling.entity.Refueling;
+import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 
 @Stateless
 public class FillUpEventConsumer {
@@ -45,13 +45,13 @@ public class FillUpEventConsumer {
 
     @Asynchronous
     public void consume(@Observes(during = TransactionPhase.AFTER_SUCCESS) final FillUpEvent event) {
-	final Refueling refueling = this.em.find(Refueling.class, event.getRefuelingId());
-	final Optional<BigDecimal> possibleResult = this.maths.computeConsumptionFor(refueling);
+	final Refuelling refuelling = this.em.find(Refuelling.class, event.getRefuelingId());
+	final Optional<BigDecimal> possibleResult = this.maths.computeConsumptionFor(refuelling);
 	if (possibleResult.isPresent()) {
 	    final FuelConsumption consumption = new FuelConsumption();
-	    consumption.setDateComputed(refueling.getDateRefueled());
+	    consumption.setDateComputed(refuelling.getDateRefueled());
 	    consumption.setLitresPerKilometre(possibleResult.get().doubleValue());
-	    consumption.setVehicle(refueling.getVehicle());
+	    consumption.setVehicle(refuelling.getVehicle());
 	    this.em.persist(consumption);
 	}
     }

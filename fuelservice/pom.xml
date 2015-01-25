@@ -16,7 +16,7 @@
 	<packaging>war</packaging>
 
 	<name>${project.artifactId}</name>
-	<description>Provides fuel related services such as refueling.</description>
+	<description>Provides fuel related services such as refuelling.</description>
 	<inceptionYear>2014</inceptionYear>
 
 	<build>
