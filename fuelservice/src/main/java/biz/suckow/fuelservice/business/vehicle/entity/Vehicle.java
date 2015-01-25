@@ -34,12 +34,16 @@ import biz.suckow.fuelservice.business.app.entity.BaseEntity;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehiclename", "owner_id" }))
-@NamedQuery(name = Vehicle.FIND_BY_OWNERS_AND_VEHICLES_NAME, query = "SELECT v FROM Vehicle v WHERE v.vehicleName = :vehicleName AND v.owner.ownerName = :ownerName")
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehicleName", "owner_id" }))
+@NamedQuery(name = Vehicle.QueryByEmailAndVehicleName.NAME, query = "SELECT v FROM Vehicle v WHERE v.vehicleName = :"+ Vehicle.QueryByEmailAndVehicleName.VEHICLE_NAME+" AND v.owner.email = :"+Vehicle.QueryByEmailAndVehicleName.EMAIL)
 public class Vehicle extends BaseEntity {
     private static final long serialVersionUID = -5360751385120611439L;
-    private static final String PREFIX = "biz.suckow.fuelservice.business.vehicle.entity.";
-    public static final String FIND_BY_OWNERS_AND_VEHICLES_NAME = Vehicle.PREFIX + "findByOwnersAndVehiclesName";
+
+    public static final class QueryByEmailAndVehicleName {
+        public static final String NAME = "Vehicle.byEmailAndVehicleName";
+        public static final String EMAIL = "email";
+        public static final String VEHICLE_NAME = "vehicleName";
+    }
 
     // TODO name must be url safe
     @NotNull
@@ -51,8 +55,8 @@ public class Vehicle extends BaseEntity {
     @ManyToOne(optional = false)
     private Owner owner;
 
-    public Vehicle setVehicleName(final String vehiclename) {
-	this.vehicleName = vehiclename;
+    public Vehicle setVehicleName(final String value) {
+	this.vehicleName = value;
 	return this;
     }
 
@@ -60,12 +64,12 @@ public class Vehicle extends BaseEntity {
 	return this.owner;
     }
 
-    public Vehicle setOwner(final Owner owner) {
-	this.owner = owner;
+    public Vehicle setOwner(final Owner value) {
+	this.owner = value;
 	return this;
     }
 
-    public String getVehiclename() {
+    public String getVehicleName() {
 	return this.vehicleName;
     }
 }

@@ -39,14 +39,14 @@ public class OwnerServiceIT extends PersistenceSupport {
 	final Owner duke = TestHelper.createDuke();
 	em.persist(duke);
 
-	final Optional<Owner> actualResult = this.cut.getOwner("duke");
+	final Optional<Owner> actualResult = this.cut.getOwner("duke@java.com");
 	assertThat(actualResult.isPresent());
 	assertThat(actualResult.get()).isSameAs(duke);
     }
 
     @Test
     public void locateNonExistingOwnerMustFail() {
-	final Optional<Owner> actualResult = this.cut.getOwner("duke");
+	final Optional<Owner> actualResult = this.cut.getOwner("duke@java.com");
 	assertThat(actualResult.isPresent()).isFalse();
     }
 }

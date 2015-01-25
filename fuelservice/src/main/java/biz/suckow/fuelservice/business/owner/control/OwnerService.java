@@ -1,10 +1,10 @@
-package biz.suckow.fuelservice.business.owner.controller;
+package biz.suckow.fuelservice.business.owner.control;
 
 /*
  * #%L
- * fuel
+ * fuelservice
  * %%
- * Copyright (C) 2014 Suckow.biz
+ * Copyright (C) 2014 - 2015 Suckow.biz
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,30 +20,28 @@ package biz.suckow.fuelservice.business.owner.controller;
  * #L%
  */
 
+import biz.suckow.fuelservice.business.app.control.EntityManagerFactory;
+import biz.suckow.fuelservice.business.owner.controller.OwnerLocator;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import java.util.Optional;
 
-public class OwnerLocator {
-    private final EntityManager em;
+public class OwnerService {
+    @Inject
+    private OwnerLocator locator;
 
     @Inject
-    public OwnerLocator(final EntityManager em) {
-        this.em = em;
+    private EntityManager em;
+
+    public void create(String email, String password) {
+        Owner owner = new Owner().setEmail(email).setPassword(password);
+        this.em.persist(owner);
     }
 
-    public Optional<Owner> getOwner(final String email) {
-        Owner result = null;
-        try {
-            result = (Owner) this.em.createNamedQuery(Owner.QueryByEmailCaseIgnore.NAME)
-                    .setParameter(Owner.QueryByEmailCaseIgnore.EMAIL, email).getSingleResult();
-        } catch (final NoResultException e) {
-        /* NOP */
-        }
-        return Optional.ofNullable(result);
+    public Optional<Owner> locateByEmail(final String email) {
+        final Optional<Owner> result = this.locator.getOwner(email);
+        return result;
     }
-
 }

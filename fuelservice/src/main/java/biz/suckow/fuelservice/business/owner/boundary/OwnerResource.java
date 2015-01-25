@@ -20,19 +20,42 @@ package biz.suckow.fuelservice.business.owner.boundary;
  * #L%
  */
 
+import biz.suckow.fuelservice.business.owner.control.OwnerService;
+import biz.suckow.fuelservice.business.owner.entity.Owner;
+
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Optional;
 
 @Path("owners")
 @Stateless
 public class OwnerResource {
+    @Inject
+    private OwnerService ownerService;
 
-    // TODO
-    @Path("register/{ownername}")
-    public Response login(@PathParam("ownername") final String ownername) {
+    // TODO: test
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("register/{email}/{password}")
+    public Response register(@PathParam("email") String email, @PathParam("password") String password) {
+        Response response = Response.ok().build();
+        Optional<Owner> possibleOwner = this.ownerService.locateByEmail(email);
+        if (possibleOwner.isPresent()) {
+            response = Response.status(Response.Status.FORBIDDEN).entity("Please use another email address.").build();
+        } else {
+            this.ownerService.create(email, password);
+            response = Response.ok().build();
+        }
+        return response;
+    }
 
-	return Response.ok().build();
+    @Path("token/{email}/{password}")
+    public Response generateToken() {
+        // TODO: generate token
+        return Response.ok().build();
     }
 }

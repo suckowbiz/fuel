@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Set these VM properties in your IDE debugger -Djava.util.logging.manager=org.jboss.logmanager.LogManager 
 	-Djboss.home=target/wildfly-8.1.0.Final -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<artifactId>fuelservice</artifactId>
-	<parent>
-		<groupId>biz.suckow.fuel</groupId>
-		<artifactId>multifuel</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
-	</parent>
+    <artifactId>fuelservice</artifactId>
+    <parent>
+        <groupId>biz.suckow.fuel</groupId>
+        <artifactId>multifuel</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
 
-	<packaging>war</packaging>
+    <packaging>war</packaging>
 
-	<name>${project.artifactId}</name>
-	<description>Provides fuel related services such as refuelling.</description>
-	<inceptionYear>2014</inceptionYear>
+    <name>${project.artifactId}</name>
+    <description>Provides fuel related services such as refuelling.</description>
+    <inceptionYear>2014</inceptionYear>
 
-	<build>
-		<finalName>${project.artifactId}-${project.version}</finalName>
-	</build>
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+    </build>
 
-	<dependencies>
-		<!-- The core O/RM functionality as provided by Hibernate -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<!-- Hibernate O/RM implementation of the JPA specification -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<!-- Hibernate's Bean Validation (JSR-303) reference implementation. -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<!-- Added to have in-memory database for integration tests. -->
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<version>${version.derby}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <!-- The core O/RM functionality as provided by Hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Hibernate O/RM implementation of the JPA specification -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Hibernate's Bean Validation (JSR-303) reference implementation. -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Added to have in-memory database for integration tests. -->
+        <dependency>
+            <groupId>org.apache.derby</groupId>
+            <artifactId>derby</artifactId>
+            <version>${version.derby}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 </project>

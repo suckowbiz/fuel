@@ -20,14 +20,13 @@ package biz.suckow.fuelservice.business.vehicle.entity;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import org.hibernate.exception.ConstraintViolationException;
-import org.testng.annotations.Test;
-
 import biz.suckow.fuelservice.business.PersistenceSupport;
 import biz.suckow.fuelservice.business.TestHelper;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
+import org.hibernate.exception.ConstraintViolationException;
+import org.testng.annotations.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Integration tests for {@link Vehicle}.
@@ -36,16 +35,16 @@ public class VehicleIT extends PersistenceSupport {
 
     @Test(description = "The vehicle id must stay unique per owner to be able to identify an owners car by name.")
     public void vehicleNameMustBeUniqueForOwner() {
-	final Owner duke = TestHelper.createDuke();
-	em.persist(duke);
+        final Owner duke = TestHelper.createDuke();
+        em.persist(duke);
 
-	final Vehicle dukeCar = TestHelper.createDukeCar(duke);
-	em.persist(dukeCar);
+        final Vehicle dukeCar = TestHelper.createDukeCar(duke);
+        em.persist(dukeCar);
 
-	try {
-	    em.persist(TestHelper.createDukeCar(duke));
-	} catch (final Throwable t) {
-	    assertThat(t).hasCauseInstanceOf(ConstraintViolationException.class);
-	}
+        try {
+            em.persist(TestHelper.createDukeCar(duke));
+        } catch (final Throwable t) {
+            assertThat(t).hasCauseInstanceOf(ConstraintViolationException.class);
+        }
     }
 }

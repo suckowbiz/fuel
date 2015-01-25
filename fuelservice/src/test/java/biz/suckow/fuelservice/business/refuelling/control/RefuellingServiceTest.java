@@ -80,7 +80,7 @@ public class RefuellingServiceTest extends EasyMockSupport {
 	meta.memo = "full-with-stock-refuelling";
 
 	this.resetAll();
-	expect(this.locatorMock.getVehicle(expectedVehicle.getOwner().getOwnername(), expectedVehicle.getVehiclename()))
+	expect(this.locatorMock.getVehicle(expectedVehicle.getOwner().getEmail(), expectedVehicle.getVehicleName()))
 		.andStubReturn(Optional.ofNullable(expectedVehicle));
 	this.storeMock.addition(expectedVehicle, meta.date, meta.eurosPerLitre, meta.litresToStock);
 	expectLastCall();
@@ -93,7 +93,7 @@ public class RefuellingServiceTest extends EasyMockSupport {
 	expectLastCall();
 	this.replayAll();
 
-	this.cut.add(expectedVehicle.getVehiclename(), expectedVehicle.getOwner().getOwnername(), meta);
+	this.cut.add(expectedVehicle.getVehicleName(), expectedVehicle.getOwner().getEmail(), meta);
 	this.verifyAll();
     }
 
@@ -107,14 +107,14 @@ public class RefuellingServiceTest extends EasyMockSupport {
 	meta.memo = "partial-refuelling";
 
 	this.resetAll();
-	expect(this.locatorMock.getVehicle(expectedVehicle.getOwner().getOwnername(), expectedVehicle.getVehiclename()))
+	expect(this.locatorMock.getVehicle(expectedVehicle.getOwner().getEmail(), expectedVehicle.getVehicleName()))
 		.andStubReturn(Optional.ofNullable(expectedVehicle));
 	this.refuellingStoreMock.storePartialRefueling(expectedVehicle, meta.eurosPerLitre, meta.litresToTank,
 		meta.memo, meta.date);
 	expectLastCall();
 	this.replayAll();
 
-	this.cut.add(expectedVehicle.getVehiclename(), expectedVehicle.getOwner().getOwnername(), meta);
+	this.cut.add(expectedVehicle.getVehicleName(), expectedVehicle.getOwner().getEmail(), meta);
 	this.verifyAll();
     }
 

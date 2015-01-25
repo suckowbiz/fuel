@@ -36,11 +36,11 @@ public class VehicleLocator {
 	this.em = em;
     }
 
-    public Optional<Vehicle> getVehicle(final String ownername, final String vehiclename) {
+    public Optional<Vehicle> getVehicle(final String email, final String vehicleName) {
 	Vehicle result = null;
 	try {
-	    result = this.em.createNamedQuery(Vehicle.FIND_BY_OWNERS_AND_VEHICLES_NAME, Vehicle.class)
-		    .setParameter("ownerName", ownername).setParameter("vehicleName", vehiclename).getSingleResult();
+	    result = this.em.createNamedQuery(Vehicle.QueryByEmailAndVehicleName.NAME, Vehicle.class)
+		    .setParameter(Vehicle.QueryByEmailAndVehicleName.EMAIL, email).setParameter(Vehicle.QueryByEmailAndVehicleName.VEHICLE_NAME, vehicleName).getSingleResult();
 	} catch (final NoResultException e) {
 	    /* NOP */
 	}

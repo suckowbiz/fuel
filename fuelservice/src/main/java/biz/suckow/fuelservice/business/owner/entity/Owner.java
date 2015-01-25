@@ -20,49 +20,63 @@ package biz.suckow.fuelservice.business.owner.entity;
  * #L%
  */
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-
 import biz.suckow.fuelservice.business.app.entity.BaseEntity;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
+
+/**
+ * An owner is a representation of an application user that is uniquely identified by email.
+ */
 @Entity
-@NamedQuery(name = Owner.QueryByOwnernameIgnoreCase.NAME, query = "SELECT o FROM Owner o "
-	+ "WHERE LOWER(o.ownerName) = LOWER(:" + Owner.QueryByOwnernameIgnoreCase.OWNERNAME + ")")
+@NamedQuery(name = Owner.QueryByEmailCaseIgnore.NAME, query = "SELECT o FROM Owner o "
+        + "WHERE LOWER(o.email) = LOWER(:" + Owner.QueryByEmailCaseIgnore.EMAIL + ")")
 public class Owner extends BaseEntity {
     private static final long serialVersionUID = -2640121939957877859L;
 
-    public static final class QueryByOwnernameIgnoreCase {
-	public static final String NAME = "Owner.byOwnername";
-	public static final String OWNERNAME = "ownername";
+    public static final class QueryByEmailCaseIgnore {
+        public static final String NAME = "Owner.byEmail";
+        public static final String EMAIL = "ownername";
     }
 
     @OneToMany(mappedBy = "owner")
     private Set<Vehicle> vehicles;
 
+    @NotNull
     @Column(unique = true, nullable = false)
-    private String ownerName;
+    private String email;
+
+    @NotNull
+    @Column(nullable = false)
+    private String password;
 
     public Owner() {
-	this.vehicles = new HashSet<>();
+        this.vehicles = new HashSet<>();
     }
 
-    public String getOwnername() {
-	return this.ownerName;
+    public String getPassword() {
+        return password;
     }
 
-    public Owner setOwnername(final String ownername) {
-	this.ownerName = ownername;
-	return this;
+    public Owner setPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public String getEmail() {
+        return this.email;
+    }
+
+    public Owner setEmail(String value) {
+        this.email = value;
+        return this;
     }
 
     public Set<Vehicle> getVehicles() {
-	return this.vehicles;
+        return this.vehicles;
     }
 
 }

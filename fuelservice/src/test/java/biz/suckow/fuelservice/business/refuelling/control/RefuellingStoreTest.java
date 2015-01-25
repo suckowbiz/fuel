@@ -66,7 +66,7 @@ public class RefuellingStoreTest extends EasyMockSupport {
 	final Double expectedLitres = 42D;
 	final String expectedMemo = "duke";
 	final Date expectedDate = new Date();
-	final Vehicle expectedVehicle = new Vehicle().setOwner(new Owner().setOwnername("duke")).setVehicleName(
+	final Vehicle expectedVehicle = new Vehicle().setOwner(new Owner().setEmail("duke")).setVehicleName(
 		"duke-car");
 	final Refuelling expectedRefuelling = new Refuelling.Builder().eurosPerLitre(expectedEuros).litres(expectedLitres)
 		.memo(expectedMemo).dateRefueled(expectedDate).fillUp(false).vehicle(expectedVehicle).build();
@@ -88,7 +88,7 @@ public class RefuellingStoreTest extends EasyMockSupport {
 	final Double expectedKilometres = 120000D;
 	final String expectedMemo = "duke";
 	final Date expectedDate = new Date();
-	final Vehicle expectedVehicle = new Vehicle().setOwner(new Owner().setOwnername("duke")).setVehicleName(
+	final Vehicle expectedVehicle = new Vehicle().setOwner(new Owner().setEmail("duke")).setVehicleName(
 		"duke-car");
 
 	final Refuelling expectedRefuelling = new Refuelling.Builder().eurosPerLitre(expectedEuros).litres(expectedLitres)

@@ -31,7 +31,7 @@ public class TestHelper {
     protected static AtomicInteger uniqueness = new AtomicInteger(0);
 
     public static Owner createDuke() {
-	return new Owner().setOwnername("duke");
+	return new Owner().setEmail("duke@java.com").setPassword("42");
     }
 
     public static Vehicle createDukeCar(Owner owner) {
