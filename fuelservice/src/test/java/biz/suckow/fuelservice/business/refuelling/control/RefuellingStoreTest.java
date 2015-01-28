@@ -20,87 +20,84 @@ package biz.suckow.fuelservice.business.refuelling.control;
  * #L%
  */
 
-import static org.easymock.EasyMock.cmp;
-import static org.easymock.EasyMock.expectLastCall;
-
-import java.util.Comparator;
-import java.util.Date;
-import java.util.Objects;
-
-import javax.persistence.EntityManager;
-
+import biz.suckow.fuelservice.business.owner.entity.Owner;
 import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
+import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 import org.easymock.EasyMockSupport;
 import org.easymock.LogicalOperator;
 import org.easymock.Mock;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import biz.suckow.fuelservice.business.owner.entity.Owner;
-import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
+import javax.persistence.EntityManager;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.Objects;
+
+import static org.easymock.EasyMock.cmp;
+import static org.easymock.EasyMock.expectLastCall;
 
 public class RefuellingStoreTest extends EasyMockSupport {
+    private final Comparator<Refuelling> refuelingComparator = (o1, o2) -> {
+        if (Objects.equals(o1.getEurosPerLitre(), o2.getEurosPerLitre())
+                && Objects.equals(o1.getLitres(), o2.getLitres())
+                && Objects.equals(o1.getKilometre(), o2.getKilometre()) && Objects.equals(o1.getMemo(), o2.getMemo())
+                && Objects.equals(o1.getDateRefueled(), o2.getDateRefueled())
+                && Objects.equals(o1.getIsFillUp(), o2.getIsFillUp())
+                && Objects.equals(o1.getVehicle(), o2.getVehicle())) {
+            return 0;
+        }
+        return -1;
+    };
     @Mock
     private EntityManager emMock;
 
     @BeforeClass
     private void BeforeClass() {
-	injectMocks(this);
+        injectMocks(this);
     }
-
-    private final Comparator<Refuelling> refuelingComparator = (o1, o2) -> {
-	if (Objects.equals(o1.getEurosPerLitre(), o2.getEurosPerLitre())
-		&& Objects.equals(o1.getLitres(), o2.getLitres())
-		&& Objects.equals(o1.getKilometre(), o2.getKilometre()) && Objects.equals(o1.getMemo(), o2.getMemo())
-		&& Objects.equals(o1.getDateRefueled(), o2.getDateRefueled())
-		&& Objects.equals(o1.getIsFillUp(), o2.getIsFillUp())
-		&& Objects.equals(o1.getVehicle(), o2.getVehicle())) {
-	    return 0;
-	}
-	return -1;
-    };
 
     @Test
     public void storePartialRefuelingMustPersistExactly() {
-	final Double expectedEuros = 1.22D;
-	final Double expectedLitres = 42D;
-	final String expectedMemo = "duke";
-	final Date expectedDate = new Date();
-	final Vehicle expectedVehicle = new Vehicle().setOwner(new Owner().setEmail("duke")).setVehicleName(
-		"duke-car");
-	final Refuelling expectedRefuelling = new Refuelling.Builder().eurosPerLitre(expectedEuros).litres(expectedLitres)
-		.memo(expectedMemo).dateRefueled(expectedDate).fillUp(false).vehicle(expectedVehicle).build();
+        final Double expectedEuros = 1.22D;
+        final Double expectedLitres = 42D;
+        final String expectedMemo = "duke";
+        final Date expectedDate = new Date();
+        final Vehicle expectedVehicle = new Vehicle().setOwner(new Owner().setEmail("duke")).setVehicleName(
+                "duke-car");
+        final Refuelling expectedRefuelling = new Refuelling.Builder().eurosPerLitre(expectedEuros).litres(expectedLitres)
+                .memo(expectedMemo).dateRefueled(expectedDate).fillUp(false).vehicle(expectedVehicle).build();
 
-	this.resetAll();
-	this.emMock.persist(cmp(expectedRefuelling, this.refuelingComparator, LogicalOperator.EQUAL));
-	expectLastCall();
-	this.replayAll();
+        this.resetAll();
+        this.emMock.persist(cmp(expectedRefuelling, this.refuelingComparator, LogicalOperator.EQUAL));
+        expectLastCall();
+        this.replayAll();
 
-	new RefuellingStore(this.emMock).storePartialRefueling(expectedVehicle, expectedEuros, expectedLitres,
-		expectedMemo, expectedDate);
-	this.verifyAll();
+        new RefuellingStore(this.emMock).storePartialRefueling(expectedVehicle, expectedEuros, expectedLitres,
+                expectedMemo, expectedDate);
+        this.verifyAll();
     }
 
     @Test
     public void storeFillUpMustPersistExactly() {
-	final Double expectedEuros = 1.22D;
-	final Double expectedLitres = 42D;
-	final Double expectedKilometres = 120000D;
-	final String expectedMemo = "duke";
-	final Date expectedDate = new Date();
-	final Vehicle expectedVehicle = new Vehicle().setOwner(new Owner().setEmail("duke")).setVehicleName(
-		"duke-car");
+        final Double expectedEuros = 1.22D;
+        final Double expectedLitres = 42D;
+        final Double expectedKilometres = 120000D;
+        final String expectedMemo = "duke";
+        final Date expectedDate = new Date();
+        final Vehicle expectedVehicle = new Vehicle().setOwner(new Owner().setEmail("duke")).setVehicleName(
+                "duke-car");
 
-	final Refuelling expectedRefuelling = new Refuelling.Builder().eurosPerLitre(expectedEuros).litres(expectedLitres)
-		.kilometre(expectedKilometres).memo(expectedMemo).dateRefueled(expectedDate).fillUp(true)
-		.vehicle(expectedVehicle).build();
+        final Refuelling expectedRefuelling = new Refuelling.Builder().eurosPerLitre(expectedEuros).litres(expectedLitres)
+                .kilometre(expectedKilometres).memo(expectedMemo).dateRefueled(expectedDate).fillUp(true)
+                .vehicle(expectedVehicle).build();
 
-	this.resetAll();
-	this.emMock.persist(cmp(expectedRefuelling, this.refuelingComparator, LogicalOperator.EQUAL));
-	this.replayAll();
+        this.resetAll();
+        this.emMock.persist(cmp(expectedRefuelling, this.refuelingComparator, LogicalOperator.EQUAL));
+        this.replayAll();
 
-	new RefuellingStore(this.emMock).storeFillUp(expectedVehicle, expectedEuros, expectedLitres, expectedKilometres,
-		expectedMemo, expectedDate);
-	this.verifyAll();
+        new RefuellingStore(this.emMock).storeFillUp(expectedVehicle, expectedEuros, expectedLitres, expectedKilometres,
+                expectedMemo, expectedDate);
+        this.verifyAll();
     }
 }

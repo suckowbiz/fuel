@@ -33,7 +33,7 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import biz.suckow.fuelservice.business.app.entity.BaseEntity;
+import biz.suckow.fuelservice.business.BaseEntity;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 @Entity

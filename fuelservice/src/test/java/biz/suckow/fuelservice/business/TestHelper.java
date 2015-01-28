@@ -20,31 +20,31 @@ package biz.suckow.fuelservice.business;
  * #L%
  */
 
+import biz.suckow.fuelservice.business.owner.entity.Owner;
+import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
+
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import biz.suckow.fuelservice.business.owner.entity.Owner;
-import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 public class TestHelper {
     protected static AtomicInteger uniqueness = new AtomicInteger(0);
 
     public static Owner createDuke() {
-	return new Owner().setEmail("duke@java.com").setPassword("42");
+        return new Owner().setEmail("duke@java.com").setPassword("42");
     }
 
     public static Vehicle createDukeCar(Owner owner) {
-	return new Vehicle().setOwner(owner).setVehicleName("duke-car");
+        return new Vehicle().setOwner(owner).setVehicleName("duke-car");
     }
 
     public static String getUniqueness() {
-	return String.valueOf(uniqueness.getAndAdd(1));
+        return String.valueOf(uniqueness.getAndAdd(1));
     }
 
     public static Date getMonth(final int month) {
-	final Calendar calendar = Calendar.getInstance();
-	calendar.set(Calendar.MONTH, month);
-	return calendar.getTime();
+        final Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, month);
+        return calendar.getTime();
     }
 }

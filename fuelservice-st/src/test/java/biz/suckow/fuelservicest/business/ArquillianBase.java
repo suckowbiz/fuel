@@ -33,10 +33,10 @@ public abstract class ArquillianBase extends Arquillian {
     @Deployment
     @OverProtocol("Servlet 3.0")
     public static WebArchive deploy() {
-	final WebArchive war = ShrinkWrap.create(MavenImporter.class)
-		.loadPomFromFile("../fuelservice/pom.xml").importBuildOutput().as(WebArchive.class);
-	war.delete("META-INF/persistence.xml");
-	war.addAsResource("arquillian/persistence.xml", "META-INF/persistence.xml");
-	return war;
+        final WebArchive war = ShrinkWrap.create(MavenImporter.class)
+                .loadPomFromFile("../fuelservice/pom.xml").importBuildOutput().as(WebArchive.class);
+        war.delete("META-INF/persistence.xml");
+        war.addAsResource("arquillian/persistence.xml", "META-INF/persistence.xml");
+        return war;
     }
 }

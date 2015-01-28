@@ -20,19 +20,17 @@ package biz.suckow.fuelservice.business.refuelling.control;
  * #L%
  */
 
-import static org.easymock.EasyMock.cmp;
-
-import java.util.Comparator;
-
-import javax.enterprise.event.Event;
-
+import biz.suckow.fuelservice.business.consumption.entity.FillUpEvent;
 import org.easymock.EasyMockSupport;
 import org.easymock.LogicalOperator;
 import org.easymock.Mock;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import biz.suckow.fuelservice.business.consumption.entity.FillUpEvent;
+import javax.enterprise.event.Event;
+import java.util.Comparator;
+
+import static org.easymock.EasyMock.cmp;
 
 public class FillUpEventGunTest extends EasyMockSupport {
     @Mock
@@ -42,32 +40,32 @@ public class FillUpEventGunTest extends EasyMockSupport {
 
     @BeforeClass
     private void setUp() {
-	injectMocks(this);
-	this.cut = new FillUpEventGun(this.fillUpEventMock);
+        injectMocks(this);
+        this.cut = new FillUpEventGun(this.fillUpEventMock);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void fireMustFail() {
-	this.cut.fire(null);
+        this.cut.fire(null);
     }
 
     @Test
     public void fireMustTriggerEvent() {
-	FillUpEvent expectedEvent = new FillUpEvent().setRefuelingId(42L);
-	Comparator<FillUpEvent> eventComparator = new Comparator<FillUpEvent>() {
-	    @Override
-	    public int compare(FillUpEvent o1, FillUpEvent o2) {
-		if (o1.getRefuelingId().equals(o2.getRefuelingId()))
-		    return 0;
-		return 1;
-	    }
-	};
+        FillUpEvent expectedEvent = new FillUpEvent().setRefuelingId(42L);
+        Comparator<FillUpEvent> eventComparator = new Comparator<FillUpEvent>() {
+            @Override
+            public int compare(FillUpEvent o1, FillUpEvent o2) {
+                if (o1.getRefuelingId().equals(o2.getRefuelingId()))
+                    return 0;
+                return 1;
+            }
+        };
 
-	this.resetAll();
-	this.fillUpEventMock.fire(cmp(expectedEvent, eventComparator, LogicalOperator.EQUAL));
-	this.replayAll();
+        this.resetAll();
+        this.fillUpEventMock.fire(cmp(expectedEvent, eventComparator, LogicalOperator.EQUAL));
+        this.replayAll();
 
-	this.cut.fire(expectedEvent.getRefuelingId());
-	this.verifyAll();
+        this.cut.fire(expectedEvent.getRefuelingId());
+        this.verifyAll();
     }
 }

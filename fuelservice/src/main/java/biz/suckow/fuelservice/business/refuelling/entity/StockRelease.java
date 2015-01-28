@@ -28,7 +28,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import biz.suckow.fuelservice.business.app.entity.BaseEntity;
+import biz.suckow.fuelservice.business.BaseEntity;
 
 @Entity
 public class StockRelease extends BaseEntity {

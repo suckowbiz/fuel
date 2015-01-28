@@ -20,96 +20,95 @@ package biz.suckow.fuelservice.business.refuelling.control;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
+import biz.suckow.fuelservice.business.PersistenceSupport;
+import biz.suckow.fuelservice.business.TestHelper;
+import biz.suckow.fuelservice.business.owner.entity.Owner;
+import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
+import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
+import org.testng.annotations.Test;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
-import org.testng.annotations.Test;
-
-import biz.suckow.fuelservice.business.PersistenceSupport;
-import biz.suckow.fuelservice.business.TestHelper;
-import biz.suckow.fuelservice.business.owner.entity.Owner;
-import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class RefuellingLocatorIT extends PersistenceSupport {
     private final RefuellingLocator cut = new RefuellingLocator(em);
 
     @Test
     public void mustFetchPartialsBetween() {
-	final Owner duke = TestHelper.createDuke();
-	em.persist(duke);
+        final Owner duke = TestHelper.createDuke();
+        em.persist(duke);
 
-	final Vehicle dukeCar = TestHelper.createDukeCar(duke);
-	em.persist(dukeCar);
+        final Vehicle dukeCar = TestHelper.createDukeCar(duke);
+        em.persist(dukeCar);
 
-	final Vehicle oakCar = new Vehicle().setOwner(duke).setVehicleName("oak-car");
-	em.persist(oakCar);
+        final Vehicle oakCar = new Vehicle().setOwner(duke).setVehicleName("oak-car");
+        em.persist(oakCar);
 
-	final Date january = TestHelper.getMonth(0);
-	final Date february = TestHelper.getMonth(1);
-	final Date march = TestHelper.getMonth(2);
-	final Date april = TestHelper.getMonth(3);
+        final Date january = TestHelper.getMonth(0);
+        final Date february = TestHelper.getMonth(1);
+        final Date march = TestHelper.getMonth(2);
+        final Date april = TestHelper.getMonth(3);
 
-	final Refuelling partialFebruaryDuke = this.createRefueling(dukeCar, february, false);
-	em.persist(partialFebruaryDuke);
+        final Refuelling partialFebruaryDuke = this.createRefueling(dukeCar, february, false);
+        em.persist(partialFebruaryDuke);
 
-	final Refuelling fillUpFebruaryDuke = this.createRefueling(dukeCar, february, true);
-	em.persist(fillUpFebruaryDuke);
+        final Refuelling fillUpFebruaryDuke = this.createRefueling(dukeCar, february, true);
+        em.persist(fillUpFebruaryDuke);
 
-	final Refuelling partialFebruaryOak = this.createRefueling(oakCar, february, false);
-	em.persist(partialFebruaryOak);
+        final Refuelling partialFebruaryOak = this.createRefueling(oakCar, february, false);
+        em.persist(partialFebruaryOak);
 
-	final Refuelling partialMarchDuke = this.createRefueling(dukeCar, march, false);
-	em.persist(partialMarchDuke);
+        final Refuelling partialMarchDuke = this.createRefueling(dukeCar, march, false);
+        em.persist(partialMarchDuke);
 
-	final Refuelling fullMarch = this.createRefueling(dukeCar, march, true);
-	em.persist(fullMarch);
+        final Refuelling fullMarch = this.createRefueling(dukeCar, march, true);
+        em.persist(fullMarch);
 
-	final Refuelling partialAprilDuke = this.createRefueling(dukeCar, april, false);
-	em.persist(partialAprilDuke);
+        final Refuelling partialAprilDuke = this.createRefueling(dukeCar, april, false);
+        em.persist(partialAprilDuke);
 
-	final List<Refuelling> actualRefuellings = this.cut.getPartialRefuelingsBetween(january, april, dukeCar);
-	assertThat(actualRefuellings).hasSize(2).containsOnly(partialFebruaryDuke, partialMarchDuke);
+        final List<Refuelling> actualRefuellings = this.cut.getPartialRefuelingsBetween(january, april, dukeCar);
+        assertThat(actualRefuellings).hasSize(2).containsOnly(partialFebruaryDuke, partialMarchDuke);
     }
 
     @Test
     public void mustFetchLatestFillUpBefore() {
-	final Owner duke = TestHelper.createDuke();
-	em.persist(duke);
+        final Owner duke = TestHelper.createDuke();
+        em.persist(duke);
 
-	final Vehicle dukeCar = TestHelper.createDukeCar(duke);
-	em.persist(dukeCar);
+        final Vehicle dukeCar = TestHelper.createDukeCar(duke);
+        em.persist(dukeCar);
 
-	final Vehicle oakCar = new Vehicle().setOwner(duke).setVehicleName("oak-car");
-	em.persist(oakCar);
+        final Vehicle oakCar = new Vehicle().setOwner(duke).setVehicleName("oak-car");
+        em.persist(oakCar);
 
-	final Date january = TestHelper.getMonth(0);
-	final Date february = TestHelper.getMonth(1);
-	final Date march = TestHelper.getMonth(2);
-	final Date april = TestHelper.getMonth(3);
+        final Date january = TestHelper.getMonth(0);
+        final Date february = TestHelper.getMonth(1);
+        final Date march = TestHelper.getMonth(2);
+        final Date april = TestHelper.getMonth(3);
 
-	final Refuelling fillUpJanuary = this.createRefueling(dukeCar, january, true);
-	em.persist(fillUpJanuary);
+        final Refuelling fillUpJanuary = this.createRefueling(dukeCar, january, true);
+        em.persist(fillUpJanuary);
 
-	final Refuelling fillUpFebruary = this.createRefueling(dukeCar, february, true);
-	em.persist(fillUpFebruary);
+        final Refuelling fillUpFebruary = this.createRefueling(dukeCar, february, true);
+        em.persist(fillUpFebruary);
 
-	final Refuelling partialFillUpMarch = this.createRefueling(dukeCar, march, false);
-	em.persist(partialFillUpMarch);
+        final Refuelling partialFillUpMarch = this.createRefueling(dukeCar, march, false);
+        em.persist(partialFillUpMarch);
 
-	final Refuelling fillUpApril = this.createRefueling(dukeCar, april, true);
-	em.persist(fillUpApril);
+        final Refuelling fillUpApril = this.createRefueling(dukeCar, april, true);
+        em.persist(fillUpApril);
 
-	final Optional<Refuelling> actualResult = this.cut.getFillUpBefore(april);
-	assertThat(actualResult.isPresent());
-	assertThat(actualResult.get()).isSameAs(fillUpFebruary);
+        final Optional<Refuelling> actualResult = this.cut.getFillUpBefore(april);
+        assertThat(actualResult.isPresent());
+        assertThat(actualResult.get()).isSameAs(fillUpFebruary);
     }
 
     private Refuelling createRefueling(final Vehicle vehicle, final Date date, final Boolean isFillUp) {
-	return new Refuelling.Builder().dateRefueled(date).eurosPerLitre(1D).fillUp(isFillUp).kilometre(1D).litres(1D)
-		.vehicle(vehicle).build();
+        return new Refuelling.Builder().dateRefueled(date).eurosPerLitre(1D).fillUp(isFillUp).kilometre(1D).litres(1D)
+                .vehicle(vehicle).build();
     }
 }

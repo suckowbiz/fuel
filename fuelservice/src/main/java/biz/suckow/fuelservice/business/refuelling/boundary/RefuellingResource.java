@@ -20,6 +20,9 @@ package biz.suckow.fuelservice.business.refuelling.boundary;
  * #L%
  */
 
+import javax.annotation.security.DeclareRoles;
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -30,12 +33,14 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import biz.suckow.fuelservice.business.refuelling.control.RefuellingService;
 import biz.suckow.fuelservice.business.refuelling.entity.RefuellingMeta;
 
 // TODO test
+
+/**
+ * Resource must not be an EJB. This is to support RolesAllowed without enterprise security configuration required.
+ */
 @Path("refuellings")
-@Stateless
 public class RefuellingResource {
     // TODO verify: because once a full refuelling is added and the consumption
     // is calculated the addition of previous
@@ -43,11 +48,14 @@ public class RefuellingResource {
     @Inject
     private RefuellingService refuellingService;
 
+    @RolesAllowed("OWNER")
+   // @PermitAll
     @GET
     public Response index() {
 	return Response.ok().entity(this.getClass().getSimpleName()).build();
     }
 
+    @RolesAllowed("ARole")
     @POST
     @Path("add/{ownerName}/{vehicleName}")
     @Consumes(MediaType.APPLICATION_JSON)

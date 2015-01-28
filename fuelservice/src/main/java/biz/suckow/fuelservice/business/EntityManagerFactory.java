@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.app.control;
+package biz.suckow.fuelservice.business;
 
 /*
  * #%L

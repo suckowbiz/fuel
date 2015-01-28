@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.owner.control;
+package biz.suckow.fuelservice.business.owner.boundary;
 
 /*
  * #%L
@@ -20,14 +20,15 @@ package biz.suckow.fuelservice.business.owner.control;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.app.control.EntityManagerFactory;
 import biz.suckow.fuelservice.business.owner.controller.OwnerLocator;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.Optional;
 
+@Stateless
 public class OwnerService {
     @Inject
     private OwnerLocator locator;

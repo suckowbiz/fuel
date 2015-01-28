@@ -29,7 +29,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
-import biz.suckow.fuelservice.business.app.entity.BaseEntity;
+import biz.suckow.fuelservice.business.BaseEntity;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 @Entity

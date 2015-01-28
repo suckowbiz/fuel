@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.app.control;
+package biz.suckow.fuelservice.business;
 
 /*
  * #%L
@@ -20,14 +20,9 @@ package biz.suckow.fuelservice.business.app.control;
  * #L%
  */
 
-import java.util.logging.Logger;
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
 
-import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
-
-public class LoggerFactory {
-    @Produces
-    public Logger produceLogger(final InjectionPoint ip) {
-	return Logger.getLogger(ip.getMember().getDeclaringClass().getName());
-    }
+@ApplicationPath("resources")
+public class JaxRsActivator extends Application {
 }

@@ -20,34 +20,33 @@ package biz.suckow.fuelservice.business.refuelling.control;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.Optional;
-
-import org.testng.annotations.Test;
-
 import biz.suckow.fuelservice.business.PersistenceSupport;
 import biz.suckow.fuelservice.business.TestHelper;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
 import biz.suckow.fuelservice.business.refuelling.entity.FuelStock;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
+import org.testng.annotations.Test;
+
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FuelStockLocatorIT extends PersistenceSupport {
 
     @Test
     public void locateMustSucceed() {
-	final Owner duke = TestHelper.createDuke();
-	em.persist(duke);
+        final Owner duke = TestHelper.createDuke();
+        em.persist(duke);
 
-	final Vehicle dukeCar = TestHelper.createDukeCar(duke);
-	em.persist(dukeCar);
+        final Vehicle dukeCar = TestHelper.createDukeCar(duke);
+        em.persist(dukeCar);
 
-	final FuelStock stock = new FuelStock();
-	stock.setVehicle(dukeCar);
-	em.persist(stock);
+        final FuelStock stock = new FuelStock();
+        stock.setVehicle(dukeCar);
+        em.persist(stock);
 
-	final Optional<FuelStock> actualResult = new FuelStockLocator(em).locate(dukeCar);
-	assertThat(actualResult.isPresent());
-	assertThat(actualResult.get()).isSameAs(stock);
+        final Optional<FuelStock> actualResult = new FuelStockLocator(em).locate(dukeCar);
+        assertThat(actualResult.isPresent());
+        assertThat(actualResult.get()).isSameAs(stock);
     }
 }

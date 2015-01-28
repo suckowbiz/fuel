@@ -20,7 +20,7 @@ package biz.suckow.fuelservice.business.owner.entity;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.app.entity.BaseEntity;
+import biz.suckow.fuelservice.business.BaseEntity;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 import javax.persistence.*;
@@ -42,6 +42,10 @@ public class Owner extends BaseEntity {
         public static final String EMAIL = "ownername";
     }
 
+    @NotNull
+    @Column(nullable = false)
+    private Role role;
+
     @OneToMany(mappedBy = "owner")
     private Set<Vehicle> vehicles;
 
@@ -54,6 +58,7 @@ public class Owner extends BaseEntity {
     private String password;
 
     public Owner() {
+        this.role = Role.OWNER;
         this.vehicles = new HashSet<>();
     }
 
@@ -79,4 +84,12 @@ public class Owner extends BaseEntity {
         return this.vehicles;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public Owner setRole(Role role) {
+        this.role = role;
+        return this;
+    }
 }

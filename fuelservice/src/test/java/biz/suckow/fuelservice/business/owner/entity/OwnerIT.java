@@ -20,25 +20,23 @@ package biz.suckow.fuelservice.business.owner.entity;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import biz.suckow.fuelservice.business.PersistenceSupport;
+import biz.suckow.fuelservice.business.TestHelper;
 import org.hibernate.exception.ConstraintViolationException;
 import org.testng.annotations.Test;
 
-import biz.suckow.fuelservice.business.PersistenceSupport;
-import biz.suckow.fuelservice.business.TestHelper;
-import biz.suckow.fuelservice.business.owner.entity.Owner;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class OwnerIT extends PersistenceSupport {
     @Test
-    public void doublicateOwnernameMustNotPerist() {
-	Owner duke = TestHelper.createDuke();
-	em.persist(duke);
+    public void duplicateOwnerNameMustNotPersist() {
+        Owner duke = TestHelper.createDuke();
+        em.persist(duke);
 
-	try {
-	    em.persist(TestHelper.createDuke());
-	} catch (Throwable t) {
-	    assertThat(t).hasCauseInstanceOf(ConstraintViolationException.class);
-	}
+        try {
+            em.persist(TestHelper.createDuke());
+        } catch (Throwable t) {
+            assertThat(t).hasCauseInstanceOf(ConstraintViolationException.class);
+        }
     }
 }

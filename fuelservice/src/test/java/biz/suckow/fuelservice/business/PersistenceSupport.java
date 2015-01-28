@@ -20,13 +20,13 @@ package biz.suckow.fuelservice.business;
  * #L%
  */
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-
 import org.easymock.EasyMockSupport;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
 
 public abstract class PersistenceSupport extends EasyMockSupport {
     private static final String PERSISTENCE_UNIT_NAME = "integrationtest";
@@ -34,18 +34,18 @@ public abstract class PersistenceSupport extends EasyMockSupport {
     protected static EntityTransaction tx;
 
     static {
-	em = Persistence.createEntityManagerFactory(PersistenceSupport.PERSISTENCE_UNIT_NAME).createEntityManager();
-	tx = em.getTransaction();
+        em = Persistence.createEntityManagerFactory(PersistenceSupport.PERSISTENCE_UNIT_NAME).createEntityManager();
+        tx = em.getTransaction();
     }
 
     @BeforeMethod
     protected void startTransaction() {
-	tx.begin();
+        tx.begin();
     }
 
     @AfterMethod
     protected void rollbackTransaction() {
-	tx.rollback();
+        tx.rollback();
     }
 
 }

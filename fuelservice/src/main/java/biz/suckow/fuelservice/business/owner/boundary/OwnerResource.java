@@ -20,7 +20,6 @@ package biz.suckow.fuelservice.business.owner.boundary;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.owner.control.OwnerService;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
 
 import javax.ejb.Stateless;
@@ -33,7 +32,6 @@ import javax.ws.rs.core.Response;
 import java.util.Optional;
 
 @Path("owners")
-@Stateless
 public class OwnerResource {
     @Inject
     private OwnerService ownerService;
@@ -55,7 +53,7 @@ public class OwnerResource {
 
     @Path("token/{email}/{password}")
     public Response generateToken() {
-        // TODO: generate token
+
         return Response.ok().build();
     }
 }

@@ -30,7 +30,7 @@ import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import biz.suckow.fuelservice.business.app.entity.BaseEntity;
+import biz.suckow.fuelservice.business.BaseEntity;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
 
 @Entity

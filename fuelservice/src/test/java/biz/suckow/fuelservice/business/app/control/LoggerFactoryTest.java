@@ -20,88 +20,86 @@ package biz.suckow.fuelservice.business.app.control;
  * #L%
  */
 
-import static org.assertj.core.api.Assertions.assertThat;
+import biz.suckow.fuelservice.business.LoggerFactory;
+import org.testng.annotations.Test;
 
+import javax.enterprise.inject.spi.Annotated;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.InjectionPoint;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Member;
 import java.lang.reflect.Type;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import javax.enterprise.inject.spi.Annotated;
-import javax.enterprise.inject.spi.Bean;
-import javax.enterprise.inject.spi.InjectionPoint;
-
-import org.testng.annotations.Test;
-
-import biz.suckow.fuelservice.business.app.control.LoggerFactory;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class LoggerFactoryTest {
     @Test
     public void produceLoggerMustBeOfRightName() {
-	final Member member = new Member() {
+        final Member member = new Member() {
 
-	    @Override
-	    public boolean isSynthetic() {
-		return false;
-	    }
+            @Override
+            public boolean isSynthetic() {
+                return false;
+            }
 
-	    @Override
-	    public String getName() {
-		return null;
-	    }
+            @Override
+            public String getName() {
+                return null;
+            }
 
-	    @Override
-	    public int getModifiers() {
-		return 0;
-	    }
+            @Override
+            public int getModifiers() {
+                return 0;
+            }
 
-	    @Override
-	    public Class<?> getDeclaringClass() {
-		return this.getClass();
-	    }
-	};
-	InjectionPoint ip = new InjectionPoint() {
+            @Override
+            public Class<?> getDeclaringClass() {
+                return this.getClass();
+            }
+        };
+        InjectionPoint ip = new InjectionPoint() {
 
-	    @Override
-	    public boolean isTransient() {
-		return false;
-	    }
+            @Override
+            public boolean isTransient() {
+                return false;
+            }
 
-	    @Override
-	    public boolean isDelegate() {
-		return false;
-	    }
+            @Override
+            public boolean isDelegate() {
+                return false;
+            }
 
-	    @Override
-	    public Type getType() {
-		return null;
-	    }
+            @Override
+            public Type getType() {
+                return null;
+            }
 
-	    @Override
-	    public Set<Annotation> getQualifiers() {
-		return null;
-	    }
+            @Override
+            public Set<Annotation> getQualifiers() {
+                return null;
+            }
 
-	    @Override
-	    public Member getMember() {
-		return member;
-	    }
+            @Override
+            public Member getMember() {
+                return member;
+            }
 
-	    @Override
-	    public Bean<?> getBean() {
-		return null;
-	    }
+            @Override
+            public Bean<?> getBean() {
+                return null;
+            }
 
-	    @Override
-	    public Annotated getAnnotated() {
-		return null;
-	    }
-	};
+            @Override
+            public Annotated getAnnotated() {
+                return null;
+            }
+        };
 
-	Logger actualLogger = new LoggerFactory().produceLogger(ip);
-	assertThat(actualLogger.getName()).contains(this.getClass().getName()); // logger
-										// appends
-										// $1
+        Logger actualLogger = new LoggerFactory().produceLogger(ip);
+        assertThat(actualLogger.getName()).contains(this.getClass().getName()); // logger
+        // appends
+        // $1
     }
 }

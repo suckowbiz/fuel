@@ -29,16 +29,16 @@
         <url>http://www.suckow.biz</url>
     </organization>
 
-    <url>https://bitbucket.org/tsuckow/fuel</url>
+    <url>https://github.com/suckowbiz/fuel/issues</url>
     <issueManagement>
-        <url>https://bitbucket.org/tsuckow/fuel/issues</url>
-        <system>Bitbucket.org</system>
+        <url>https://github.com/suckowbiz/fuel/issues</url>
+        <system>Github.com</system>
     </issueManagement>
 
     <scm>
-        <url>https://bitbucket.org/tsuckow/fuel</url>
-        <connection>git@bitbucket.org:tsuckow/fuel.git</connection>
-        <developerConnection>git@bitbucket.org:tsuckow/fuel.git</developerConnection>
+        <url>https://github.com/suckowbiz/fuel</url>
+        <connection>git@github.com:suckowbiz/fuel.git</connection>
+        <developerConnection>git@github.com:suckowbiz/fuel.git</developerConnection>
         <tag>master</tag>
     </scm>
 
@@ -59,7 +59,7 @@
 
     <ciManagement>
         <system>Drone.io</system>
-        <url>https://drone.io/bitbucket.org/tsuckow/fuel</url>
+        <url>https://drone.io/github.com/suckowbiz/fuel</url>
     </ciManagement>
 
     <properties>
@@ -104,7 +104,7 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- Stack of Widfly conform hibernate versions. See https://github.com/wildfly/boms -->
+            <!-- Stack of Wildfly conform hibernate versions. See https://github.com/wildfly/boms -->
             <dependency>
                 <groupId>org.wildfly.bom</groupId>
                 <artifactId>jboss-javaee-7.0-with-all</artifactId>
