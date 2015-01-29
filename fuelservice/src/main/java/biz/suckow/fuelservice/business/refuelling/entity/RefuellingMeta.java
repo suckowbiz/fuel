@@ -20,9 +20,8 @@ package biz.suckow.fuelservice.business.refuelling.entity;
  * #L%
  */
 
-import java.util.Date;
-
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Date;
 
 @XmlRootElement
 public class RefuellingMeta {

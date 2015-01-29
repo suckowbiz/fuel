@@ -20,39 +20,38 @@ package biz.suckow.fuelservice.business.consumption.control;
  * #L%
  */
 
-import java.util.Date;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-
 import biz.suckow.fuelservice.business.refuelling.entity.FuelStock;
 import biz.suckow.fuelservice.business.refuelling.entity.StockAddition;
 import biz.suckow.fuelservice.business.refuelling.entity.StockRelease;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.List;
 
 public class FuelStockLocator {
     private final EntityManager em;
 
     @Inject
     public FuelStockLocator(final EntityManager em) {
-	this.em = em;
+        this.em = em;
     }
 
     public List<StockAddition> getAdditionsBetween(final Date left, final Date right, final Vehicle vehicle) {
-	final List<StockAddition> result = this.em
-		.createNamedQuery(FuelStock.FIND_ADDITIONS_BY_VEHICLE_AND_DATE_BETWEEN, StockAddition.class)
-		.setParameter("left", left).setParameter("right", right).setParameter("vehicle", vehicle)
-		.getResultList();
-	return result;
+        final List<StockAddition> result = this.em
+                .createNamedQuery(FuelStock.FIND_ADDITIONS_BY_VEHICLE_AND_DATE_BETWEEN, StockAddition.class)
+                .setParameter("left", left).setParameter("right", right).setParameter("vehicle", vehicle)
+                .getResultList();
+        return result;
     }
 
     public List<StockRelease> getReleasesBetween(final Date left, final Date right, final Vehicle vehicle) {
-	final List<StockRelease> result = this.em
-		.createNamedQuery(FuelStock.FIND_RELEASES_BY_VEHCILE_AND_DATE_BETWEEN, StockRelease.class)
-		.setParameter("left", left).setParameter("right", right).setParameter("vehicle", vehicle)
-		.getResultList();
-	return result;
+        final List<StockRelease> result = this.em
+                .createNamedQuery(FuelStock.FIND_RELEASES_BY_VEHCILE_AND_DATE_BETWEEN, StockRelease.class)
+                .setParameter("left", left).setParameter("right", right).setParameter("vehicle", vehicle)
+                .getResultList();
+        return result;
     }
 
 }

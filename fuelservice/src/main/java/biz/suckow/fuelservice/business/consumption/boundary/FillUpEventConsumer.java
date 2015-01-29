@@ -20,8 +20,10 @@ package biz.suckow.fuelservice.business.consumption.boundary;
  * #L%
  */
 
-import java.math.BigDecimal;
-import java.util.Optional;
+import biz.suckow.fuelservice.business.consumption.control.FuelConsumptionCalculator;
+import biz.suckow.fuelservice.business.consumption.entity.FillUpEvent;
+import biz.suckow.fuelservice.business.consumption.entity.FuelConsumption;
+import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 
 import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
@@ -29,11 +31,8 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.event.TransactionPhase;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-
-import biz.suckow.fuelservice.business.consumption.control.FuelConsumptionCalculator;
-import biz.suckow.fuelservice.business.consumption.entity.FillUpEvent;
-import biz.suckow.fuelservice.business.consumption.entity.FuelConsumption;
-import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
+import java.math.BigDecimal;
+import java.util.Optional;
 
 @Stateless
 public class FillUpEventConsumer {
@@ -45,14 +44,14 @@ public class FillUpEventConsumer {
 
     @Asynchronous
     public void consume(@Observes(during = TransactionPhase.AFTER_SUCCESS) final FillUpEvent event) {
-	final Refuelling refuelling = this.em.find(Refuelling.class, event.getRefuelingId());
-	final Optional<BigDecimal> possibleResult = this.maths.computeConsumptionFor(refuelling);
-	if (possibleResult.isPresent()) {
-	    final FuelConsumption consumption = new FuelConsumption();
-	    consumption.setDateComputed(refuelling.getDateRefueled());
-	    consumption.setLitresPerKilometre(possibleResult.get().doubleValue());
-	    consumption.setVehicle(refuelling.getVehicle());
-	    this.em.persist(consumption);
-	}
+        final Refuelling refuelling = this.em.find(Refuelling.class, event.getRefuelingId());
+        final Optional<BigDecimal> possibleResult = this.maths.computeConsumptionFor(refuelling);
+        if (possibleResult.isPresent()) {
+            final FuelConsumption consumption = new FuelConsumption();
+            consumption.setDateComputed(refuelling.getDateRefueled());
+            consumption.setLitresPerKilometre(possibleResult.get().doubleValue());
+            consumption.setVehicle(refuelling.getVehicle());
+            this.em.persist(consumption);
+        }
     }
 }

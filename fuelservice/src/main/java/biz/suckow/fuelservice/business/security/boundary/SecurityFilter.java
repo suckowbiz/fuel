@@ -28,9 +28,7 @@ import biz.suckow.fuelservice.business.security.control.TokenValidationException
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.ResourceInfo;
@@ -40,6 +38,8 @@ import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Provider
 public class SecurityFilter implements ContainerRequestFilter {
@@ -52,6 +52,9 @@ public class SecurityFilter implements ContainerRequestFilter {
     @Inject
     private OwnerService ownerService;
 
+    @Inject
+    private Logger logger;
+
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         Annotation[] declaredAnnotations = resourceInfo.getResourceMethod().getDeclaredAnnotations();
@@ -60,6 +63,7 @@ public class SecurityFilter implements ContainerRequestFilter {
             if (annotation instanceof RolesAllowed) {
                 String[] roles = ((RolesAllowed) annotation).value();
                 String token = containerRequestContext.getHeaderString("X-FUEL-TOKEN");
+                this.logger.log(Level.INFO, "token: {0}", token);
                 try {
                     boolean isAllowed = isAllowed(roles, token);
                     if (isAllowed == false) {
@@ -77,6 +81,7 @@ public class SecurityFilter implements ContainerRequestFilter {
             }
 
             if (abortReason.length() > 0) {
+                this.logger.log(Level.INFO, "Request aborted: {0}", abortReason);
                 containerRequestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
             }
             break;
@@ -85,7 +90,7 @@ public class SecurityFilter implements ContainerRequestFilter {
 
     private boolean isAllowed(String[] roles, String token) throws TokenValidationException {
         boolean result = false;
-        String principal = this.tokenService.getValidPrincipal(token);
+        String principal = this.tokenService.readPrincipal(token);
         Optional<Owner> possibleOwner = this.ownerService.locateByEmail(principal);
         if (possibleOwner.isPresent()) {
             Owner owner = possibleOwner.get();

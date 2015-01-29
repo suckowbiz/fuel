@@ -20,27 +20,36 @@ package biz.suckow.fuelservice.business.owner.boundary;
  * #L%
  */
 
+import biz.suckow.fuelservice.business.login.boundary.LoginService;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
+import biz.suckow.fuelservice.business.security.control.TokenService;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
 
-@Path("owners")
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+
+@Path(OwnerResource.PATH_BASE)
 public class OwnerResource {
+    public static final String PATH_BASE = "owners";
+
+    @Inject
+    private LoginService loginService;
+
+    @Inject
+    private TokenService tokenService;
+
     @Inject
     private OwnerService ownerService;
 
-    // TODO: test
-    @Produces(MediaType.APPLICATION_JSON)
+    @POST
+    @Produces(APPLICATION_JSON)
     @Path("register/{email}/{password}")
     public Response register(@PathParam("email") String email, @PathParam("password") String password) {
-        Response response = Response.ok().build();
+        Response response;
         Optional<Owner> possibleOwner = this.ownerService.locateByEmail(email);
         if (possibleOwner.isPresent()) {
             response = Response.status(Response.Status.FORBIDDEN).entity("Please use another email address.").build();
@@ -51,9 +60,16 @@ public class OwnerResource {
         return response;
     }
 
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
     @Path("token/{email}/{password}")
-    public Response generateToken() {
-
-        return Response.ok().build();
+    public Response generateToken(@PathParam("email") String email, @PathParam("password") String password) {
+        Response response = Response.status(Response.Status.UNAUTHORIZED).build();
+        Optional<Owner> possibleOwner = this.loginService.login(email, password);
+        if (possibleOwner.isPresent()) {
+            String token = tokenService.generateToken(possibleOwner.get().getEmail());
+            response = Response.ok(token).build();
+        }
+        return response;
     }
 }

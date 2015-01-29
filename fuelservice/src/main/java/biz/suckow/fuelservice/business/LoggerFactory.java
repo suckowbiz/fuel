@@ -20,14 +20,13 @@ package biz.suckow.fuelservice.business;
  * #L%
  */
 
-import java.util.logging.Logger;
-
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
+import java.util.logging.Logger;
 
 public class LoggerFactory {
     @Produces
     public Logger produceLogger(final InjectionPoint ip) {
-	return Logger.getLogger(ip.getMember().getDeclaringClass().getName());
+        return Logger.getLogger(ip.getMember().getDeclaringClass().getName());
     }
 }

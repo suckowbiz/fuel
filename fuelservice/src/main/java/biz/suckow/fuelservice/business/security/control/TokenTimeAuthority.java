@@ -1,7 +1,5 @@
 package biz.suckow.fuelservice.business.security.control;
 
-import javax.ejb.ApplicationException;
-
 /*
  * #%L
  * fuelservice
@@ -21,9 +19,18 @@ import javax.ejb.ApplicationException;
  * limitations under the License.
  * #L%
  */
-@ApplicationException(rollback = true)
-public class TokenValidationException extends Exception {
-    public TokenValidationException(String message) {
-        super(message);
+
+import biz.suckow.fuelservice.business.security.entity.TokenTime;
+
+import java.util.concurrent.TimeUnit;
+
+public class TokenTimeAuthority {
+    private static final long EXPIRATION_SECONDS = TimeUnit.MINUTES.toSeconds(15);
+
+    public TokenTime generate() {
+        long issuedAtSeconds = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+        long expiresAtSeconds = issuedAtSeconds + EXPIRATION_SECONDS;
+        TokenTime result = new TokenTime().setExpiresAt(expiresAtSeconds).setIssuedAt(issuedAtSeconds);
+        return result;
     }
 }

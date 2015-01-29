@@ -23,17 +23,19 @@ package biz.suckow.fuelservice.business.security.control;
 
 import biz.suckow.fuelservice.business.security.entity.TokenSecret;
 import biz.suckow.fuelservice.business.security.entity.TokenSignature;
+import biz.suckow.fuelservice.business.security.entity.TokenTime;
+import org.jboss.resteasy.jose.jwe.JWEBuilder;
 import org.jboss.resteasy.jose.jwe.JWEInput;
+import org.jboss.resteasy.jose.jws.JWSBuilder;
 import org.jboss.resteasy.jose.jws.JWSInput;
 import org.jboss.resteasy.jose.jws.crypto.RSAProvider;
 import org.jboss.resteasy.jwt.JsonSerialization;
 import org.jboss.resteasy.jwt.JsonWebToken;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,7 +49,10 @@ public class TokenService {
     @Inject
     private Logger logger;
 
-    public String getValidPrincipal(String token) throws TokenValidationException {
+    @Inject
+    private TokenTimeAuthority timeAuthority;
+
+    public String readPrincipal(String token) throws TokenValidationException {
         if (token == null || token.isEmpty()) {
             throw new TokenValidationException("Token must not be absent.");
         }
@@ -55,14 +60,32 @@ public class TokenService {
         JWSInput jws = new JWSInput(token, ResteasyProviderFactory.getInstance());
         this.verify(jws);
 
-        String jwe = (String) jws.readContent(String.class);
+        String jwe = jws.readContent(String.class);
         JsonWebToken jwt = this.decrypt(jwe);
         return jwt.getPrincipal();
     }
 
+    public String generateToken(String principal) {
+        TokenTime tokenTime = this.timeAuthority.generate();
+        JsonWebToken jwt = new JsonWebToken()
+                .issuer(principal)
+                .issuedAt(tokenTime.getIssuedAt())
+                .expiration(tokenTime.getExpiresAt())
+                .principal(principal);
+
+        String jwe = new JWEBuilder().content(jwt, MediaType.APPLICATION_JSON_TYPE).dir(this.secret.get());
+
+        String jws = new JWSBuilder()
+                .contentType(MediaType.TEXT_PLAIN_TYPE)
+                .content(jwe, MediaType.TEXT_PLAIN_TYPE)
+                .rsa512(this.signature.getPrivateKey());
+
+        return jws;
+    }
+
     private JsonWebToken decrypt(String jwe) throws TokenValidationException {
         byte[] content = new JWEInput(jwe).decrypt(this.secret.get()).getRawContent();
-        JsonWebToken jwt = null;
+        JsonWebToken jwt;
         try {
             jwt = JsonSerialization.fromBytes(JsonWebToken.class, content);
             if (jwt.isExpired()) {
@@ -79,8 +102,7 @@ public class TokenService {
         boolean result = RSAProvider.verify(jws, this.signature.getPublicKey());
         if (result) {
             return;
-        } else {
-            throw new TokenValidationException("Signature verification failed.");
         }
+        throw new TokenValidationException("Signature verification failed.");
     }
 }

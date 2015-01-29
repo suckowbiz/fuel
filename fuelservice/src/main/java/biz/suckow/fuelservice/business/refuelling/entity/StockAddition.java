@@ -20,7 +20,7 @@ package biz.suckow.fuelservice.business.refuelling.entity;
  * #L%
  */
 
-import java.util.Date;
+import biz.suckow.fuelservice.business.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,8 +29,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-
-import biz.suckow.fuelservice.business.BaseEntity;
+import java.util.Date;
 
 @Entity
 public class StockAddition extends BaseEntity {
@@ -52,30 +51,30 @@ public class StockAddition extends BaseEntity {
     private Double litres;
 
     public Date getDateRefueled() {
-	return this.dateAdded;
+        return this.dateAdded;
     }
 
     public StockAddition setDateAdded(final Date date) {
-	this.dateAdded = date;
-	return this;
+        this.dateAdded = date;
+        return this;
     }
 
     public Double getEurosPerLitre() {
-	return this.eurosPerLitre;
+        return this.eurosPerLitre;
     }
 
     public StockAddition setEurosPerLitre(final Double eurosPerLitre) {
-	this.eurosPerLitre = eurosPerLitre;
-	return this;
+        this.eurosPerLitre = eurosPerLitre;
+        return this;
     }
 
     public Double getLitres() {
-	return this.litres;
+        return this.litres;
     }
 
     public StockAddition setLitres(final Double litres) {
-	this.litres = litres;
-	return this;
+        this.litres = litres;
+        return this;
     }
 
 }

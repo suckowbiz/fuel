@@ -29,8 +29,8 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.archive.importer.MavenImporter;
 
 @ArquillianSuiteDeployment
-public abstract class ArquillianBase extends Arquillian {
-    @Deployment
+public abstract class ArquillianBlackBoxTest extends Arquillian {
+    @Deployment(testable = false)
     @OverProtocol("Servlet 3.0")
     public static WebArchive deploy() {
         final WebArchive war = ShrinkWrap.create(MavenImporter.class)

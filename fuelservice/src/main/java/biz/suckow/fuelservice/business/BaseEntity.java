@@ -20,18 +20,9 @@ package biz.suckow.fuelservice.business;
  * #L%
  */
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -49,24 +40,24 @@ public abstract class BaseEntity implements Serializable {
 
     @PrePersist
     private void addCtime() {
-	this.ctime = new Date();
+        this.ctime = new Date();
     }
 
     @PreUpdate
     private void updateUtime() {
-	this.utime = new Date();
+        this.utime = new Date();
     }
 
     public Date getCTime() {
-	return this.ctime;
+        return this.ctime;
     }
 
     public Date getUtime() {
-	return this.utime;
+        return this.utime;
     }
 
     public Long getId() {
-	return this.id;
+        return this.id;
     }
 
 }

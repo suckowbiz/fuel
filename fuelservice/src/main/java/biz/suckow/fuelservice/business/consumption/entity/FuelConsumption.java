@@ -20,17 +20,12 @@ package biz.suckow.fuelservice.business.consumption.entity;
  * #L%
  */
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-
 import biz.suckow.fuelservice.business.BaseEntity;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Entity
 public class FuelConsumption extends BaseEntity {
@@ -48,29 +43,29 @@ public class FuelConsumption extends BaseEntity {
     private Vehicle vehicle;
 
     public Date getDateComputed() {
-	return this.dateComputed;
-    }
-
-    public Vehicle getVehicle() {
-	return this.vehicle;
-    }
-
-    public FuelConsumption setVehicle(final Vehicle vehicle) {
-	this.vehicle = vehicle;
-	return this;
+        return this.dateComputed;
     }
 
     public FuelConsumption setDateComputed(final Date dateComputed) {
-	this.dateComputed = dateComputed;
-	return this;
+        this.dateComputed = dateComputed;
+        return this;
+    }
+
+    public Vehicle getVehicle() {
+        return this.vehicle;
+    }
+
+    public FuelConsumption setVehicle(final Vehicle vehicle) {
+        this.vehicle = vehicle;
+        return this;
     }
 
     public Double getLitresPerKilometre() {
-	return this.litresPerKilometre;
+        return this.litresPerKilometre;
     }
 
     public FuelConsumption setLitresPerKilometre(final Double litresPerKilometre) {
-	this.litresPerKilometre = litresPerKilometre;
-	return this;
+        this.litresPerKilometre = litresPerKilometre;
+        return this;
     }
 }

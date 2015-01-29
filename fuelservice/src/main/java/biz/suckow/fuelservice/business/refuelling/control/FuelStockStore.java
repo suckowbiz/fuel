@@ -20,16 +20,15 @@ package biz.suckow.fuelservice.business.refuelling.control;
  * #L%
  */
 
-import java.util.Date;
-import java.util.Optional;
-
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-
 import biz.suckow.fuelservice.business.refuelling.entity.FuelStock;
 import biz.suckow.fuelservice.business.refuelling.entity.StockAddition;
 import biz.suckow.fuelservice.business.refuelling.entity.StockRelease;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
+
+import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import java.util.Date;
+import java.util.Optional;
 
 public class FuelStockStore {
     private final EntityManager em;
@@ -37,31 +36,31 @@ public class FuelStockStore {
 
     @Inject
     public FuelStockStore(final EntityManager em, final FuelStockLocator stockLocator) {
-	this.em = em;
-	this.stockLocator = stockLocator;
+        this.em = em;
+        this.stockLocator = stockLocator;
     }
 
     public void addition(final Vehicle vehicle, final Date date, final Double euros, final Double litres) {
-	final StockAddition addition = new StockAddition().setDateAdded(date).setEurosPerLitre(euros).setLitres(litres);
-	this.em.persist(addition);
+        final StockAddition addition = new StockAddition().setDateAdded(date).setEurosPerLitre(euros).setLitres(litres);
+        this.em.persist(addition);
 
-	final FuelStock fuelStock = this.getFuelStockOf(vehicle);
-	fuelStock.add(addition);
-	this.em.merge(fuelStock);
+        final FuelStock fuelStock = this.getFuelStockOf(vehicle);
+        fuelStock.add(addition);
+        this.em.merge(fuelStock);
 
     }
 
     public void release(final Vehicle vehicle, final Date date, final Double litres) {
-	final StockRelease release = new StockRelease().setDateReleased(date).setLitres(litres);
-	this.em.persist(release);
+        final StockRelease release = new StockRelease().setDateReleased(date).setLitres(litres);
+        this.em.persist(release);
 
-	final FuelStock fuelStock = this.getFuelStockOf(vehicle);
-	fuelStock.release(release);
-	this.em.merge(fuelStock);
+        final FuelStock fuelStock = this.getFuelStockOf(vehicle);
+        fuelStock.release(release);
+        this.em.merge(fuelStock);
     }
 
     private FuelStock getFuelStockOf(final Vehicle vehicle) {
-	final Optional<FuelStock> possibleStock = this.stockLocator.locate(vehicle);
-	return possibleStock.orElseThrow(() -> new IllegalStateException("Missing fuel stock!"));
+        final Optional<FuelStock> possibleStock = this.stockLocator.locate(vehicle);
+        return possibleStock.orElseThrow(() -> new IllegalStateException("Missing fuel stock!"));
     }
 }

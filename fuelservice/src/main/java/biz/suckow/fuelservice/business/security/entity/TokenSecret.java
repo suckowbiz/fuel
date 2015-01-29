@@ -27,10 +27,9 @@ import javax.inject.Inject;
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 public class TokenSecret {
+    public static final int STRENGTH_BIT = 512;
     @Inject
     private TokenSignature signature;
-
-    public static final int STRENGTH_BIT = 512;
     private String secret;
 
     @PostConstruct

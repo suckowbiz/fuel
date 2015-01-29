@@ -20,30 +20,29 @@ package biz.suckow.fuelservice.business.refuelling.control;
  * #L%
  */
 
-import java.util.Optional;
+import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-
-import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
+import java.util.Optional;
 
 public class VehicleLocator {
     private final EntityManager em;
 
     @Inject
     public VehicleLocator(final EntityManager em) {
-	this.em = em;
+        this.em = em;
     }
 
     public Optional<Vehicle> getVehicle(final String email, final String vehicleName) {
-	Vehicle result = null;
-	try {
-	    result = this.em.createNamedQuery(Vehicle.QueryByEmailAndVehicleName.NAME, Vehicle.class)
-		    .setParameter(Vehicle.QueryByEmailAndVehicleName.EMAIL, email).setParameter(Vehicle.QueryByEmailAndVehicleName.VEHICLE_NAME, vehicleName).getSingleResult();
-	} catch (final NoResultException e) {
-	    /* NOP */
-	}
-	return Optional.ofNullable(result);
+        Vehicle result = null;
+        try {
+            result = this.em.createNamedQuery(Vehicle.QueryByEmailAndVehicleName.NAME, Vehicle.class)
+                    .setParameter(Vehicle.QueryByEmailAndVehicleName.EMAIL, email).setParameter(Vehicle.QueryByEmailAndVehicleName.VEHICLE_NAME, vehicleName).getSingleResult();
+        } catch (final NoResultException e) {
+        /* NOP */
+        }
+        return Optional.ofNullable(result);
     }
 }

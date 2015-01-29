@@ -20,56 +20,48 @@ package biz.suckow.fuelservice.business.vehicle.entity;
  * #L%
  */
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.NotEmpty;
-
 import biz.suckow.fuelservice.business.BaseEntity;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(uniqueConstraints = @UniqueConstraint(columnNames = { "vehicleName", "owner_id" }))
-@NamedQuery(name = Vehicle.QueryByEmailAndVehicleName.NAME, query = "SELECT v FROM Vehicle v WHERE v.vehicleName = :"+ Vehicle.QueryByEmailAndVehicleName.VEHICLE_NAME+" AND v.owner.email = :"+Vehicle.QueryByEmailAndVehicleName.EMAIL)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"vehicleName", "owner_id"}))
+@NamedQuery(name = Vehicle.QueryByEmailAndVehicleName.NAME, query = "SELECT v FROM Vehicle v WHERE v.vehicleName = :" + Vehicle.QueryByEmailAndVehicleName.VEHICLE_NAME + " AND v.owner.email = :" + Vehicle.QueryByEmailAndVehicleName.EMAIL)
 public class Vehicle extends BaseEntity {
     private static final long serialVersionUID = -5360751385120611439L;
-
-    public static final class QueryByEmailAndVehicleName {
-        public static final String NAME = "Vehicle.byEmailAndVehicleName";
-        public static final String EMAIL = "email";
-        public static final String VEHICLE_NAME = "vehicleName";
-    }
-
     // TODO name must be url safe
     @NotNull
     @NotEmpty
     @Column(nullable = false)
     private String vehicleName;
-
     @NotNull
     @ManyToOne(optional = false)
     private Owner owner;
 
-    public Vehicle setVehicleName(final String value) {
-	this.vehicleName = value;
-	return this;
-    }
-
     public Owner getOwner() {
-	return this.owner;
+        return this.owner;
     }
 
     public Vehicle setOwner(final Owner value) {
-	this.owner = value;
-	return this;
+        this.owner = value;
+        return this;
     }
 
     public String getVehicleName() {
-	return this.vehicleName;
+        return this.vehicleName;
+    }
+
+    public Vehicle setVehicleName(final String value) {
+        this.vehicleName = value;
+        return this;
+    }
+
+    public static final class QueryByEmailAndVehicleName {
+        public static final String NAME = "Vehicle.byEmailAndVehicleName";
+        public static final String EMAIL = "email";
+        public static final String VEHICLE_NAME = "vehicleName";
     }
 }

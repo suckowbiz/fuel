@@ -26,12 +26,12 @@ public class FillUpEvent {
     private Long refuelingId;
 
     public Long getRefuelingId() {
-	return this.refuelingId;
+        return this.refuelingId;
     }
 
     public FillUpEvent setRefuelingId(final Long refuelingId) {
-	Objects.requireNonNull(refuelingId, "Refuelling id must not be null.");
-	this.refuelingId = refuelingId;
-	return this;
+        Objects.requireNonNull(refuelingId, "Refuelling id must not be null.");
+        this.refuelingId = refuelingId;
+        return this;
     }
 }

@@ -30,6 +30,6 @@ public class EntityManagerFactory {
 
     @Produces
     public EntityManager produceEntityManager() {
-	return this.em;
+        return this.em;
     }
 }

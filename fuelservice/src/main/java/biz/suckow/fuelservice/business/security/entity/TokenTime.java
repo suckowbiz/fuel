@@ -1,15 +1,10 @@
-package biz.suckow.fuelservicest.business;
-
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-
+package biz.suckow.fuelservice.business.security.entity;
 
 /*
  * #%L
- * fuelservice-st
+ * fuelservice
  * %%
- * Copyright (C) 2014 Suckow.biz
+ * Copyright (C) 2014 - 2015 Suckow.biz
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,15 +20,25 @@ import javax.ws.rs.client.WebTarget;
  * #L%
  */
 
+public class TokenTime {
+    private long issuedAt;
+    private long expiresAt;
 
-public abstract class RESTSupport extends ArquillianBase {
-    protected Client client;
-    protected WebTarget target;
-
-    public void init(final String uri) {
-	this.client = ClientBuilder.newClient();
-	this.target = this.client.target(uri);
+    public long getExpiresAt() {
+        return expiresAt;
     }
 
-    public abstract void init();
+    public TokenTime setExpiresAt(long expiresAt) {
+        this.expiresAt = expiresAt;
+        return this;
+    }
+
+    public long getIssuedAt() {
+        return issuedAt;
+    }
+
+    public TokenTime setIssuedAt(long issuedAt) {
+        this.issuedAt = issuedAt;
+        return this;
+    }
 }

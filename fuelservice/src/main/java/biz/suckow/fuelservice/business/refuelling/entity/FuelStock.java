@@ -20,25 +20,20 @@ package biz.suckow.fuelservice.business.refuelling.entity;
  * #L%
  */
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.NotNull;
-
 import biz.suckow.fuelservice.business.BaseEntity;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @NamedQueries({
-    @NamedQuery(name = FuelStock.FIND_BY_VEHICLE, query = "SELECT fs FROM FuelStock fs WHERE fs.vehicle = :vehicle"),
-    @NamedQuery(name = FuelStock.FIND_ADDITIONS_BY_VEHICLE_AND_DATE_BETWEEN, query = "SELECT a FROM FuelStock fs JOIN fs.additions a JOIN fs.vehicle v WHERE v = :vehicle AND a.dateAdded > :left AND a.dateAdded < :right"),
-    @NamedQuery(name = FuelStock.FIND_RELEASES_BY_VEHCILE_AND_DATE_BETWEEN, query = "SELECT sr FROM FuelStock fs JOIN fs.releases sr WHERE fs.vehicle = :vehicle "
-	    + "AND sr.dateReleased > :left AND sr.dateReleased < :right") })
+        @NamedQuery(name = FuelStock.FIND_BY_VEHICLE, query = "SELECT fs FROM FuelStock fs WHERE fs.vehicle = :vehicle"),
+        @NamedQuery(name = FuelStock.FIND_ADDITIONS_BY_VEHICLE_AND_DATE_BETWEEN, query = "SELECT a FROM FuelStock fs JOIN fs.additions a JOIN fs.vehicle v WHERE v = :vehicle AND a.dateAdded > :left AND a.dateAdded < :right"),
+        @NamedQuery(name = FuelStock.FIND_RELEASES_BY_VEHCILE_AND_DATE_BETWEEN, query = "SELECT sr FROM FuelStock fs JOIN fs.releases sr WHERE fs.vehicle = :vehicle "
+                + "AND sr.dateReleased > :left AND sr.dateReleased < :right")})
 public class FuelStock extends BaseEntity {
     private static final long serialVersionUID = 2386152541780890783L;
 
@@ -58,35 +53,35 @@ public class FuelStock extends BaseEntity {
     private Vehicle vehicle;
 
     public FuelStock() {
-	this.releases = new HashSet<>();
-	this.additions = new HashSet<>();
+        this.releases = new HashSet<>();
+        this.additions = new HashSet<>();
     }
 
     public FuelStock add(final StockAddition addition) {
-	this.additions.add(addition);
-	return this;
+        this.additions.add(addition);
+        return this;
     }
 
     public Set<StockAddition> getAdditions() {
-	return this.additions;
+        return this.additions;
     }
 
     public Set<StockRelease> getReleases() {
-	return this.releases;
+        return this.releases;
     }
 
     public FuelStock release(final StockRelease release) {
-	this.releases.add(release);
-	return this;
+        this.releases.add(release);
+        return this;
     }
 
     public Vehicle getVehicle() {
-	return this.vehicle;
+        return this.vehicle;
     }
 
     public FuelStock setVehicle(final Vehicle vehicle) {
-	this.vehicle = vehicle;
-	return this;
+        this.vehicle = vehicle;
+        return this;
     }
 
 }

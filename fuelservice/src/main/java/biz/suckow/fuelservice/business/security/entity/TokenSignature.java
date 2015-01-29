@@ -24,8 +24,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.*;
 import javax.inject.Inject;
 import java.security.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,11 +36,11 @@ public class TokenSignature {
     private KeyPair keyPair;
 
     @PostConstruct
-    void init () {
+    void init() {
         try {
             this.keyPair = KeyPairGenerator.getInstance("RSA").generateKeyPair();
         } catch (NoSuchAlgorithmException e) {
-           this.logger.log(Level.SEVERE, "Failure to create RSA key pair: {0}", e.getMessage());
+            this.logger.log(Level.SEVERE, "Failure to create RSA key pair: {0}", e.getMessage());
         }
     }
 
