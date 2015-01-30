@@ -28,8 +28,14 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.archive.importer.MavenImporter;
 
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+
 @ArquillianSuiteDeployment
 public abstract class ArquillianBlackBoxTest extends Arquillian {
+    private final String BASE = "http://localhost:8080/fuelservice-0.0.1-SNAPSHOT/resources/";
+    protected final WebTarget target = ClientBuilder.newClient().target(BASE);
+
     @Deployment(testable = false)
     @OverProtocol("Servlet 3.0")
     public static WebArchive deploy() {

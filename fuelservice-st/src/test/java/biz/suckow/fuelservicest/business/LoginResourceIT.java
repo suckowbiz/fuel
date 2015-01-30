@@ -4,7 +4,7 @@ package biz.suckow.fuelservicest.business;
  * #%L
  * fuelservice-st
  * %%
- * Copyright (C) 2014 Suckow.biz
+ * Copyright (C) 2014 - 2015 Suckow.biz
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,27 +22,22 @@ package biz.suckow.fuelservicest.business;
 
 import org.testng.annotations.Test;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Test(groups = "owner")
-public class OwnerResourceIT  extends ArquillianBlackBoxTest {
+@Test(dependsOnGroups = "owner")
+public class LoginResourceIT extends ArquillianBlackBoxTest {
 
     @Test
-    public void testRegisterOwnerSucceeds() {
-        final Response response = this.target.path("owners/register/{email}/{password}")
+    public void testRequestTokenSucceeds() {
+        Response response = this.target.path("auths/token/{email}/{password}")
                 .resolveTemplate("email", "duke@java.net")
                 .resolveTemplate("password", "password")
-                .request()
-                .post(null);
+                .request(MediaType.TEXT_PLAIN)
+                .get();
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        response.close();
+        assertThat(response.readEntity(String.class)).isNotNull().isNotEmpty();
     }
-
 }
