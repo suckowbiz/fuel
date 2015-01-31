@@ -22,6 +22,7 @@ package biz.suckow.fuelservice.business.owner.boundary;
 
 import biz.suckow.fuelservice.business.owner.entity.Owner;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -32,6 +33,7 @@ import java.util.Optional;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
+@Stateless
 @Path(OwnerResource.PATH_BASE)
 public class OwnerResource {
     public static final String PATH_BASE = "owners";

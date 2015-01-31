@@ -23,10 +23,7 @@ package biz.suckow.fuelservice.business.owner.entity;
 import biz.suckow.fuelservice.business.BaseEntity;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
@@ -40,8 +37,8 @@ import java.util.Set;
 public class Owner extends BaseEntity {
     private static final long serialVersionUID = -2640121939957877859L;
     @NotNull
-    @Column(nullable = false)
-    private Role role;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<Role> roles;
     @OneToMany(mappedBy = "owner")
     private Set<Vehicle> vehicles;
     @NotNull
@@ -56,8 +53,12 @@ public class Owner extends BaseEntity {
     private String password;
 
     public Owner() {
-        this.role = Role.OWNER;
+        this.roles = new HashSet<>();
         this.vehicles = new HashSet<>();
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
     }
 
     public String getPassword() {
@@ -82,12 +83,22 @@ public class Owner extends BaseEntity {
         return this.vehicles;
     }
 
-    public Role getRole() {
-        return role;
+    public Owner setVehicles(Set<Vehicle> vehicles) {
+        this.vehicles = vehicles;
+        return this;
     }
 
-    public Owner setRole(Role role) {
-        this.role = role;
+    public Set<Role> getRoles() {
+        return this.roles;
+    }
+
+    public Owner setRoles(Set<Role> roles) {
+        this.roles = roles;
+        return this;
+    }
+
+    public Owner addRole(Role value) {
+        this.roles.add(value);
         return this;
     }
 

@@ -20,12 +20,15 @@ package biz.suckow.fuelservice.business.token.entity;
  * #L%
  */
 
-import javax.inject.Qualifier;
+import biz.suckow.fuelservice.business.owner.entity.Role;
+
+import javax.ws.rs.NameBinding;
 import java.lang.annotation.*;
 
 @Documented
-@Qualifier
-@Target({ElementType.FIELD, ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
-public @interface Authenticated {
+@NameBinding
+@Target({ElementType.TYPE, ElementType.METHOD})
+@Retention(value = RetentionPolicy.RUNTIME)
+public @interface TokenSecured {
+    Role[] value() default {Role.OWNER};
 }

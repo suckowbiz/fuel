@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.token.boundary;
+package biz.suckow.fuelservice.business.owner.boundary;
 
 /*
  * #%L
@@ -20,32 +20,32 @@ package biz.suckow.fuelservice.business.token.boundary;
  * #L%
  */
 
+import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
+import biz.suckow.fuelservice.business.token.boundary.TokenService;
 import biz.suckow.fuelservice.business.token.control.TokenValidationException;
-import biz.suckow.fuelservice.business.token.entity.Authenticated;
 
 import javax.enterprise.context.RequestScoped;
-import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
-import java.security.Principal;
+import java.util.Optional;
 
 @RequestScoped
-public class PrincipalProducer {
+public class OwnerPrincipalProducer {
     @Inject
     private HttpServletRequest request;
 
     @Inject
     private TokenService tokenService;
 
-    @Authenticated
+    @Inject
+    private OwnerService ownerService;
+
     @Produces
-    public Principal produce() throws TokenValidationException {
+    public Optional<OwnerPrincipal> produce() throws TokenValidationException {
         String token = request.getHeader(TokenService.TOKEN_HEADER_NAME);
-        final String principal = this.tokenService.readPrincipal(token);
-        Principal result = () -> principal;
+        final String email = this.tokenService.readPrincipal(token);
+        Optional<OwnerPrincipal> result = this.ownerService.createOwnerPrincipal(email);
         return result;
     }
 

@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.login.boundary;
+package biz.suckow.fuelservice.business.auth.boundary;
 
 /*
  * #%L
@@ -29,7 +29,7 @@ import javax.inject.Inject;
 import java.util.Optional;
 
 @Stateless
-public class LoginService {
+public class AuthService {
     @Inject
     private OwnerService ownerService;
 

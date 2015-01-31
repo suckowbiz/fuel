@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.login.boundary;
+package biz.suckow.fuelservice.business.auth.boundary;
 
 /*
  * #%L
@@ -23,6 +23,7 @@ package biz.suckow.fuelservice.business.login.boundary;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
 import biz.suckow.fuelservice.business.token.boundary.TokenService;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -32,10 +33,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
 
+@Stateless
 @Path("auths")
-public class LoginResource {
+public class AuthResource {
     @Inject
-    private LoginService loginService;
+    private AuthService loginService;
 
     @Inject
     private TokenService tokenService;
