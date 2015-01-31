@@ -1,10 +1,12 @@
-package biz.suckow.fuelservice.business;
+package biz.suckow.fuelservice.business.token.control;
+
+import javax.ejb.ApplicationException;
 
 /*
  * #%L
- * fuel
+ * fuelservice
  * %%
- * Copyright (C) 2014 Suckow.biz
+ * Copyright (C) 2014 - 2015 Suckow.biz
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +21,9 @@ package biz.suckow.fuelservice.business;
  * limitations under the License.
  * #L%
  */
-
-import javax.ws.rs.ApplicationPath;
-import javax.ws.rs.core.Application;
-
-@ApplicationPath("resources")
-public class JaxRsActivator extends Application {
+@ApplicationException(rollback = true)
+public class TokenValidationException extends Exception {
+    public TokenValidationException(String message) {
+        super(message);
+    }
 }

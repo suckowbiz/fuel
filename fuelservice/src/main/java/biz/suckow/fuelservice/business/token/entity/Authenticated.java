@@ -1,6 +1,4 @@
-package biz.suckow.fuelservice.business.security.control;
-
-import javax.ejb.ApplicationException;
+package biz.suckow.fuelservice.business.token.entity;
 
 /*
  * #%L
@@ -21,9 +19,13 @@ import javax.ejb.ApplicationException;
  * limitations under the License.
  * #L%
  */
-@ApplicationException(rollback = true)
-public class TokenValidationException extends Exception {
-    public TokenValidationException(String message) {
-        super(message);
-    }
+
+import javax.inject.Qualifier;
+import java.lang.annotation.*;
+
+@Documented
+@Qualifier
+@Target({ElementType.FIELD, ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface Authenticated {
 }

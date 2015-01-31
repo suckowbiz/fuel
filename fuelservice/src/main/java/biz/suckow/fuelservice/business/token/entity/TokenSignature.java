@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.security.entity;
+package biz.suckow.fuelservice.business.token.entity;
 
 /*
  * #%L
@@ -23,27 +23,35 @@ package biz.suckow.fuelservice.business.security.entity;
 import javax.annotation.PostConstruct;
 import javax.ejb.*;
 import javax.inject.Inject;
+import java.security.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Singleton
 @ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
-public class TokenSecret {
-    public static final int STRENGTH_BIT = 512;
+public class TokenSignature {
     @Inject
-    private TokenSignature signature;
-    private String secret;
+    private Logger logger;
+
+    private KeyPair keyPair;
 
     @PostConstruct
     void init() {
-        StringBuilder builder = new StringBuilder();
-        byte[] privateKey = signature.getPrivateKey().getEncoded();
-        for (int i = 0; i < this.STRENGTH_BIT; i++) {
-            builder.append(privateKey[i]);
+        try {
+            this.keyPair = KeyPairGenerator.getInstance("RSA").generateKeyPair();
+        } catch (NoSuchAlgorithmException e) {
+            this.logger.log(Level.SEVERE, "Failure to create RSA key pair: {0}", e.getMessage());
         }
-        this.secret = builder.toString();
     }
 
     @Lock(LockType.READ)
-    public String get() {
-        return this.secret;
+    public PublicKey getPublicKey() {
+        return this.keyPair.getPublic();
     }
+
+    @Lock(LockType.READ)
+    public PrivateKey getPrivateKey() {
+        return this.keyPair.getPrivate();
+    }
+
 }

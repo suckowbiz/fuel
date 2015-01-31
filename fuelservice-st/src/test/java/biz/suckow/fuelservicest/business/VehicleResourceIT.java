@@ -4,7 +4,7 @@ package biz.suckow.fuelservicest.business;
  * #%L
  * fuelservice-st
  * %%
- * Copyright (C) 2014 - 2015 Suckow.biz
+ * Copyright (C) 2014 Suckow.biz
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,17 +27,28 @@ import javax.ws.rs.core.Response;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Test(groups = "login", dependsOnGroups = "owner")
-public class LoginResourceIT extends ArquillianBlackBoxTest {
+@Test(dependsOnGroups = "login")
+public class VehicleResourceIT extends ArquillianBlackBoxTest {
 
     @Test
-    public void testRequestTokenSucceeds() {
+    public void testAddVehicleSucceeds() {
         Response response = this.target.path("auths/token/{email}/{password}")
                 .resolveTemplate("email", "duke@java.net")
                 .resolveTemplate("password", "password")
                 .request(MediaType.TEXT_PLAIN)
                 .get();
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        assertThat(response.readEntity(String.class)).isNotNull().isNotEmpty();
+        String token = response.readEntity(String.class);
+        response.close();
+
+        response = this.target.path("vehicles/{email}/{vehicle}")
+                .resolveTemplate("email", "duke@javfa.net")
+                .resolveTemplate("vehicle", "duke-car")
+                .request()
+                .header("X-FUEL-TOKEN", token)
+                .post(null);
+        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+        response.close();
     }
+
 }

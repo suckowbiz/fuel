@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.security.boundary;
+package biz.suckow.fuelservice.business;
 
 /*
  * #%L
@@ -22,12 +22,13 @@ package biz.suckow.fuelservice.business.security.boundary;
 
 import biz.suckow.fuelservice.business.owner.boundary.OwnerService;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
-import biz.suckow.fuelservice.business.security.control.TokenService;
-import biz.suckow.fuelservice.business.security.control.TokenValidationException;
+import biz.suckow.fuelservice.business.token.control.TokenValidationException;
+import biz.suckow.fuelservice.business.token.entity.Authenticated;
 
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.PermitAll;
 import javax.annotation.security.RolesAllowed;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -37,35 +38,36 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+import java.security.Principal;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Provider
-public class SecurityFilter implements ContainerRequestFilter {
+public class PermissionFilter implements ContainerRequestFilter {
     @Context
     private ResourceInfo resourceInfo;
 
     @Inject
-    private TokenService tokenService;
-
-    @Inject
     private OwnerService ownerService;
+
+    @Authenticated
+    @Inject
+    private Instance<Principal> principalProducer;
 
     @Inject
     private Logger logger;
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-        Annotation[] declaredAnnotations = resourceInfo.getResourceMethod().getDeclaredAnnotations();
-        for (Annotation annotation : declaredAnnotations) {
+        Annotation[] annotations = resourceInfo.getResourceMethod().getDeclaredAnnotations();
+        for (Annotation annotation : annotations) {
             String abortReason = "";
             if (annotation instanceof RolesAllowed) {
                 String[] roles = ((RolesAllowed) annotation).value();
-                String token = containerRequestContext.getHeaderString("X-FUEL-TOKEN");
-                this.logger.log(Level.INFO, "token: {0}", token);
                 try {
-                    boolean isAllowed = isAllowed(roles, token);
+                    boolean isAllowed = isAllowed(roles);
                     if (isAllowed == false) {
                         abortReason = "Forbidden.";
                     }
@@ -88,10 +90,11 @@ public class SecurityFilter implements ContainerRequestFilter {
         }
     }
 
-    private boolean isAllowed(String[] roles, String token) throws TokenValidationException {
+    // https://github.com/lefloh/jax-rs-context/blob/master/src/main/java/de/utkast/rest/context/provider/UserProvider.java
+    private boolean isAllowed(String[] roles) throws TokenValidationException {
         boolean result = false;
-        String principal = this.tokenService.readPrincipal(token);
-        Optional<Owner> possibleOwner = this.ownerService.locateByEmail(principal);
+        String email = this.principalProducer.get().getName();
+        Optional<Owner> possibleOwner = this.ownerService.locateByEmail(email);
         if (possibleOwner.isPresent()) {
             Owner owner = possibleOwner.get();
             for (String role : roles) {

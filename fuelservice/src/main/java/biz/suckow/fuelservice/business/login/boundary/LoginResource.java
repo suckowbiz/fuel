@@ -21,7 +21,7 @@ package biz.suckow.fuelservice.business.login.boundary;
  */
 
 import biz.suckow.fuelservice.business.owner.entity.Owner;
-import biz.suckow.fuelservice.business.security.control.TokenService;
+import biz.suckow.fuelservice.business.token.boundary.TokenService;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;

@@ -24,9 +24,9 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
 import java.util.logging.Logger;
 
-public class LoggerFactory {
+public class LoggerProducer {
     @Produces
-    public Logger produceLogger(final InjectionPoint ip) {
+    public Logger produce(final InjectionPoint ip) {
         return Logger.getLogger(ip.getMember().getDeclaringClass().getName());
     }
 }

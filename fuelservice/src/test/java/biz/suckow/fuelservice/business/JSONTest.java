@@ -46,7 +46,7 @@ public class JSONTest {
 
     @Test
     public void test() throws Exception {
-        // get rid of requiring jce files :)
+        // produce rid of requiring jce files :)
         try {
             java.lang.reflect.Field field = Class.forName("javax.crypto.JceSecurity").getDeclaredField("isRestricted");
             field.setAccessible(true);

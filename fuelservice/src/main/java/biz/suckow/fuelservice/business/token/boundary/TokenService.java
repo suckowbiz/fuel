@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.security.control;
+package biz.suckow.fuelservice.business.token.boundary;
 
 /*
  * #%L
@@ -21,9 +21,11 @@ package biz.suckow.fuelservice.business.security.control;
  */
 
 
-import biz.suckow.fuelservice.business.security.entity.TokenSecret;
-import biz.suckow.fuelservice.business.security.entity.TokenSignature;
-import biz.suckow.fuelservice.business.security.entity.TokenTime;
+import biz.suckow.fuelservice.business.token.control.TokenTimeAuthority;
+import biz.suckow.fuelservice.business.token.control.TokenValidationException;
+import biz.suckow.fuelservice.business.token.entity.TokenSecret;
+import biz.suckow.fuelservice.business.token.entity.TokenSignature;
+import biz.suckow.fuelservice.business.token.entity.TokenTime;
 import org.jboss.resteasy.jose.jwe.JWEBuilder;
 import org.jboss.resteasy.jose.jwe.JWEInput;
 import org.jboss.resteasy.jose.jws.JWSBuilder;
@@ -33,13 +35,17 @@ import org.jboss.resteasy.jwt.JsonSerialization;
 import org.jboss.resteasy.jwt.JsonWebToken;
 import org.jboss.resteasy.spi.ResteasyProviderFactory;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@Stateless
 public class TokenService {
+    public static final String TOKEN_HEADER_NAME = "X-FUEL-TOKEN";
+
     @Inject
     private TokenSignature signature;
 
@@ -76,7 +82,6 @@ public class TokenService {
         String jwe = new JWEBuilder().content(jwt, MediaType.APPLICATION_JSON_TYPE).dir(this.secret.get());
 
         String jws = new JWSBuilder()
-                .contentType(MediaType.TEXT_PLAIN_TYPE)
                 .content(jwe, MediaType.TEXT_PLAIN_TYPE)
                 .rsa512(this.signature.getPrivateKey());
 

@@ -31,7 +31,7 @@ import javax.ws.rs.core.Response;
 // TODO test
 
 /**
- * Resource must not be an EJB. This is to support RolesAllowed without enterprise security configuration required.
+ * Resource must not be an EJB. This is to support RolesAllowed without enterprise token configuration required.
  */
 @Path("refuellings")
 public class RefuellingResource {

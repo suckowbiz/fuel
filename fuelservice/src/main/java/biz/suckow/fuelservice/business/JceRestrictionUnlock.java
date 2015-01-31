@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 
 @Singleton
 @Startup
-public class JceSecurityUnlock {
+public class JceRestrictionUnlock {
     public static final String FIELD_NAME = "isRestricted";
     public static final String CLASS_NAME = "javax.crypto.JceSecurity";
 

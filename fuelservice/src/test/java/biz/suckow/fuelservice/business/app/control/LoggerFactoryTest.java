@@ -20,7 +20,7 @@ package biz.suckow.fuelservice.business.app.control;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.LoggerFactory;
+import biz.suckow.fuelservice.business.LoggerProducer;
 import org.testng.annotations.Test;
 
 import javax.enterprise.inject.spi.Annotated;
@@ -97,7 +97,7 @@ public class LoggerFactoryTest {
             }
         };
 
-        Logger actualLogger = new LoggerFactory().produceLogger(ip);
+        Logger actualLogger = new LoggerProducer().produce(ip);
         assertThat(actualLogger.getName()).contains(this.getClass().getName()); // logger
         // appends
         // $1

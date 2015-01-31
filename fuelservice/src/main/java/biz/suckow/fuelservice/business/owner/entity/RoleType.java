@@ -1,10 +1,10 @@
-package biz.suckow.fuelservice.business;
+package biz.suckow.fuelservice.business.owner.entity;
 
 /*
  * #%L
- * fuel
+ * fuelservice
  * %%
- * Copyright (C) 2014 Suckow.biz
+ * Copyright (C) 2014 - 2015 Suckow.biz
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,7 @@ package biz.suckow.fuelservice.business;
  * #L%
  */
 
-import javax.enterprise.inject.Produces;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
-public class EntityManagerFactory {
-    @PersistenceContext
-    private EntityManager em;
-
-    @Produces
-    public EntityManager produceEntityManager() {
-        return this.em;
-    }
+public class RoleType {
+    public static final String OWNER = "owner";
+    public static final String ADMIN = "admin";
 }

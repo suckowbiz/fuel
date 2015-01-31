@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.security.control;
+package biz.suckow.fuelservice.business.token.entity;
 
 /*
  * #%L
@@ -20,17 +20,25 @@ package biz.suckow.fuelservice.business.security.control;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.security.entity.TokenTime;
+public class TokenTime {
+    private long issuedAt;
+    private long expiresAt;
 
-import java.util.concurrent.TimeUnit;
+    public long getExpiresAt() {
+        return expiresAt;
+    }
 
-public class TokenTimeAuthority {
-    private static final long EXPIRATION_SECONDS = TimeUnit.MINUTES.toSeconds(15);
+    public TokenTime setExpiresAt(long expiresAt) {
+        this.expiresAt = expiresAt;
+        return this;
+    }
 
-    public TokenTime generate() {
-        long issuedAtSeconds = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-        long expiresAtSeconds = issuedAtSeconds + EXPIRATION_SECONDS;
-        TokenTime result = new TokenTime().setExpiresAt(expiresAtSeconds).setIssuedAt(issuedAtSeconds);
-        return result;
+    public long getIssuedAt() {
+        return issuedAt;
+    }
+
+    public TokenTime setIssuedAt(long issuedAt) {
+        this.issuedAt = issuedAt;
+        return this;
     }
 }
