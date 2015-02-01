@@ -31,6 +31,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -40,6 +41,9 @@ public class OwnerService {
 
     @Inject
     private EntityManager em;
+
+    @Inject
+    private Logger logger;
 
     public void create(String email, String password) {
         Owner owner = new Owner().addRole(Role.OWNER).setEmail(email).setPassword(password);
@@ -67,6 +71,8 @@ public class OwnerService {
                     .stream()
                     .collect(Collectors.toSet());
             result = new OwnerPrincipal().setName(email).setOwnedVehicleNames(vehicleNames).setRoles(roles);
+        } else {
+            throw new IllegalArgumentException("No sucher owner!");
         }
         return Optional.ofNullable(result);
     }

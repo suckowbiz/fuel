@@ -40,6 +40,7 @@ public class RefuellingService {
     private RefuellingStore refuellingStore;
     @Inject
     private FuelStockStore stockStore;
+    // TODO: instead move locator to vehicle control and have a vehicle service here
     @Inject
     private VehicleLocator locator;
 

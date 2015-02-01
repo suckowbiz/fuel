@@ -102,6 +102,11 @@ public class Owner extends BaseEntity {
         return this;
     }
 
+    public Owner addVehicle(Vehicle vehicle) {
+        this.vehicles.add(vehicle);
+        return this;
+    }
+
     public static final class QueryByEmailCaseIgnore {
         public static final String NAME = "Owner.byEmail";
         public static final String EMAIL = "ownername";

@@ -20,25 +20,49 @@ package biz.suckow.fuelservice.business.vehicle.boundary;
  * #L%
  */
 
+import biz.suckow.fuelservice.business.owner.boundary.OwnerService;
+import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
 import biz.suckow.fuelservice.business.owner.entity.Role;
 import biz.suckow.fuelservice.business.token.entity.TokenSecured;
 
+import javax.ejb.Stateless;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
+import java.util.Optional;
+import java.util.Set;
+import java.util.logging.Logger;
 
+@Stateless
 @Path("vehicles")
-public class VehicleResource {
+public class VehiclesResource {
+    @Inject
+    private Instance<Optional<OwnerPrincipal>> principalProducer;
+
     @Inject
     private VehicleService vehicleService;
 
+    @Inject
+    private Logger logger;
+
+    @Inject
+    private OwnerService ownerService;
+
     @TokenSecured(Role.OWNER)
     @POST
-    @Path("{email}/{vehicle}")
-    public Response addVehicle(@PathParam("email") String email, @PathParam("vehicle") String vehicleName) {
-        this.vehicleService.addVehicle(email, vehicleName);
+    @Path("{vehicle}")
+    public Response addVehicle(@PathParam("vehicle") String vehicleName) {
+        Set<String> ownedVehicles = this.principalProducer.get().get().getOwnedVehicleNames();
+        if (ownedVehicles.contains(vehicleName)) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("Failure to add duplicate vehicle.").build();
+        }
+
+        String ownerEmail = this.principalProducer.get().get().getName();
+        this.vehicleService.addVehicle(ownerEmail, vehicleName);
+
         return Response.ok().build();
     }
 }

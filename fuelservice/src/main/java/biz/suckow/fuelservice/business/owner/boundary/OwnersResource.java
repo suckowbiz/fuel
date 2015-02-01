@@ -24,6 +24,7 @@ import biz.suckow.fuelservice.business.owner.entity.Owner;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.validation.constraints.Size;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -34,8 +35,8 @@ import java.util.Optional;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Stateless
-@Path(OwnerResource.PATH_BASE)
-public class OwnerResource {
+@Path(OwnersResource.PATH_BASE)
+public class OwnersResource {
     public static final String PATH_BASE = "owners";
 
     @Inject
@@ -44,7 +45,7 @@ public class OwnerResource {
     @POST
     @Produces(APPLICATION_JSON)
     @Path("register/{email}/{password}")
-    public Response register(@PathParam("email") String email, @PathParam("password") String password) {
+    public Response register(@Size(min = 8, max = 64) @PathParam("email") String email, @Size(min = 6, max = 255) @PathParam("password") String password) {
         Response response;
         Optional<Owner> possibleOwner = this.ownerService.locateByEmail(email);
         if (possibleOwner.isPresent()) {

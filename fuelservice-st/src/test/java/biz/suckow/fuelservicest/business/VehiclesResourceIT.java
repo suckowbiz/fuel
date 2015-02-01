@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Test(dependsOnGroups = "login")
-public class VehicleResourceIT extends ArquillianBlackBoxTest {
+public class VehiclesResourceIT extends ArquillianBlackBoxTest {
 
     @Test
     public void testAddVehicleSucceeds() {
@@ -41,8 +41,7 @@ public class VehicleResourceIT extends ArquillianBlackBoxTest {
         String token = response.readEntity(String.class);
         response.close();
 
-        response = this.target.path("vehicles/{email}/{vehicle}")
-                .resolveTemplate("email", "duke@javfa.net")
+        response = this.target.path("vehicles/{vehicle}")
                 .resolveTemplate("vehicle", "duke-car")
                 .request()
                 .header("X-FUEL-TOKEN", token)
@@ -51,4 +50,23 @@ public class VehicleResourceIT extends ArquillianBlackBoxTest {
         response.close();
     }
 
+    @Test(dependsOnMethods = "testAddVehicleSucceeds")
+    public void testAddDuplicateVehicleFails() {
+        Response response = this.target.path("auths/token/{email}/{password}")
+                .resolveTemplate("email", "duke@java.net")
+                .resolveTemplate("password", "password")
+                .request(MediaType.TEXT_PLAIN)
+                .get();
+        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+        String token = response.readEntity(String.class);
+        response.close();
+
+        response = this.target.path("vehicles/{vehicle}")
+                .resolveTemplate("vehicle", "duke-car")
+                .request()
+                .header("X-FUEL-TOKEN", token)
+                .post(null);
+        assertThat(response.getStatus()).isEqualTo(Response.Status.BAD_REQUEST.getStatusCode());
+        response.close();
+    }
 }

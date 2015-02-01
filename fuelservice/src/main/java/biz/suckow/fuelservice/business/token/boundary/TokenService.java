@@ -53,9 +53,6 @@ public class TokenService {
     private TokenSecret secret;
 
     @Inject
-    private Logger logger;
-
-    @Inject
     private TokenTimeAuthority timeAuthority;
 
     public String readPrincipal(String token) throws TokenValidationException {
@@ -72,6 +69,10 @@ public class TokenService {
     }
 
     public String generateToken(String principal) {
+        if (principal == null || principal.isEmpty()) {
+            throw new IllegalArgumentException("Principal must not be null or empty.");
+        }
+
         TokenTime tokenTime = this.timeAuthority.generate();
         JsonWebToken jwt = new JsonWebToken()
                 .issuer(principal)
@@ -84,7 +85,6 @@ public class TokenService {
         String jws = new JWSBuilder()
                 .content(jwe, MediaType.TEXT_PLAIN_TYPE)
                 .rsa512(this.signature.getPrivateKey());
-
         return jws;
     }
 
@@ -97,7 +97,6 @@ public class TokenService {
                 throw new TokenValidationException("Token expired.");
             }
         } catch (IOException e) {
-            this.logger.log(Level.SEVERE, "Failure deserialize jwe: {0}", jwe);
             throw new TokenValidationException("Failure deserialize token.");
         }
         return jwt;

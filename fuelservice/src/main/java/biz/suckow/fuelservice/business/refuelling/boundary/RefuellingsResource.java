@@ -35,7 +35,7 @@ import javax.ws.rs.core.Response;
  */
 @Stateless
 @Path("refuellings")
-public class RefuellingResource {
+public class RefuellingsResource {
     // TODO verify: because once a full refuelling is added and the consumption
     // is calculated the addition of previous
     // partial refuelings cannot be accepted!

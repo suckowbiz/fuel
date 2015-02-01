@@ -35,7 +35,7 @@ import java.util.Optional;
 
 @Stateless
 @Path("auths")
-public class AuthResource {
+public class AuthsResource {
     @Inject
     private AuthService loginService;
 

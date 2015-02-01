@@ -20,6 +20,8 @@ package biz.suckow.fuelservicest.business;
  * #L%
  */
 
+import junit.framework.Assert;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.client.Client;
@@ -29,10 +31,13 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Test(groups = "owner")
-public class OwnerResourceIT  extends ArquillianBlackBoxTest {
+public class OwnersResourceIT extends ArquillianBlackBoxTest {
 
     @Test
     public void testRegisterOwnerSucceeds() {
@@ -43,6 +48,24 @@ public class OwnerResourceIT  extends ArquillianBlackBoxTest {
                 .post(null);
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         response.close();
+    }
+
+    @Test(dataProvider = "illegalOwnerData")
+    public void testRegisterOwnerFails(String email, String password) {
+        final Response response = this.target.path("owners/register/{email}/{password}")
+                .resolveTemplate("email", email)
+                .resolveTemplate("password", password)
+                .request()
+                .post(null);
+        assertThat(response.getStatus()).isEqualTo(Response.Status.BAD_REQUEST.getStatusCode());
+        response.close();
+    }
+
+    @DataProvider
+    private Object[][] illegalOwnerData() {
+        String password = "passwordwithatleast8chars";
+        String email = "emailaddress@thatmakes.sense";
+        return new Object[][]{ {"s", password}, {email, "p"}, {"d", "s"}};
     }
 
 }

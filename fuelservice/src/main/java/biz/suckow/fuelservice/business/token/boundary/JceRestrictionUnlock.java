@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business;
+package biz.suckow.fuelservice.business.token.boundary;
 
 /*
  * #%L
@@ -39,7 +39,7 @@ public class JceRestrictionUnlock {
     @PostConstruct
     void unlockJceStrengthRestriction() {
         try {
-            // remove restriction to be able to use jce for JOSE token
+            // remove restriction to be able to create JWE/JWT/JWS token
             java.lang.reflect.Field field = Class.forName(CLASS_NAME).getDeclaredField(FIELD_NAME);
             field.setAccessible(true);
             field.set(null, Boolean.FALSE);

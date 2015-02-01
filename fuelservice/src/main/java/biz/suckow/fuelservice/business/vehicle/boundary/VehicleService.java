@@ -30,6 +30,7 @@ import javax.persistence.EntityManager;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @Stateless
 public class VehicleService {
@@ -39,6 +40,9 @@ public class VehicleService {
 
     @Inject
     private EntityManager em;
+
+    @Inject
+    private Logger logger;
 
     public void persist(Vehicle vehicle) {
         this.em.persist(vehicle);
@@ -53,8 +57,15 @@ public class VehicleService {
     public void addVehicle(String email, String vehicleName) {
         Optional<Owner> possibleOwner = this.ownerService.locateByEmail(email);
         if (possibleOwner.isPresent()) {
-            Vehicle vehicle = new Vehicle().setOwner(possibleOwner.get()).setVehicleName(vehicleName);
+            Owner owner = possibleOwner.get();
+
+            Vehicle vehicle = new Vehicle().setOwner(owner).setVehicleName(vehicleName);
+            owner.addVehicle(vehicle);
             this.em.persist(vehicle);
+
+            this.em.merge(owner);
+        } else {
+            throw new IllegalArgumentException("NO SUCH OWNER.");
         }
     }
 }

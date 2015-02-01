@@ -28,7 +28,7 @@ import javax.ws.rs.core.Response;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Test(groups = "login", dependsOnGroups = "owner")
-public class LoginResourceIT extends ArquillianBlackBoxTest {
+public class AuthsResourceIT extends ArquillianBlackBoxTest {
 
     @Test
     public void testRequestTokenSucceeds() {
@@ -39,5 +39,17 @@ public class LoginResourceIT extends ArquillianBlackBoxTest {
                 .get();
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         assertThat(response.readEntity(String.class)).isNotNull().isNotEmpty();
+        response.close();
+    }
+
+    @Test
+    public void testRequestTokenFails() {
+        Response response = this.target.path("auths/token/{email}/{password}")
+                .resolveTemplate("email", "duke@java.net")
+                .resolveTemplate("password", "illegal")
+                .request(MediaType.TEXT_PLAIN)
+                .get();
+        assertThat(response.getStatus()).isEqualTo(Response.Status.UNAUTHORIZED.getStatusCode());
+        response.close();
     }
 }

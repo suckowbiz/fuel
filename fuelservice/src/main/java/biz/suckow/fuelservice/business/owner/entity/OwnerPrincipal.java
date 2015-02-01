@@ -21,13 +21,13 @@ package biz.suckow.fuelservice.business.owner.entity;
  */
 
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.Set;
 
 public class OwnerPrincipal implements Principal {
-
     private String name;
-    private Set<Role> roles;
-    private Set<String> ownedVehicleNames;
+    private Set<Role> roles = new HashSet<>();
+    private Set<String> ownedVehicleNames = new HashSet<>();
 
     public Set<Role> getRoles() {
         return roles;
@@ -49,7 +49,7 @@ public class OwnerPrincipal implements Principal {
 
     @Override
     public String getName() {
-        return null;
+        return this.name;
     }
 
     public OwnerPrincipal setName(String name) {
