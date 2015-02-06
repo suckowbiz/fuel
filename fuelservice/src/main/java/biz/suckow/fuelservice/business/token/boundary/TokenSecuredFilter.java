@@ -20,6 +20,7 @@ package biz.suckow.fuelservice.business.token.boundary;
  * #L%
  */
 
+import biz.suckow.fuelservice.business.owner.boundary.Authenticated;
 import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
 import biz.suckow.fuelservice.business.owner.entity.Role;
 import biz.suckow.fuelservice.business.token.entity.TokenSecured;
@@ -36,7 +37,6 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @TokenSecured
 @Provider
@@ -44,15 +44,16 @@ public class TokenSecuredFilter implements ContainerRequestFilter {
     @Context
     private ResourceInfo resourceInfo;
 
+    @Authenticated
     @Inject
-    private Instance<Optional<OwnerPrincipal>> principalProducer;
+    private Instance<OwnerPrincipal> principalFactory;
 
     // TODO add exception mapper for token validation exception to return 401/403
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         TokenSecured annotation = this.resourceInfo.getResourceMethod().getAnnotation(TokenSecured.class);
         List<Role> rolesAllowed = Arrays.asList(annotation.value());
-        boolean isNotInRole = Collections.disjoint(this.principalProducer.get().get().getRoles(), rolesAllowed);
+        boolean isNotInRole = Collections.disjoint(this.principalFactory.get().getRoles(), rolesAllowed);
         if (isNotInRole) {
             containerRequestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
         }

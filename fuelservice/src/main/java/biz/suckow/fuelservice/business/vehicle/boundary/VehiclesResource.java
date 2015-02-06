@@ -20,49 +20,59 @@ package biz.suckow.fuelservice.business.vehicle.boundary;
  * #L%
  */
 
+import biz.suckow.fuelservice.business.owner.boundary.Authenticated;
 import biz.suckow.fuelservice.business.owner.boundary.OwnerService;
 import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
-import biz.suckow.fuelservice.business.owner.entity.Role;
 import biz.suckow.fuelservice.business.token.entity.TokenSecured;
+import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
-import javax.ejb.Stateless;
-import javax.enterprise.inject.Instance;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.validation.constraints.Size;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Optional;
 import java.util.Set;
-import java.util.logging.Logger;
 
-@Stateless
+@RequestScoped
 @Path("vehicles")
 public class VehiclesResource {
+    @Authenticated
     @Inject
-    private Instance<Optional<OwnerPrincipal>> principalProducer;
+    private OwnerPrincipal principal;
 
     @Inject
     private VehicleService vehicleService;
 
     @Inject
-    private Logger logger;
-
-    @Inject
     private OwnerService ownerService;
 
-    @TokenSecured(Role.OWNER)
+    @TokenSecured
     @POST
     @Path("{vehicle}")
-    public Response addVehicle(@PathParam("vehicle") String vehicleName) {
-        Set<String> ownedVehicles = this.principalProducer.get().get().getOwnedVehicleNames();
+    public Response addVehicle(@Size(min = 3, max = 64) @PathParam("vehicle") String vehicleName) {
+        Set<String> ownedVehicles = this.principal.getOwnedVehicleNames();
         if (ownedVehicles.contains(vehicleName)) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Failure to add duplicate vehicle.").build();
         }
 
-        String ownerEmail = this.principalProducer.get().get().getName();
+        String ownerEmail = this.principal.getName();
         this.vehicleService.addVehicle(ownerEmail, vehicleName);
 
         return Response.ok().build();
+    }
+
+    @TokenSecured
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response listAll() {
+        Set<Vehicle> vehicles = this.vehicleService.getOwned(this.principal.getName());
+        JsonArrayBuilder builder = Json.createArrayBuilder();
+        for (Vehicle vehicle : vehicles) {
+            builder.add(vehicle.getVehicleName());
+        }
+        return Response.ok().entity(builder.build()).build();
     }
 }

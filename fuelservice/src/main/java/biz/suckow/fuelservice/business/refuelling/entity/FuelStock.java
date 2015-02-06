@@ -37,7 +37,7 @@ import java.util.Set;
 public class FuelStock extends BaseEntity {
     private static final long serialVersionUID = 2386152541780890783L;
 
-    private static final String PREFIX = "biz.suckow.fuelservice.business.refuelling.entity";
+    private static final String PREFIX = "biz.suckow.fuelservice.business.refuelling.entity.";
     public static final String FIND_BY_VEHICLE = FuelStock.PREFIX + "findByVehicle";
     public static final String FIND_ADDITIONS_BY_VEHICLE_AND_DATE_BETWEEN = FuelStock.PREFIX + "findAdditionsBetween";
     public static final String FIND_RELEASES_BY_VEHCILE_AND_DATE_BETWEEN = FuelStock.PREFIX + "findReleasesBetween";

@@ -22,12 +22,12 @@ package biz.suckow.fuelservice.business.vehicle.boundary;
 
 import biz.suckow.fuelservice.business.owner.boundary.OwnerService;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
+import biz.suckow.fuelservice.business.vehicle.control.VehicleLocator;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -39,6 +39,9 @@ public class VehicleService {
     private OwnerService ownerService;
 
     @Inject
+    private VehicleLocator locator;
+
+    @Inject
     private EntityManager em;
 
     @Inject
@@ -48,10 +51,12 @@ public class VehicleService {
         this.em.persist(vehicle);
     }
 
-    public Set<String> getNamesOfOwnedVehicles(String name) {
-        Set<String> result = new HashSet<>();
-        result.add("duke-car");
-        return result;
+    public Optional<Vehicle> lookUp(String email, String vehicle) {
+        return this.locator.getVehicle(email, vehicle);
+    }
+
+    public Set<Vehicle> getOwned(String email) {
+        return this.locator.getVehicles(email);
     }
 
     public void addVehicle(String email, String vehicleName) {

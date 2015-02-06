@@ -29,23 +29,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Test(groups = "login", dependsOnGroups = "owner")
 public class AuthsResourceIT extends ArquillianBlackBoxTest {
+    static String token;
 
     @Test
     public void testRequestTokenSucceeds() {
         Response response = this.target.path("auths/token/{email}/{password}")
-                .resolveTemplate("email", "duke@java.net")
+                .resolveTemplate("email", OwnersResourceIT.OWNER_EMAIL)
                 .resolveTemplate("password", "password")
                 .request(MediaType.TEXT_PLAIN)
                 .get();
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        assertThat(response.readEntity(String.class)).isNotNull().isNotEmpty();
+
+        token = response.readEntity(String.class);
+        assertThat(token).isNotNull().isNotEmpty();
         response.close();
     }
 
     @Test
     public void testRequestTokenFails() {
         Response response = this.target.path("auths/token/{email}/{password}")
-                .resolveTemplate("email", "duke@java.net")
+                .resolveTemplate("email", OwnersResourceIT.OWNER_EMAIL)
                 .resolveTemplate("password", "illegal")
                 .request(MediaType.TEXT_PLAIN)
                 .get();

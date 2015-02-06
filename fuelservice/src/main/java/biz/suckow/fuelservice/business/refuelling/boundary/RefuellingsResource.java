@@ -20,13 +20,18 @@ package biz.suckow.fuelservice.business.refuelling.boundary;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.owner.entity.Role;
+import biz.suckow.fuelservice.business.owner.boundary.Authenticated;
+import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
 import biz.suckow.fuelservice.business.refuelling.entity.RefuellingMeta;
 import biz.suckow.fuelservice.business.token.entity.TokenSecured;
+import biz.suckow.fuelservice.business.vehicle.boundary.OwnedVehicle;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -42,18 +47,16 @@ public class RefuellingsResource {
     @Inject
     private RefuellingService refuellingService;
 
-    @TokenSecured(Role.OWNER)
-    @GET
-    public Response index() {
-        return Response.ok().entity(this.getClass().getSimpleName()).build();
-    }
+    @Authenticated
+    @Inject
+    private OwnerPrincipal principal;
 
+    @TokenSecured
     @POST
-    @Path("add/{ownerName}/{vehicleName}")
+    @Path("{vehicleName}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response refuel(@PathParam("ownerName") final String ownerName,
-                           @PathParam("vehicleName") final String vehicleName, final RefuellingMeta meta) {
-        this.refuellingService.add(vehicleName, ownerName, meta);
+    public Response refuel(@OwnedVehicle @PathParam("vehicleName") final String vehicleName, final RefuellingMeta meta) {
+        this.refuellingService.add(vehicleName, this.principal.getName(), meta);
         return Response.ok().build();
     }
 }

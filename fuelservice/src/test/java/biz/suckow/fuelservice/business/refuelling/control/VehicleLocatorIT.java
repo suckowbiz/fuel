@@ -23,6 +23,7 @@ package biz.suckow.fuelservice.business.refuelling.control;
 import biz.suckow.fuelservice.business.PersistenceSupport;
 import biz.suckow.fuelservice.business.TestHelper;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
+import biz.suckow.fuelservice.business.vehicle.control.VehicleLocator;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 import org.testng.annotations.Test;
 

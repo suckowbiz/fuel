@@ -39,8 +39,6 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @Stateless
 public class TokenService {

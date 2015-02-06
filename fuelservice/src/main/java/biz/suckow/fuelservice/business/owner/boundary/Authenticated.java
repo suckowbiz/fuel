@@ -1,10 +1,10 @@
-package biz.suckow.fuelservice.business;
+package biz.suckow.fuelservice.business.owner.boundary;
 
 /*
  * #%L
- * fuel
+ * fuelservice
  * %%
- * Copyright (C) 2014 Suckow.biz
+ * Copyright (C) 2014 - 2015 Suckow.biz
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,22 +20,14 @@ package biz.suckow.fuelservice.business;
  * #L%
  */
 
-import javax.enterprise.inject.Disposes;
-import javax.enterprise.inject.Produces;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.inject.Qualifier;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class EMProducer {
-    @PersistenceContext
-    private EntityManager em;
-
-    @Produces
-    public EntityManager produce() {
-        return this.em;
-    }
-
-    public void close(@Disposes EntityManager em) {
-        // The disposer method is called automatically when the context ends.
-        em.close();
-    }
+@Qualifier
+@Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD})
+@Retention(value = RetentionPolicy.RUNTIME)
+public @interface Authenticated {
 }

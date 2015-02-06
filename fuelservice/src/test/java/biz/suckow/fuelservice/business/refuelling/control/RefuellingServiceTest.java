@@ -24,6 +24,7 @@ import biz.suckow.fuelservice.business.TestHelper;
 import biz.suckow.fuelservice.business.refuelling.boundary.RefuellingService;
 import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 import biz.suckow.fuelservice.business.refuelling.entity.RefuellingMeta;
+import biz.suckow.fuelservice.business.vehicle.boundary.VehicleService;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 import org.easymock.EasyMockSupport;
 import org.easymock.Mock;
@@ -47,7 +48,7 @@ public class RefuellingServiceTest extends EasyMockSupport {
     private FillUpEventGun gun;
 
     @Mock
-    private VehicleLocator locator;
+    private VehicleService vehicleService;
 
     @TestSubject
     private RefuellingService cut = new RefuellingService();
@@ -60,7 +61,7 @@ public class RefuellingServiceTest extends EasyMockSupport {
     @Test(expectedExceptions = IllegalStateException.class)
     public void addMustFail() {
         this.resetAll();
-        expect(this.locator.getVehicle(anyString(), anyString())).andStubReturn(Optional.<Vehicle>empty());
+        expect(this.vehicleService.lookUp(anyString(), anyString())).andStubReturn(Optional.<Vehicle>empty());
         this.replayAll();
         this.cut.add(null, null, null);
     }
@@ -79,7 +80,7 @@ public class RefuellingServiceTest extends EasyMockSupport {
         meta.memo = "full-with-stock-refuelling";
 
         this.resetAll();
-        expect(this.locator.getVehicle(expectedVehicle.getOwner().getEmail(), expectedVehicle.getVehicleName()))
+        expect(this.vehicleService.lookUp(expectedVehicle.getOwner().getEmail(), expectedVehicle.getVehicleName()))
                 .andStubReturn(Optional.ofNullable(expectedVehicle));
         this.stockStore.addition(expectedVehicle, meta.date, meta.eurosPerLitre, meta.litresToStock);
         expectLastCall();
@@ -106,7 +107,7 @@ public class RefuellingServiceTest extends EasyMockSupport {
         meta.memo = "partial-refuelling";
 
         this.resetAll();
-        expect(this.locator.getVehicle(expectedVehicle.getOwner().getEmail(), expectedVehicle.getVehicleName()))
+        expect(this.vehicleService.lookUp(expectedVehicle.getOwner().getEmail(), expectedVehicle.getVehicleName()))
                 .andStubReturn(Optional.ofNullable(expectedVehicle));
         this.refuellingStore.storePartialRefueling(expectedVehicle, meta.eurosPerLitre, meta.litresToTank,
                 meta.memo, meta.date);

@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.token.entity;
+package biz.suckow.fuelservice.business.vehicle.boundary;
 
 /*
  * #%L
@@ -20,15 +20,21 @@ package biz.suckow.fuelservice.business.token.entity;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.owner.entity.Role;
+import biz.suckow.fuelservice.business.vehicle.control.OwnedVehicleValidator;
 
-import javax.ws.rs.NameBinding;
+import javax.validation.Constraint;
+import javax.validation.Payload;
 import java.lang.annotation.*;
 
+@Target({ElementType.PARAMETER})
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = OwnedVehicleValidator.class)
 @Documented
-@NameBinding
-@Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD})
-@Retention(value = RetentionPolicy.RUNTIME)
-public @interface TokenSecured {
-    Role[] value() default {Role.OWNER};
+public @interface OwnedVehicle {
+
+    String message() default "Vehicle must be owned.";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
 }

@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.refuelling.control;
+package biz.suckow.fuelservice.business.vehicle.control;
 
 /*
  * #%L
@@ -25,7 +25,7 @@ import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import java.util.Optional;
+import java.util.*;
 
 public class VehicleLocator {
     private final EntityManager em;
@@ -39,10 +39,24 @@ public class VehicleLocator {
         Vehicle result = null;
         try {
             result = this.em.createNamedQuery(Vehicle.QueryByEmailAndVehicleName.NAME, Vehicle.class)
-                    .setParameter(Vehicle.QueryByEmailAndVehicleName.EMAIL, email).setParameter(Vehicle.QueryByEmailAndVehicleName.VEHICLE_NAME, vehicleName).getSingleResult();
+                    .setParameter(Vehicle.QueryByEmailAndVehicleName.EMAIL, email)
+                    .setParameter(Vehicle.QueryByEmailAndVehicleName.VEHICLE_NAME, vehicleName)
+                    .getSingleResult();
         } catch (final NoResultException e) {
-        /* NOP */
+            /* NOP */
         }
         return Optional.ofNullable(result);
+    }
+
+    public Set<Vehicle> getVehicles(final String email) {
+        List<Vehicle> result = new ArrayList<>();
+        try {
+            result = this.em.createNamedQuery(Vehicle.QueryByEmail.NAME, Vehicle.class)
+                    .setParameter(Vehicle.QueryByEmail.EMAIL, email)
+                    .getResultList();
+        } catch (final NoResultException e) {
+            /* NOP */
+        }
+        return new HashSet<>(result);
     }
 }

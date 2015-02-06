@@ -29,7 +29,11 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"vehicleName", "owner_id"}))
-@NamedQuery(name = Vehicle.QueryByEmailAndVehicleName.NAME, query = "SELECT v FROM Vehicle v WHERE v.vehicleName = :" + Vehicle.QueryByEmailAndVehicleName.VEHICLE_NAME + " AND v.owner.email = :" + Vehicle.QueryByEmailAndVehicleName.EMAIL)
+@NamedQueries({@NamedQuery(name = Vehicle.QueryByEmailAndVehicleName.NAME, query = "SELECT v FROM Vehicle v "
+        + " WHERE v.vehicleName = :" + Vehicle.QueryByEmailAndVehicleName.VEHICLE_NAME
+        + " AND v.owner.email = :" + Vehicle.QueryByEmailAndVehicleName.EMAIL),
+        @NamedQuery(name = Vehicle.QueryByEmail.NAME, query = "SELECT v FROM Vehicle v WHERE " +
+                " v.owner.email = :" + Vehicle.QueryByEmail.EMAIL)})
 public class Vehicle extends BaseEntity {
     private static final long serialVersionUID = -5360751385120611439L;
     // TODO name must be url safe
@@ -63,5 +67,10 @@ public class Vehicle extends BaseEntity {
         public static final String NAME = "Vehicle.byEmailAndVehicleName";
         public static final String EMAIL = "email";
         public static final String VEHICLE_NAME = "vehicleName";
+    }
+
+    public static final class QueryByEmail {
+        public static final String NAME = "Vehicle.byEmail";
+        public static final String EMAIL = "email";
     }
 }

@@ -125,5 +125,13 @@
             <artifactId>resteasy-client</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- Added to parse client json request -->
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-json-p-provider</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
 </project>

@@ -28,7 +28,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
 @RequestScoped
 public class OwnerPrincipalProducer {
@@ -41,11 +40,12 @@ public class OwnerPrincipalProducer {
     @Inject
     private OwnerService ownerService;
 
+    @Authenticated
     @Produces
-    public Optional<OwnerPrincipal> produce() throws TokenValidationException {
+    public OwnerPrincipal produce() throws TokenValidationException {
         String token = request.getHeader(TokenService.TOKEN_HEADER_NAME);
         final String email = this.tokenService.readPrincipal(token);
-        Optional<OwnerPrincipal> result = this.ownerService.createOwnerPrincipal(email);
+        OwnerPrincipal result = this.ownerService.createOwnerPrincipal(email);
         return result;
     }
 

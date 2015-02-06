@@ -22,49 +22,77 @@ package biz.suckow.fuelservicest.business;
 
 import org.testng.annotations.Test;
 
-import javax.ws.rs.core.MediaType;
+import javax.json.JsonArray;
+import javax.json.JsonValue;
 import javax.ws.rs.core.Response;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Test(dependsOnGroups = "login")
+@Test(groups = "vehicle", dependsOnGroups = "login")
 public class VehiclesResourceIT extends ArquillianBlackBoxTest {
+    public static final String VEHICLE_NAME = "duke-car";
 
     @Test
     public void testAddVehicleSucceeds() {
-        Response response = this.target.path("auths/token/{email}/{password}")
-                .resolveTemplate("email", "duke@java.net")
-                .resolveTemplate("password", "password")
-                .request(MediaType.TEXT_PLAIN)
-                .get();
-        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        String token = response.readEntity(String.class);
-        response.close();
-
-        response = this.target.path("vehicles/{vehicle}")
-                .resolveTemplate("vehicle", "duke-car")
+        Response response = this.target.path("vehicles/{vehicle}")
+                .resolveTemplate("vehicle", VEHICLE_NAME)
                 .request()
-                .header("X-FUEL-TOKEN", token)
+                .header("X-FUEL-TOKEN", AuthsResourceIT.token)
                 .post(null);
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         response.close();
     }
 
+    @Test
+    public void testAddVehicleWithShortNameFails() {
+        Response response = this.target.path("vehicles/{vehicle}")
+                .resolveTemplate("vehicle", "s")
+                .request()
+                .header("X-FUEL-TOKEN", AuthsResourceIT.token)
+                .post(null);
+        assertThat(response.getStatus()).isEqualTo(Response.Status.BAD_REQUEST.getStatusCode());
+        response.close();
+    }
+
     @Test(dependsOnMethods = "testAddVehicleSucceeds")
-    public void testAddDuplicateVehicleFails() {
-        Response response = this.target.path("auths/token/{email}/{password}")
-                .resolveTemplate("email", "duke@java.net")
-                .resolveTemplate("password", "password")
-                .request(MediaType.TEXT_PLAIN)
-                .get();
+    public void listVehiclesSucceeds() {
+        final String crazyVehicleName = "My cräzy car°";
+        Response response = this.target.path("vehicles/{vehicle}")
+                .resolveTemplate("vehicle", crazyVehicleName)
+                .request()
+                .header("X-FUEL-TOKEN", AuthsResourceIT.token)
+                .post(null);
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        String token = response.readEntity(String.class);
         response.close();
 
-        response = this.target.path("vehicles/{vehicle}")
-                .resolveTemplate("vehicle", "duke-car")
+        response = this.target.path("vehicles")
                 .request()
-                .header("X-FUEL-TOKEN", token)
+                .header("X-FUEL-TOKEN", AuthsResourceIT.token)
+                .get();
+        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+
+        JsonArray jsonArray = response.readEntity(JsonArray.class);
+        response.close();
+
+        Set<String> values = new HashSet<>();
+        jsonArray.forEach(new Consumer<JsonValue>() {
+            @Override
+            public void accept(JsonValue jsonValue) {
+                values.add(jsonValue.toString().replaceAll("\"", ""));
+            }
+        });
+        assertThat(values).hasSize(2).contains(VEHICLE_NAME, crazyVehicleName);
+    }
+
+    @Test(dependsOnMethods = "testAddVehicleSucceeds")
+    public void testAddDuplicateVehicleFails() {
+        Response response = this.target.path("vehicles/{vehicle}")
+                .resolveTemplate("vehicle", VEHICLE_NAME)
+                .request()
+                .header("X-FUEL-TOKEN", AuthsResourceIT.token)
                 .post(null);
         assertThat(response.getStatus()).isEqualTo(Response.Status.BAD_REQUEST.getStatusCode());
         response.close();
