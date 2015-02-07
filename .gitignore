@@ -10,3 +10,4 @@ fuelservice/derby.log
 .idea
 *.iml
 derby.log
+fuelservice/META-INF/
