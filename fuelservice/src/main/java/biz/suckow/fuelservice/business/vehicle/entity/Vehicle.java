@@ -22,7 +22,6 @@ package biz.suckow.fuelservice.business.vehicle.entity;
 
 import biz.suckow.fuelservice.business.BaseEntity;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -38,7 +37,6 @@ public class Vehicle extends BaseEntity {
     private static final long serialVersionUID = -5360751385120611439L;
     // TODO name must be url safe
     @NotNull
-    @NotEmpty
     @Column(nullable = false)
     private String vehicleName;
     @NotNull

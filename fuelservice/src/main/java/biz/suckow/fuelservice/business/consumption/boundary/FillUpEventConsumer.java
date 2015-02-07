@@ -22,7 +22,6 @@ package biz.suckow.fuelservice.business.consumption.boundary;
 
 import biz.suckow.fuelservice.business.consumption.control.FuelConsumptionCalculator;
 import biz.suckow.fuelservice.business.consumption.entity.FillUpEvent;
-import biz.suckow.fuelservice.business.consumption.entity.FuelConsumption;
 import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 
 import javax.ejb.Asynchronous;
@@ -47,11 +46,8 @@ public class FillUpEventConsumer {
         final Refuelling refuelling = this.em.find(Refuelling.class, event.getRefuelingId());
         final Optional<BigDecimal> possibleResult = this.maths.computeConsumptionFor(refuelling);
         if (possibleResult.isPresent()) {
-            final FuelConsumption consumption = new FuelConsumption();
-            consumption.setDateComputed(refuelling.getDateRefueled());
-            consumption.setLitresPerKilometre(possibleResult.get().doubleValue());
-            consumption.setVehicle(refuelling.getVehicle());
-            this.em.persist(consumption);
+            refuelling.setConsumption(possibleResult.get().doubleValue());
+            this.em.merge(refuelling);
         }
     }
 }

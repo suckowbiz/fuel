@@ -20,28 +20,57 @@ package biz.suckow.fuelservicest.business;
  * #L%
  */
 
+import org.assertj.core.api.Assertions;
 import org.testng.annotations.Test;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.time.Instant;
 
 @Test(dependsOnGroups = "vehicle")
 public class RefuellingsResourceIT extends ArquillianBlackBoxTest {
 
- /*   @Test
-    public void testAddFullRefuelingSucceeds() {
-        Response response = this.target.path("refuellings/token/{email}/{password}")
-                .resolveTemplate("email", "duke@java.net")
-                .resolveTemplate("password", "password")
-                .request(MediaType.TEXT_PLAIN)
-                .get();
-        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        String token = response.readEntity(String.class);
+    @Test
+    public void testAddTwoFullRefuelingsSucceeds() {
+        JsonObject json = Json.createObjectBuilder()
+                .add("date", Instant.now().toString())
+                .add("eurosPerLitre", 1.129D)
+                .add("isFull", true)
+                .add("kilometre", 130000)
+                .add("litresFromStock", 0)
+                .add("litresToStock", 0)
+                .add("litresToTank", 50)
+                .add("memo", "duke-car refuelling").build();
+        Response response = this.target
+                .path("refuellings/{vehicleName}")
+                .resolveTemplate("vehicleName", VehiclesResourceIT.VEHICLE_NAME)
+                .request()
+                .header("X-FUEL-TOKEN", AuthsResourceIT.token)
+                .post(Entity.entity(json.toString(), MediaType.APPLICATION_JSON_TYPE));
+        Assertions.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         response.close();
 
-        response = this.target.path("vehicles/{vehicle}")
-                .resolveTemplate("vehicle", VEHICLE_NAME)
+        json = Json.createObjectBuilder()
+                .add("date", Instant.ofEpochMilli(System.currentTimeMillis()).toString())
+                .add("eurosPerLitre", 1.129D)
+                .add("isFull", true)
+                .add("kilometre", 130000)
+                .add("litresFromStock", 0)
+                .add("litresToStock", 0)
+                .add("litresToTank", 50)
+                .add("memo", "duke-car refuelling").build();
+        response = this.target
+                .path("refuellings/{vehicleName}")
+                .resolveTemplate("vehicleName", VehiclesResourceIT.VEHICLE_NAME)
                 .request()
-                .header("X-FUEL-TOKEN", token)
-                .post(null);
-        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+                .header("X-FUEL-TOKEN", AuthsResourceIT.token)
+                .post(Entity.entity(json.toString(), MediaType.APPLICATION_JSON_TYPE));
+        Assertions.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         response.close();
-    }*/
+
+    }
+
 }

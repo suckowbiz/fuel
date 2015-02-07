@@ -61,6 +61,16 @@ public class Refuelling extends BaseEntity {
     private Boolean isFillUp;
     @ManyToOne
     private Vehicle vehicle;
+    @Column
+    private Double consumption;
+
+    public Double getConsumption() {
+        return consumption;
+    }
+
+    public void setConsumption(Double consumption) {
+        this.consumption = consumption;
+    }
 
     public Vehicle getVehicle() {
         return this.vehicle;

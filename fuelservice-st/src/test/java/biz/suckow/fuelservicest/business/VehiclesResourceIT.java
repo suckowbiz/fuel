@@ -74,17 +74,15 @@ public class VehiclesResourceIT extends ArquillianBlackBoxTest {
                 .get();
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
-        JsonArray jsonArray = response.readEntity(JsonArray.class);
-        response.close();
-
         Set<String> values = new HashSet<>();
-        jsonArray.forEach(new Consumer<JsonValue>() {
+        response.readEntity(JsonArray.class).forEach(new Consumer<JsonValue>() {
             @Override
             public void accept(JsonValue jsonValue) {
                 values.add(jsonValue.toString().replaceAll("\"", ""));
             }
         });
         assertThat(values).hasSize(2).contains(VEHICLE_NAME, crazyVehicleName);
+        response.close();
     }
 
     @Test(dependsOnMethods = "testAddVehicleSucceeds")

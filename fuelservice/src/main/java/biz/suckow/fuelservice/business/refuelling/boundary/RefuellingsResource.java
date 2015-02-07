@@ -34,6 +34,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Resource must not be an EJB. This is to support RolesAllowed without enterprise token configuration required.
@@ -46,6 +48,9 @@ public class RefuellingsResource {
     // partial refuelings cannot be accepted!
     @Inject
     private RefuellingService refuellingService;
+
+    @Inject
+    private Logger logger;
 
     @Authenticated
     @Inject

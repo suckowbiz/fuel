@@ -36,7 +36,7 @@ public class AuthsResourceIT extends ArquillianBlackBoxTest {
         Response response = this.target.path("auths/token/{email}/{password}")
                 .resolveTemplate("email", OwnersResourceIT.OWNER_EMAIL)
                 .resolveTemplate("password", "password")
-                .request(MediaType.TEXT_PLAIN)
+                .request()
                 .get();
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
@@ -50,7 +50,7 @@ public class AuthsResourceIT extends ArquillianBlackBoxTest {
         Response response = this.target.path("auths/token/{email}/{password}")
                 .resolveTemplate("email", OwnersResourceIT.OWNER_EMAIL)
                 .resolveTemplate("password", "illegal")
-                .request(MediaType.TEXT_PLAIN)
+                .request()
                 .get();
         assertThat(response.getStatus()).isEqualTo(Response.Status.UNAUTHORIZED.getStatusCode());
         response.close();
