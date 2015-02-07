@@ -22,30 +22,31 @@ package biz.suckow.fuelservice.business.refuelling.boundary;
 
 import biz.suckow.fuelservice.business.refuelling.control.FillUpEventGun;
 import biz.suckow.fuelservice.business.refuelling.control.FuelStockStore;
-import biz.suckow.fuelservice.business.refuelling.control.RefuellingStore;
 import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 import biz.suckow.fuelservice.business.refuelling.entity.RefuellingMeta;
-import biz.suckow.fuelservice.business.vehicle.boundary.VehicleService;
+import biz.suckow.fuelservice.business.vehicle.boundary.VehicleStore;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import java.util.Date;
 import java.util.Optional;
 
 @Stateless
-public class RefuellingService {
+public class RefuellingStore {
+    @Inject
+    private EntityManager em;
     @Inject
     private FillUpEventGun gun;
     @Inject
-    private RefuellingStore refuellingStore;
-    @Inject
     private FuelStockStore stockStore;
     @Inject
-    private VehicleService vehicleService;
+    private VehicleStore vehicleStore;
 
     public void add(final String vehicleName, final String ownerName, final RefuellingMeta meta) {
         // TODO handle previous additions /recalculate ...
-        final Optional<Vehicle> possibleVehicle = this.vehicleService.lookUp(ownerName, vehicleName);
+        final Optional<Vehicle> possibleVehicle = this.vehicleStore.getVehicleByNameAndOwnerEmail(ownerName, vehicleName);
         final Vehicle vehicle = possibleVehicle.orElseThrow(() -> new IllegalStateException("No such vehicle."));
         if (meta.litresToStock > 0D) {
             this.stockStore.addition(vehicle, meta.date, meta.eurosPerLitre, meta.litresToStock);
@@ -54,12 +55,31 @@ public class RefuellingService {
             this.stockStore.release(possibleVehicle.get(), meta.date, meta.litresFromStock);
         }
         if (meta.isFull) {
-            final Refuelling refuelling = this.refuellingStore.storeFillUp(possibleVehicle.get(), meta.eurosPerLitre,
+            final Refuelling refuelling = this.storeFillUp(possibleVehicle.get(), meta.eurosPerLitre,
                     meta.litresToTank, meta.kilometre, meta.memo, meta.date);
             this.gun.fire(refuelling.getId());
         } else {
-            this.refuellingStore.storePartialRefueling(possibleVehicle.get(), meta.eurosPerLitre, meta.litresToTank,
+            this.storePartialRefueling(possibleVehicle.get(), meta.eurosPerLitre, meta.litresToTank,
                     meta.memo, meta.date);
         }
     }
+
+    public Refuelling storeFillUp(final Vehicle vehicle, final Double eurosPerLitre, final Double litres, final Double kilometre, final String memo,
+                                  final Date date) {
+        final Refuelling result = new Refuelling.Builder().eurosPerLitre(eurosPerLitre).litres(litres)
+                .kilometre(kilometre).memo(memo).dateRefueled(date).fillUp(true).vehicle(vehicle).build();
+        this.em.persist(result);
+        return result;
+    }
+
+    public void storePartialRefueling(final Vehicle vehicle, final Double euros, final Double litres, final String memo, final Date date) {
+        final Refuelling refuelling = new Refuelling.Builder().litres(litres).eurosPerLitre(euros).dateRefueled(date)
+                .memo(memo).vehicle(vehicle).build();
+        this.em.persist(refuelling);
+    }
+
+
+//    public Set<Refuelling> list(String vehicleName) {
+//        this.refuellingStore.g
+//    }
 }

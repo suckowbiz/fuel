@@ -36,7 +36,7 @@ public class FillUpEventGun {
 
     public void fire(final Long id) {
         Objects.requireNonNull(id, "Refuelling id must not be null.");
-        final FillUpEvent event = new FillUpEvent().setRefuelingId(id);
+        final FillUpEvent event = new FillUpEvent().setRefuellingId(id);
         this.fillUpEvent.fire(event);
     }
 }

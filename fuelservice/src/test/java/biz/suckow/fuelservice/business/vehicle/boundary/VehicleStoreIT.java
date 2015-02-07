@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.owner.control;
+package biz.suckow.fuelservice.business.vehicle.boundary;
 
 /*
  * #%L
@@ -22,30 +22,33 @@ package biz.suckow.fuelservice.business.owner.control;
 
 import biz.suckow.fuelservice.business.PersistenceSupport;
 import biz.suckow.fuelservice.business.TestHelper;
-import biz.suckow.fuelservice.business.owner.controller.OwnerLocator;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
+import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class OwnerServiceIT extends PersistenceSupport {
-    private final OwnerLocator cut = new OwnerLocator(em);
+public class VehicleStoreIT extends PersistenceSupport {
 
-    @Test
-    public void locateOwnerMustSucceed() {
-        final Owner duke = TestHelper.createDuke();
-        em.persist(duke);
+    private final VehicleStore cut = new VehicleStore();
 
-        final Optional<Owner> actualResult = this.cut.getOwner("duke@java.com");
-        assertThat(actualResult.isPresent());
-        assertThat(actualResult.get()).isSameAs(duke);
+    @BeforeClass
+    public void setUp() {
+        this.cut.em = em;
     }
 
     @Test
-    public void locateNonExistingOwnerMustFail() {
-        final Optional<Owner> actualResult = this.cut.getOwner("duke@java.com");
-        assertThat(actualResult.isPresent()).isFalse();
+    public void mustFetchExistingVehicle() {
+        final Owner duke = TestHelper.createDuke();
+        em.persist(duke);
+
+        final Vehicle dukeCar = TestHelper.createDukeCar(duke);
+        em.persist(dukeCar);
+
+        final Vehicle actualResult = this.cut.getVehicleByNameAndOwnerEmail(dukeCar.getOwner().getEmail(), dukeCar.getVehicleName())
+                .get();
+        assertThat(actualResult).isNotNull();
+        assertThat(actualResult.getId()).isEqualTo(dukeCar.getId());
     }
 }

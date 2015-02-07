@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.refuelling.control;
+package biz.suckow.fuelservice.business.owner.boundary;
 
 /*
  * #%L
@@ -23,35 +23,34 @@ package biz.suckow.fuelservice.business.refuelling.control;
 import biz.suckow.fuelservice.business.PersistenceSupport;
 import biz.suckow.fuelservice.business.TestHelper;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
-import biz.suckow.fuelservice.business.vehicle.control.VehicleLocator;
-import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VehicleLocatorIT extends PersistenceSupport {
+public class OwnerStoreIT extends PersistenceSupport {
+    private final OwnerStore cut = new OwnerStore();
 
-    private final VehicleLocator cut = new VehicleLocator(em);
-
-    @Test
-    public void mustFetchExistingVehicle() {
-        final Owner duke = TestHelper.createDuke();
-        em.persist(duke);
-
-        final Vehicle dukeCar = TestHelper.createDukeCar(duke);
-        em.persist(dukeCar);
-
-        final Vehicle actualResult = this.cut.getVehicle(dukeCar.getOwner().getEmail(), dukeCar.getVehicleName())
-                .get();
-        assertThat(actualResult).isNotNull();
-        assertThat(actualResult.getId()).isEqualTo(dukeCar.getId());
+    @BeforeTest
+    private void setUp() {
+        this.cut.em = em;
     }
 
     @Test
-    public void mustNotFetchNonExistingVehicle() {
-        final Optional<Vehicle> possibleVehicle = this.cut.getVehicle("duke", "duke-bike");
-        assertThat(possibleVehicle.isPresent()).isFalse();
+    public void locateOwnerMustSucceed() {
+        final Owner duke = TestHelper.createDuke();
+        em.persist(duke);
+
+        final Optional<Owner> actualResult = this.cut.getByEmail("duke@java.com");
+        assertThat(actualResult.isPresent());
+        assertThat(actualResult.get()).isSameAs(duke);
+    }
+
+    @Test
+    public void locateNonExistingOwnerMustFail() {
+        final Optional<Owner> actualResult = this.cut.getByEmail("duke@java.com");
+        assertThat(actualResult.isPresent()).isFalse();
     }
 }

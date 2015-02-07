@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.vehicle.control;
+package biz.suckow.fuelservice.business.vehicle.boundary;
 
 /*
  * #%L
@@ -20,10 +20,8 @@ package biz.suckow.fuelservice.business.vehicle.control;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.owner.boundary.Authenticated;
+import biz.suckow.fuelservice.business.owner.entity.Authenticated;
 import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
-import biz.suckow.fuelservice.business.vehicle.boundary.OwnedVehicle;
-import biz.suckow.fuelservice.business.vehicle.boundary.VehicleService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -37,7 +35,7 @@ public class OwnedVehicleValidator implements ConstraintValidator<OwnedVehicle, 
     private OwnerPrincipal principal;
 
     @Inject
-    private VehicleService vehicleService;
+    private VehicleStore vehicleStore;
 
     @Override
     public void initialize(OwnedVehicle ownedVehicle) {

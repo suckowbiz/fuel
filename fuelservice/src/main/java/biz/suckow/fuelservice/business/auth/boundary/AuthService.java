@@ -21,7 +21,7 @@ package biz.suckow.fuelservice.business.auth.boundary;
  */
 
 
-import biz.suckow.fuelservice.business.owner.boundary.OwnerService;
+import biz.suckow.fuelservice.business.owner.boundary.OwnerStore;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
 
 import javax.ejb.Stateless;
@@ -31,11 +31,11 @@ import java.util.Optional;
 @Stateless
 public class AuthService {
     @Inject
-    private OwnerService ownerService;
+    private OwnerStore ownerStore;
 
     public Optional<Owner> login(String email, String password) {
         Optional<Owner> result = Optional.empty();
-        Optional<Owner> possibleOwner = this.ownerService.locateByEmail(email);
+        Optional<Owner> possibleOwner = this.ownerStore.getByEmail(email);
         if (possibleOwner.isPresent()) {
             if (possibleOwner.get().getPassword().equals(password)) {
                 result = possibleOwner;
@@ -43,4 +43,6 @@ public class AuthService {
         }
         return result;
     }
+
+    // logout? -> remember logout happened and a new login is required (db) and skip any token requests meanwhile
 }

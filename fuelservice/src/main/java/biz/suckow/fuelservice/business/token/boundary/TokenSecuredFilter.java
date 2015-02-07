@@ -20,7 +20,7 @@ package biz.suckow.fuelservice.business.token.boundary;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.owner.boundary.Authenticated;
+import biz.suckow.fuelservice.business.owner.entity.Authenticated;
 import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
 import biz.suckow.fuelservice.business.owner.entity.Role;
 import biz.suckow.fuelservice.business.token.entity.TokenSecured;

@@ -40,18 +40,18 @@ public class OwnersResource {
     public static final String PATH_BASE = "owners";
 
     @Inject
-    private OwnerService ownerService;
+    private OwnerStore ownerStore;
 
     @POST
     @Produces(APPLICATION_JSON)
-    @Path("register/{email}/{password}")
+    @Path("{email}/{password}")
     public Response register(@Size(min = 8, max = 64) @PathParam("email") String email, @Size(min = 6, max = 255) @PathParam("password") String password) {
         Response response;
-        Optional<Owner> possibleOwner = this.ownerService.locateByEmail(email);
+        Optional<Owner> possibleOwner = this.ownerStore.getByEmail(email);
         if (possibleOwner.isPresent()) {
             response = Response.status(Response.Status.FORBIDDEN).entity("Please use another email address.").build();
         } else {
-            this.ownerService.create(email, password);
+            this.ownerStore.create(email, password);
             response = Response.ok().build();
         }
         return response;

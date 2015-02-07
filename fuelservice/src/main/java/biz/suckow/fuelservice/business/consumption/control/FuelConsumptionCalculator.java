@@ -52,11 +52,11 @@ public class FuelConsumptionCalculator {
         }
 
         BigDecimal result = null;
-        final Date refuelingDate = refuelling.getDateRefueled();
+        final Date refuelingDate = refuelling.getDateRefuelled();
         final Optional<Refuelling> possibleLastFillUp = this.refuellingLocator.getFillUpBefore(refuelingDate);
         if (possibleLastFillUp.isPresent()) {
             final Vehicle vehicle = refuelling.getVehicle();
-            final Date lastFillUpDate = possibleLastFillUp.get().getDateRefueled();
+            final Date lastFillUpDate = possibleLastFillUp.get().getDateRefuelled();
 
             BigDecimal litres = BigDecimal.valueOf(refuelling.getLitres());
             litres = litres.add(this.getLitresConsumedFromStock(lastFillUpDate, refuelingDate, vehicle));

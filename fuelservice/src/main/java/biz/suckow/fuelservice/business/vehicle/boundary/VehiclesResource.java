@@ -20,8 +20,8 @@ package biz.suckow.fuelservice.business.vehicle.boundary;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.owner.boundary.Authenticated;
-import biz.suckow.fuelservice.business.owner.boundary.OwnerService;
+import biz.suckow.fuelservice.business.owner.boundary.OwnerStore;
+import biz.suckow.fuelservice.business.owner.entity.Authenticated;
 import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
 import biz.suckow.fuelservice.business.token.entity.TokenSecured;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
@@ -44,10 +44,10 @@ public class VehiclesResource {
     private OwnerPrincipal principal;
 
     @Inject
-    private VehicleService vehicleService;
+    private VehicleStore vehicleStore;
 
     @Inject
-    private OwnerService ownerService;
+    private OwnerStore ownerStore;
 
     @TokenSecured
     @POST
@@ -59,7 +59,7 @@ public class VehiclesResource {
         }
 
         String ownerEmail = this.principal.getName();
-        this.vehicleService.addVehicle(ownerEmail, vehicleName);
+        this.vehicleStore.persistNewVehicle(ownerEmail, vehicleName);
 
         return Response.ok().build();
     }
@@ -68,7 +68,7 @@ public class VehiclesResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response listAll() {
-        Set<Vehicle> vehicles = this.vehicleService.getOwned(this.principal.getName());
+        Set<Vehicle> vehicles = this.vehicleStore.getVehiclesByOwnerEmail(this.principal.getName());
         JsonArrayBuilder builder = Json.createArrayBuilder();
         for (Vehicle vehicle : vehicles) {
             builder.add(vehicle.getVehicleName());

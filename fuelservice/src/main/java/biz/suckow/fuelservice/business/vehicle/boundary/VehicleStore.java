@@ -1,10 +1,10 @@
-package biz.suckow.fuelservice.business.vehicle.control;
+package biz.suckow.fuelservice.business.vehicle.boundary;
 
 /*
  * #%L
- * fuel
+ * fuelservice
  * %%
- * Copyright (C) 2014 Suckow.biz
+ * Copyright (C) 2014 - 2015 Suckow.biz
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,22 +20,49 @@ package biz.suckow.fuelservice.business.vehicle.control;
  * #L%
  */
 
+import biz.suckow.fuelservice.business.owner.boundary.OwnerStore;
+import biz.suckow.fuelservice.business.owner.entity.Owner;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.util.*;
+import java.util.logging.Logger;
 
-public class VehicleLocator {
-    private final EntityManager em;
+@Stateless
+public class VehicleStore {
 
     @Inject
-    public VehicleLocator(final EntityManager em) {
-        this.em = em;
+    OwnerStore ownerStore;
+
+    @Inject
+    EntityManager em;
+
+    @Inject
+    Logger logger;
+
+    public void persist(Vehicle vehicle) {
+        this.em.persist(vehicle);
     }
 
-    public Optional<Vehicle> getVehicle(final String email, final String vehicleName) {
+    public void persistNewVehicle(String email, String vehicleName) {
+        Optional<Owner> possibleOwner = this.ownerStore.getByEmail(email);
+        if (possibleOwner.isPresent()) {
+            Owner owner = possibleOwner.get();
+
+            Vehicle vehicle = new Vehicle().setOwner(owner).setVehicleName(vehicleName);
+            owner.addVehicle(vehicle);
+            this.em.persist(vehicle);
+
+            this.em.merge(owner);
+        } else {
+            throw new IllegalArgumentException("NO SUCH OWNER.");
+        }
+    }
+
+    public Optional<Vehicle> getVehicleByNameAndOwnerEmail(final String email, final String vehicleName) {
         Vehicle result = null;
         try {
             result = this.em.createNamedQuery(Vehicle.QueryByEmailAndVehicleName.NAME, Vehicle.class)
@@ -48,7 +75,7 @@ public class VehicleLocator {
         return Optional.ofNullable(result);
     }
 
-    public Set<Vehicle> getVehicles(final String email) {
+    public Set<Vehicle> getVehiclesByOwnerEmail(final String email) {
         List<Vehicle> result = new ArrayList<>();
         try {
             result = this.em.createNamedQuery(Vehicle.QueryByEmail.NAME, Vehicle.class)

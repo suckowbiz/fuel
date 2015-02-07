@@ -32,10 +32,8 @@ import org.jboss.resteasy.spi.ResteasyProviderFactory;
 import org.testng.annotations.Test;
 
 import javax.ws.rs.core.MediaType;
-
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -57,7 +55,7 @@ public class JSONTest {
 
         KeyPair keyPair = KeyPairGenerator.getInstance("RSA").generateKeyPair();
         Owner duke = TestHelper.createDuke();
-        JsonWebToken jwt = new JsonWebToken().issuer(duke.getEmail()).issuedAt(System.currentTimeMillis()-1000).expiration(System.currentTimeMillis()-1 ).principal(duke.getEmail());
+        JsonWebToken jwt = new JsonWebToken().issuer(duke.getEmail()).issuedAt(System.currentTimeMillis() - 1000).expiration(System.currentTimeMillis() - 1).principal(duke.getEmail());
         String jwtContent = JsonSerialization.toString(jwt, true);
 
         String jwe = new JWEBuilder().content(jwtContent, MediaType.TEXT_PLAIN_TYPE).dir("PU^sb_MvqZ{$mwW.9&lwp3;^2:9fK;2\\tD[1w/[j(dAY/Np4H(JkCoMLh:ru|i");
@@ -71,13 +69,13 @@ public class JSONTest {
         assertThat(RSAProvider.verify(jwsIn, keyPair.getPublic())).isTrue();
 
         // encrypt
-        String jweIn = (String)jwsIn.readContent(String.class);
+        String jweIn = (String) jwsIn.readContent(String.class);
         byte[] jwtIn = new JWEInput(jweIn).decrypt("PU^sb_MvqZ{$mwW.9&lwp3;^2:9fK;2\\tD[1w/[j(dAY/Np4H(JkCoMLh:ru|i").getRawContent();
 
         // read content - check expiration
         JsonWebToken json = JsonSerialization.fromBytes(JsonWebToken.class, jwtIn);
 
-        System.out.println("json: "+json.getPrincipal()+" "+json.isExpired());
+        System.out.println("json: " + json.getPrincipal() + " " + json.isExpired());
 
         assertThat(json).isNotNull();
     }

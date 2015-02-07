@@ -28,23 +28,18 @@ import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 public class FuelStockStore {
-    private final EntityManager em;
-    private final FuelStockLocator stockLocator;
-
     @Inject
-    public FuelStockStore(final EntityManager em, final FuelStockLocator stockLocator) {
-        this.em = em;
-        this.stockLocator = stockLocator;
-    }
+    private EntityManager em;
 
     public void addition(final Vehicle vehicle, final Date date, final Double euros, final Double litres) {
         final StockAddition addition = new StockAddition().setDateAdded(date).setEurosPerLitre(euros).setLitres(litres);
         this.em.persist(addition);
 
-        final FuelStock fuelStock = this.getFuelStockOf(vehicle);
+        final FuelStock fuelStock = this.getFuelStockOf(vehicle).orElseThrow(() -> new IllegalStateException("Missing fuel stock!"));
         fuelStock.add(addition);
         this.em.merge(fuelStock);
 
@@ -54,13 +49,18 @@ public class FuelStockStore {
         final StockRelease release = new StockRelease().setDateReleased(date).setLitres(litres);
         this.em.persist(release);
 
-        final FuelStock fuelStock = this.getFuelStockOf(vehicle);
+        FuelStock fuelStock = this.getFuelStockOf(vehicle).orElseThrow(() -> new IllegalStateException("Missing fuel stock!"));
         fuelStock.release(release);
         this.em.merge(fuelStock);
     }
 
-    private FuelStock getFuelStockOf(final Vehicle vehicle) {
-        final Optional<FuelStock> possibleStock = this.stockLocator.locate(vehicle);
-        return possibleStock.orElseThrow(() -> new IllegalStateException("Missing fuel stock!"));
+    public Optional<FuelStock> getFuelStockOf(final Vehicle vehicle) {
+        Optional<FuelStock> result = Optional.empty();
+        final List<FuelStock> fuelStockItems = this.em.createNamedQuery(FuelStock.FIND_BY_VEHICLE, FuelStock.class)
+                .setParameter("vehicle", vehicle).getResultList();
+        if (fuelStockItems.size() > 0) {
+            result = Optional.of(fuelStockItems.get(0));
+        }
+        return result;
     }
 }

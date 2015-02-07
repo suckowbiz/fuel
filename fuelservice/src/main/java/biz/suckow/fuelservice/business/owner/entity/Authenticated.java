@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.owner.boundary;
+package biz.suckow.fuelservice.business.owner.entity;
 
 /*
  * #%L

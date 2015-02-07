@@ -43,9 +43,10 @@ public class FillUpEventConsumer {
 
     @Asynchronous
     public void consume(@Observes(during = TransactionPhase.AFTER_SUCCESS) final FillUpEvent event) {
-        final Refuelling refuelling = this.em.find(Refuelling.class, event.getRefuelingId());
+        final Refuelling refuelling = this.em.find(Refuelling.class, event.getRefuellingId());
         final Optional<BigDecimal> possibleResult = this.maths.computeConsumptionFor(refuelling);
         if (possibleResult.isPresent()) {
+            this.em.refresh(refuelling);
             refuelling.setConsumption(possibleResult.get().doubleValue());
             this.em.merge(refuelling);
         }

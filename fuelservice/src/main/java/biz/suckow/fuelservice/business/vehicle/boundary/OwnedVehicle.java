@@ -20,8 +20,6 @@ package biz.suckow.fuelservice.business.vehicle.boundary;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.vehicle.control.OwnedVehicleValidator;
-
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;

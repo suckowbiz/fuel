@@ -20,7 +20,7 @@ package biz.suckow.fuelservice.business.refuelling.boundary;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.owner.boundary.Authenticated;
+import biz.suckow.fuelservice.business.owner.entity.Authenticated;
 import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
 import biz.suckow.fuelservice.business.refuelling.entity.RefuellingMeta;
 import biz.suckow.fuelservice.business.token.entity.TokenSecured;
@@ -28,26 +28,19 @@ import biz.suckow.fuelservice.business.vehicle.boundary.OwnedVehicle;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Resource must not be an EJB. This is to support RolesAllowed without enterprise token configuration required.
- */
 @Stateless
 @Path("refuellings")
 public class RefuellingsResource {
     // TODO verify: because once a full refuelling is added and the consumption
     // is calculated the addition of previous
-    // partial refuelings cannot be accepted!
+    // partial refuelings cannot be accepted... or must be re-calculated
     @Inject
-    private RefuellingService refuellingService;
+    private RefuellingStore refuellingStore;
 
     @Inject
     private Logger logger;
@@ -61,7 +54,16 @@ public class RefuellingsResource {
     @Path("{vehicleName}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response refuel(@OwnedVehicle @PathParam("vehicleName") final String vehicleName, final RefuellingMeta meta) {
-        this.refuellingService.add(vehicleName, this.principal.getName(), meta);
+        this.refuellingStore.add(vehicleName, this.principal.getName(), meta);
         return Response.ok().build();
+    }
+
+    @TokenSecured
+    @GET
+    @Path("{vehicleName}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response list(@OwnedVehicle @PathParam("vehicleName") final String vehicleName) {
+//        this.refuellingService.
+        return Response.ok().entity(null).build();
     }
 }

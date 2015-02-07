@@ -20,42 +20,43 @@ package biz.suckow.fuelservice.business.owner.boundary;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.owner.controller.OwnerLocator;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
 import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
 import biz.suckow.fuelservice.business.owner.entity.Role;
-import biz.suckow.fuelservice.business.token.entity.TokenSecured;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Stateless
-public class OwnerService {
+public class OwnerStore {
     @Inject
-    private OwnerLocator locator;
-
-    @Inject
-    private EntityManager em;
+    EntityManager em;
 
     public void create(String email, String password) {
         Owner owner = new Owner().addRole(Role.OWNER).setEmail(email).setPassword(password);
         this.em.persist(owner);
     }
 
-    public Optional<Owner> locateByEmail(final String email) {
-        final Optional<Owner> result = this.locator.getOwner(email);
-        return result;
+    public Optional<Owner> getByEmail(final String email) {
+        Owner result = null;
+        try {
+            result = (Owner) this.em.createNamedQuery(Owner.QueryByEmailCaseIgnore.NAME)
+                    .setParameter(Owner.QueryByEmailCaseIgnore.EMAIL, email).getSingleResult();
+        } catch (final NoResultException e) {
+        /* NOP */
+        }
+        return Optional.ofNullable(result);
     }
 
-    @TokenSecured
     public OwnerPrincipal createOwnerPrincipal(String email) {
         OwnerPrincipal result = new OwnerPrincipal();
-        Optional<Owner> possibleOwner = this.locateByEmail(email);
+        Optional<Owner> possibleOwner = this.getByEmail(email);
         if (possibleOwner.isPresent()) {
             Set<String> vehicleNames = possibleOwner
                     .get()
@@ -72,4 +73,5 @@ public class OwnerService {
         }
         return result;
     }
+
 }

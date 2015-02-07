@@ -31,10 +31,10 @@ import java.util.Date;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = Refuelling.FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN, query = "SELECT r FROM Refuelling r WHERE r.isFillUp = false AND r.dateRefueled > :left "
-                + "AND r.dateRefueled < :right AND r.vehicle = :vehicle"),
+        @NamedQuery(name = Refuelling.FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN, query = "SELECT r FROM Refuelling r WHERE r.isFillUp = false AND r.dateRefuelled > :left "
+                + "AND r.dateRefuelled < :right AND r.vehicle = :vehicle"),
         @NamedQuery(name = Refuelling.FIND_BY_FILLED_UP_AND_DATE_BEFORE, query = "SELECT r FROM Refuelling r WHERE r.isFillUp = true "
-                + "AND r.dateRefueled < :right ORDER BY r.dateRefueled DESC ")})
+                + "AND r.dateRefuelled < :right ORDER BY r.dateRefuelled DESC ")})
 public class Refuelling extends BaseEntity {
     private static final long serialVersionUID = 9175526663957115977L;
     private static final String PREFIX = "biz.suckow.fuelservice.business.refuelling.entity.";
@@ -44,7 +44,7 @@ public class Refuelling extends BaseEntity {
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
-    private Date dateRefueled;
+    private Date dateRefuelled;
     @NotNull
     @DecimalMin(value = "0.009", inclusive = true)
     @Column(nullable = false)
@@ -89,12 +89,12 @@ public class Refuelling extends BaseEntity {
         this.isFillUp = isFillUp;
     }
 
-    public Date getDateRefueled() {
-        return this.dateRefueled;
+    public Date getDateRefuelled() {
+        return this.dateRefuelled;
     }
 
-    public Refuelling setDateRefueled(final Date dateRefueled) {
-        this.dateRefueled = dateRefueled;
+    public Refuelling setDateRefuelled(final Date dateRefueled) {
+        this.dateRefuelled = dateRefueled;
         return this;
     }
 
@@ -138,7 +138,7 @@ public class Refuelling extends BaseEntity {
          */
         public Builder() {
             this.refuelling = new Refuelling();
-            this.refuelling.setDateRefueled(new Date());
+            this.refuelling.setDateRefuelled(new Date());
             this.refuelling.setIsFillUp(false);
         }
 
@@ -163,7 +163,7 @@ public class Refuelling extends BaseEntity {
         }
 
         public Builder dateRefueled(final Date date) {
-            this.refuelling.setDateRefueled(date);
+            this.refuelling.setDateRefuelled(date);
             return this;
         }
 

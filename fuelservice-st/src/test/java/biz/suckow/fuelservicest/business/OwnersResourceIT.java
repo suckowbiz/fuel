@@ -33,7 +33,7 @@ public class OwnersResourceIT extends ArquillianBlackBoxTest {
 
     @Test
     public void testRegisterOwnerSucceeds() {
-        final Response response = this.target.path("owners/register/{email}/{password}")
+        final Response response = this.target.path("owners/{email}/{password}")
                 .resolveTemplate("email", OWNER_EMAIL)
                 .resolveTemplate("password", "password")
                 .request()
@@ -44,7 +44,7 @@ public class OwnersResourceIT extends ArquillianBlackBoxTest {
 
     @Test(dataProvider = "illegalOwnerData")
     public void testRegisterOwnerFails(String email, String password) {
-        final Response response = this.target.path("owners/register/{email}/{password}")
+        final Response response = this.target.path("owners/{email}/{password}")
                 .resolveTemplate("email", email)
                 .resolveTemplate("password", password)
                 .request()

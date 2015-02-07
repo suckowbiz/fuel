@@ -20,7 +20,6 @@ package biz.suckow.fuelservice.business;
  * #L%
  */
 
-import javax.enterprise.inject.Disposes;
 import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -34,8 +33,8 @@ public class EMProducer {
         return this.em;
     }
 
-    public void close(@Disposes EntityManager em) {
-        // The disposer method is called automatically when the context ends.
-        em.close();
-    }
+//    public void close(@Disposes EntityManager em) {
+//        // The disposer method is called automatically when the context ends.
+//        em.close();
+//    }
 }

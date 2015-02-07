@@ -51,11 +51,11 @@ public class FillUpEventGunTest extends EasyMockSupport {
 
     @Test
     public void fireMustTriggerEvent() {
-        FillUpEvent expectedEvent = new FillUpEvent().setRefuelingId(42L);
+        FillUpEvent expectedEvent = new FillUpEvent().setRefuellingId(42L);
         Comparator<FillUpEvent> eventComparator = new Comparator<FillUpEvent>() {
             @Override
             public int compare(FillUpEvent o1, FillUpEvent o2) {
-                if (o1.getRefuelingId().equals(o2.getRefuelingId()))
+                if (o1.getRefuellingId().equals(o2.getRefuellingId()))
                     return 0;
                 return 1;
             }
@@ -65,7 +65,7 @@ public class FillUpEventGunTest extends EasyMockSupport {
         this.fillUpEventMock.fire(cmp(expectedEvent, eventComparator, LogicalOperator.EQUAL));
         this.replayAll();
 
-        this.cut.fire(expectedEvent.getRefuelingId());
+        this.cut.fire(expectedEvent.getRefuellingId());
         this.verifyAll();
     }
 }
