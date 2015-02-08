@@ -49,8 +49,7 @@ public class Refuelling extends BaseEntity {
     @DecimalMin(value = "0.009", inclusive = true)
     @Column(nullable = false)
     private Double eurosPerLitre;
-    @DecimalMin(value = "0.00", inclusive = false)
-    private Double kilometre;
+    private Long kilometre;
     @Min(value = 1)
     @NotNull
     @Column(nullable = false)
@@ -122,11 +121,11 @@ public class Refuelling extends BaseEntity {
         this.memo = memo;
     }
 
-    public Double getKilometre() {
+    public Long getKilometre() {
         return this.kilometre;
     }
 
-    public void setKilometre(final Double kilometre) {
+    public void setKilometre(final Long kilometre) {
         this.kilometre = kilometre;
     }
 
@@ -152,7 +151,7 @@ public class Refuelling extends BaseEntity {
             return this;
         }
 
-        public Builder kilometre(final Double value) {
+        public Builder kilometre(final Long value) {
             this.refuelling.setKilometre(value);
             return this;
         }

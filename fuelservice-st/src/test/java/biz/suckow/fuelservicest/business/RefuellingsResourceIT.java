@@ -21,25 +21,33 @@ package biz.suckow.fuelservicest.business;
  */
 
 import org.assertj.core.api.Assertions;
+import org.assertj.core.extractor.ToStringExtractor;
 import org.testng.annotations.Test;
 
 import javax.json.Json;
+import javax.json.JsonArray;
 import javax.json.JsonObject;
+import javax.json.JsonValue;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.Instant;
+import java.util.*;
+import java.util.function.Consumer;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 @Test(dependsOnGroups = "vehicle")
 public class RefuellingsResourceIT extends ArquillianBlackBoxTest {
 
     @Test
-    public void testAddTwoFullRefuelingsSucceeds() {
+    public void testAddTwoFullRefuellingsSucceeds() throws InterruptedException {
         JsonObject json = Json.createObjectBuilder()
-                .add("date", Instant.now().toString())
+                .add("date", Instant.ofEpochMilli(0).toString())
                 .add("eurosPerLitre", 1.129D)
                 .add("isFull", true)
-                .add("kilometre", 130000)
+                .add("kilometre", 1)
                 .add("litresFromStock", 0)
                 .add("litresToStock", 0)
                 .add("litresToTank", 50)
@@ -70,7 +78,25 @@ public class RefuellingsResourceIT extends ArquillianBlackBoxTest {
                 .post(Entity.entity(json.toString(), MediaType.APPLICATION_JSON_TYPE));
         Assertions.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         response.close();
+    }
+    
+    @Test(dependsOnMethods = "testAddTwoFullRefuellingsSucceeds")
+    public void testListRefuellingsSucceeds () {
+        Response response = this.target.path("refuellings/{vehicleName}").resolveTemplate("vehicleName", VehiclesResourceIT.VEHICLE_NAME).request().header("X-FUEL-TOKEN", AuthsResourceIT.token).get();
 
+        List<String> values = new ArrayList<>();
+        response.readEntity(JsonArray.class).forEach(new Consumer<JsonValue>() {
+            @Override
+            public void accept(JsonValue jsonValue) {
+                values.add(jsonValue.toString().replaceAll("\"", ""));
+            }
+        });
+
+        Assertions.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+        assertThat(values).hasSize(2);
+        assertThat(values.get(0)).contains(",eur:1.129,fillUp:true,km:1,ltr:50.0,memo:duke-car refuelling,consumption:");
+        assertThat(values.get(1)).contains(",eur:1.129,fillUp:true,km:130000,ltr:50.0,memo:duke-car refuelling,consumption:0.00");
+        response.close();
     }
 
 }

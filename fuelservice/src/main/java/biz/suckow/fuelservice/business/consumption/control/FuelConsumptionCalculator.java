@@ -20,7 +20,7 @@ package biz.suckow.fuelservice.business.consumption.control;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.refuelling.control.RefuellingLocator;
+import biz.suckow.fuelservice.business.refuelling.boundary.RefuellingStore;
 import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 import biz.suckow.fuelservice.business.refuelling.entity.StockAddition;
 import biz.suckow.fuelservice.business.refuelling.entity.StockRelease;
@@ -28,20 +28,21 @@ import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 import javax.inject.Inject;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Logger;
 
 public class FuelConsumptionCalculator {
-    private final RefuellingLocator refuellingLocator;
+    private RefuellingStore refuellingStore;
     private final FuelStockLocator fuelStockLocator;
     private final Logger logger;
 
     @Inject
-    public FuelConsumptionCalculator(final RefuellingLocator refuellingLocator, final FuelStockLocator fuelStockLocator,
+    public FuelConsumptionCalculator(final RefuellingStore refuellingStore, final FuelStockLocator fuelStockLocator,
                                      final Logger logger) {
-        this.refuellingLocator = refuellingLocator;
+        this.refuellingStore = refuellingStore;
         this.fuelStockLocator = fuelStockLocator;
         this.logger = logger;
     }
@@ -53,7 +54,7 @@ public class FuelConsumptionCalculator {
 
         BigDecimal result = null;
         final Date refuelingDate = refuelling.getDateRefuelled();
-        final Optional<Refuelling> possibleLastFillUp = this.refuellingLocator.getFillUpBefore(refuelingDate);
+        final Optional<Refuelling> possibleLastFillUp = this.refuellingStore.getFillUpBefore(refuelingDate);
         if (possibleLastFillUp.isPresent()) {
             final Vehicle vehicle = refuelling.getVehicle();
             final Date lastFillUpDate = possibleLastFillUp.get().getDateRefuelled();
@@ -62,18 +63,18 @@ public class FuelConsumptionCalculator {
             litres = litres.add(this.getLitresConsumedFromStock(lastFillUpDate, refuelingDate, vehicle));
             litres = litres.add(this.getLitresRefueledBetween(lastFillUpDate, refuelingDate, vehicle));
 
-            final Double distance = refuelling.getKilometre() - possibleLastFillUp.get().getKilometre();
+            final Long distance = refuelling.getKilometre() - possibleLastFillUp.get().getKilometre();
             if (distance == 0D) {
                 this.logger.warning("Cannot compute consumption because distance evaluates to zero!");
             } else {
-                result = litres.divide(BigDecimal.valueOf(distance));
+                result = litres.divide(BigDecimal.valueOf(distance), 4, RoundingMode.HALF_UP);
             }
         }
         return Optional.ofNullable(result);
     }
 
     private BigDecimal getLitresRefueledBetween(final Date left, final Date right, final Vehicle vehicle) {
-        final List<Refuelling> partials = this.refuellingLocator.getPartialRefuelingsBetween(left, right, vehicle);
+        final List<Refuelling> partials = this.refuellingStore.getPartialRefuellingsBetween(left, right, vehicle);
         final BigDecimal result = this.sumRefueledLitres(partials);
         return result;
     }

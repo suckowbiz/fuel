@@ -27,7 +27,7 @@ import java.util.Date;
 public class RefuellingMeta {
     public Date date;
     public String memo;
-    public double kilometre;
+    public long kilometre;
     public double eurosPerLitre;
     public double litresToTank;
     public double litresToStock;

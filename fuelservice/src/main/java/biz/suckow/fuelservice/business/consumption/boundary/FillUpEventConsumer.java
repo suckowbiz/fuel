@@ -24,16 +24,20 @@ import biz.suckow.fuelservice.business.consumption.control.FuelConsumptionCalcul
 import biz.suckow.fuelservice.business.consumption.entity.FillUpEvent;
 import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 
-import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.enterprise.event.Observes;
 import javax.enterprise.event.TransactionPhase;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Stateless
+@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 public class FillUpEventConsumer {
     @Inject
     private FuelConsumptionCalculator maths;
@@ -41,14 +45,18 @@ public class FillUpEventConsumer {
     @Inject
     private EntityManager em;
 
-    @Asynchronous
-    public void consume(@Observes(during = TransactionPhase.AFTER_SUCCESS) final FillUpEvent event) {
-        final Refuelling refuelling = this.em.find(Refuelling.class, event.getRefuellingId());
+    @Inject
+    private Logger logger;
+
+    public void onAfterFillUp(@Observes(during = TransactionPhase.AFTER_SUCCESS) final FillUpEvent event) {
+        final Refuelling refuelling = event.getRefuelling();
+        this.em.merge(refuelling);
         final Optional<BigDecimal> possibleResult = this.maths.computeConsumptionFor(refuelling);
         if (possibleResult.isPresent()) {
-            this.em.refresh(refuelling);
             refuelling.setConsumption(possibleResult.get().doubleValue());
             this.em.merge(refuelling);
+        } else {
+            this.logger.log(Level.WARNING, "No consumption computation result present.");
         }
     }
 }

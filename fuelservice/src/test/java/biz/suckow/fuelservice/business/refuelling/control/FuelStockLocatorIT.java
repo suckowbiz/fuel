@@ -45,7 +45,10 @@ public class FuelStockLocatorIT extends PersistenceSupport {
         stock.setVehicle(dukeCar);
         em.persist(stock);
 
-        final Optional<FuelStock> actualResult = new FuelStockLocator(em).locate(dukeCar);
+        FuelStockStore cut = new FuelStockStore();
+        cut.em = em;
+
+        final Optional<FuelStock> actualResult = cut.getFuelStockOf(dukeCar);
         assertThat(actualResult.isPresent());
         assertThat(actualResult.get()).isSameAs(stock);
     }

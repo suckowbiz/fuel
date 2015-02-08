@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.refuelling.control;
+package biz.suckow.fuelservice.business.refuelling.boundary;
 
 /*
  * #%L
@@ -25,6 +25,7 @@ import biz.suckow.fuelservice.business.TestHelper;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
 import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.Date;
@@ -33,8 +34,13 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RefuellingLocatorIT extends PersistenceSupport {
-    private final RefuellingLocator cut = new RefuellingLocator(em);
+public class RefuellingStoreIT extends PersistenceSupport {
+    private final RefuellingStore cut = new RefuellingStore();
+
+    @BeforeClass
+    private void setUp() {
+        this.cut.em = em;
+    }
 
     @Test
     public void mustFetchPartialsBetween() {
@@ -70,7 +76,7 @@ public class RefuellingLocatorIT extends PersistenceSupport {
         final Refuelling partialAprilDuke = this.createRefueling(dukeCar, april, false);
         em.persist(partialAprilDuke);
 
-        final List<Refuelling> actualRefuellings = this.cut.getPartialRefuelingsBetween(january, april, dukeCar);
+        final List<Refuelling> actualRefuellings = this.cut.getPartialRefuellingsBetween(january, april, dukeCar);
         assertThat(actualRefuellings).hasSize(2).containsOnly(partialFebruaryDuke, partialMarchDuke);
     }
 
@@ -108,7 +114,7 @@ public class RefuellingLocatorIT extends PersistenceSupport {
     }
 
     private Refuelling createRefueling(final Vehicle vehicle, final Date date, final Boolean isFillUp) {
-        return new Refuelling.Builder().dateRefueled(date).eurosPerLitre(1D).fillUp(isFillUp).kilometre(1D).litres(1D)
+        return new Refuelling.Builder().dateRefueled(date).eurosPerLitre(1D).fillUp(isFillUp).kilometre(1L).litres(1D)
                 .vehicle(vehicle).build();
     }
 }

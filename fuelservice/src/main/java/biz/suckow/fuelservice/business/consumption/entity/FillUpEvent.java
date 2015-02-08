@@ -20,18 +20,20 @@ package biz.suckow.fuelservice.business.consumption.entity;
  * #L%
  */
 
+import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
+
 import java.util.Objects;
 
 public class FillUpEvent {
-    private Long refuellingId;
+    private Refuelling refuelling;
 
-    public Long getRefuellingId() {
-        return this.refuellingId;
+    public Refuelling getRefuelling() {
+        return this.refuelling;
     }
 
-    public FillUpEvent setRefuellingId(final Long refuellingId) {
-        Objects.requireNonNull(refuellingId, "Refuelling id must not be null.");
-        this.refuellingId = refuellingId;
+    public FillUpEvent setRefuelling(final Refuelling refuelling) {
+        Objects.requireNonNull(refuelling, "Refuelling must not be null.");
+        this.refuelling = refuelling;
         return this;
     }
 }

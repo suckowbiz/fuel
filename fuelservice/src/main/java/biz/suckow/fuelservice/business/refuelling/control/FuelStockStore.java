@@ -33,7 +33,7 @@ import java.util.Optional;
 
 public class FuelStockStore {
     @Inject
-    private EntityManager em;
+    EntityManager em;
 
     public void addition(final Vehicle vehicle, final Date date, final Double euros, final Double litres) {
         final StockAddition addition = new StockAddition().setDateAdded(date).setEurosPerLitre(euros).setLitres(litres);
@@ -63,4 +63,5 @@ public class FuelStockStore {
         }
         return result;
     }
+
 }

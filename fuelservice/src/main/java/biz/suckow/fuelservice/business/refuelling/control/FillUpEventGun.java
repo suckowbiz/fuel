@@ -21,22 +21,22 @@ package biz.suckow.fuelservice.business.refuelling.control;
  */
 
 import biz.suckow.fuelservice.business.consumption.entity.FillUpEvent;
+import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 
+import javax.ejb.Asynchronous;
+import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import java.util.Objects;
 
+@Stateless
 public class FillUpEventGun {
-    private final Event<FillUpEvent> fillUpEvent;
-
     @Inject
-    public FillUpEventGun(final Event<FillUpEvent> fillUpEvent) {
-        this.fillUpEvent = fillUpEvent;
-    }
+    private Event<FillUpEvent> fillUpEvent;
 
-    public void fire(final Long id) {
-        Objects.requireNonNull(id, "Refuelling id must not be null.");
-        final FillUpEvent event = new FillUpEvent().setRefuellingId(id);
+    @Asynchronous
+    public void fire(final Refuelling refuelling) {
+        final FillUpEvent event = new FillUpEvent().setRefuelling(refuelling);
         this.fillUpEvent.fire(event);
     }
 }

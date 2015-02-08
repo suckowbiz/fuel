@@ -22,9 +22,12 @@ package biz.suckow.fuelservice.business.vehicle.entity;
 
 import biz.suckow.fuelservice.business.BaseEntity;
 import biz.suckow.fuelservice.business.owner.entity.Owner;
+import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"vehicleName", "owner_id"}))
@@ -42,6 +45,16 @@ public class Vehicle extends BaseEntity {
     @NotNull
     @ManyToOne(optional = false)
     private Owner owner;
+    @OneToMany(mappedBy = "vehicle")
+    private Set<Refuelling> refuellings = new HashSet<>();
+
+    public Set<Refuelling> getRefuellings() {
+        return refuellings;
+    }
+
+    public void setRefuellings(Set<Refuelling> refuellings) {
+        this.refuellings = refuellings;
+    }
 
     public Owner getOwner() {
         return this.owner;
