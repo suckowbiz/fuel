@@ -45,8 +45,8 @@ public class Vehicle extends BaseEntity {
     @NotNull
     @ManyToOne(optional = false)
     private Owner owner;
-    @OneToMany(mappedBy = "vehicle")
     @OrderBy("id DESC")
+    @OneToMany(mappedBy = "vehicle", cascade = CascadeType.REMOVE)
     private Set<Refuelling> refuellings = new HashSet<>();
 
     public Set<Refuelling> getRefuellings() {

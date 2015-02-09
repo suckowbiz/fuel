@@ -29,6 +29,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 @Stateless
@@ -47,15 +48,36 @@ public class VehicleStore {
         this.em.persist(vehicle);
     }
 
+    public void removeOwnersVehicle(String vehicleName, String ownerEmail) {
+        Optional<Owner> possibleOwner = this.ownerStore.getByEmail(ownerEmail);
+        possibleOwner.orElseThrow(() -> new IllegalArgumentException("No such user!"));
+        boolean needleFound = false;
+        Owner owner = possibleOwner.get();
+        for (Vehicle vehicle : owner.getVehicles()) {
+            if (vehicle.getVehicleName().equals(vehicleName)) {
+                needleFound = true;
+                owner.getVehicles().remove(vehicle);
+                this.em.merge(owner);
+
+                // remove cascades
+                this.em.remove(vehicle);
+                break;
+            }
+        }
+        if (needleFound == false) {
+            throw new IllegalArgumentException("No such vehicle!");
+        }
+    }
+
     public void persistNewVehicle(String email, String vehicleName) {
         Optional<Owner> possibleOwner = this.ownerStore.getByEmail(email);
         if (possibleOwner.isPresent()) {
             Owner owner = possibleOwner.get();
 
             Vehicle vehicle = new Vehicle().setOwner(owner).setVehicleName(vehicleName);
-            owner.addVehicle(vehicle);
             this.em.persist(vehicle);
 
+            owner.addVehicle(vehicle);
             this.em.merge(owner);
         } else {
             throw new IllegalArgumentException("NO SUCH OWNER.");

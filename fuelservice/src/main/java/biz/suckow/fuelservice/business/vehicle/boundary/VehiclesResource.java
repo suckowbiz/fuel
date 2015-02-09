@@ -50,9 +50,17 @@ public class VehiclesResource {
     private OwnerStore ownerStore;
 
     @TokenSecured
+    @DELETE
+    @Path("{vehicleName}")
+    public Response remove(@OwnedVehicle @PathParam("vehicleName") String vehicleName) {
+        this.vehicleStore.removeOwnersVehicle(vehicleName, this.principal.getName());
+        return Response.ok().build();
+    }
+
+    @TokenSecured
     @POST
-    @Path("{vehicle}")
-    public Response addVehicle(@Size(min = 3, max = 64) @PathParam("vehicle") String vehicleName) {
+    @Path("{vehicleName}")
+    public Response addVehicle(@Size(min = 3, max = 64) @PathParam("vehicleName") String vehicleName) {
         Set<String> ownedVehicles = this.principal.getOwnedVehicleNames();
         if (ownedVehicles.contains(vehicleName)) {
             return Response.status(Response.Status.BAD_REQUEST).entity("Failure to add duplicate vehicle.").build();

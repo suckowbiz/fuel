@@ -39,7 +39,7 @@ public class Owner extends BaseEntity {
     @NotNull
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
-    @OneToMany(mappedBy = "owner")
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     private Set<Vehicle> vehicles;
     @NotNull
     @Column(unique = true, nullable = false)
