@@ -27,9 +27,7 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonValue;
 import javax.json.stream.JsonParser;
-import javax.sql.rowset.spi.SyncResolver;
 import javax.ws.rs.core.Response;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;

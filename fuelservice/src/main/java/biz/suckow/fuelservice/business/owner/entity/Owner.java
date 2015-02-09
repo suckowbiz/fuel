@@ -60,6 +60,9 @@ public class Owner extends BaseEntity {
         this.vehicles = new HashSet<>();
     }
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
 
     public Boolean getIsLoggedOut() {
         return isLoggedOut;
@@ -67,11 +70,6 @@ public class Owner extends BaseEntity {
 
     public void setIsLoggedOut(Boolean isLoggedOn) {
         this.isLoggedOut = isLoggedOn;
-    }
-
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public String getPassword() {

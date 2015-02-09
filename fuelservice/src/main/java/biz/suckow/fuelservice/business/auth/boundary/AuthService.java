@@ -27,7 +27,6 @@ import biz.suckow.fuelservice.business.owner.entity.Owner;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Stateless

@@ -29,7 +29,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 @Stateless
