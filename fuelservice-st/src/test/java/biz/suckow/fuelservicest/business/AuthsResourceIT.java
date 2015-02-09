@@ -22,7 +22,6 @@ package biz.suckow.fuelservicest.business;
 
 import org.testng.annotations.Test;
 
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import static org.assertj.core.api.Assertions.assertThat;

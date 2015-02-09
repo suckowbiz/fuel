@@ -20,62 +20,26 @@ package biz.suckow.fuelservice.business.refuelling.boundary;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.consumption.boundary.FillUpEventConsumer;
-import biz.suckow.fuelservice.business.consumption.entity.FillUpEvent;
-import biz.suckow.fuelservice.business.refuelling.control.FillUpEventGun;
-import biz.suckow.fuelservice.business.refuelling.control.FuelStockStore;
 import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
-import biz.suckow.fuelservice.business.refuelling.entity.RefuellingMeta;
 import biz.suckow.fuelservice.business.vehicle.boundary.VehicleStore;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Stateless
 public class RefuellingStore {
     @Inject
     EntityManager em;
-    @Inject
-    FillUpEventGun gun;
-    @Inject
-    FuelStockStore stockStore;
-    @Inject
-    VehicleStore vehicleStore;
-    @Inject
-    private Event<FillUpEvent> fillUpEvent;
 
-    public void add(final String vehicleName, final String ownerName, final RefuellingMeta meta) {
-        // TODO handle previous additions /recalculate ...
-        final Vehicle vehicle = this.vehicleStore.getVehicleByNameAndOwnerEmail(ownerName, vehicleName)
-                .orElseThrow(() -> new IllegalStateException("No such vehicle."));
-        if (meta.litresToStock > 0D) {
-            this.stockStore.addition(vehicle, meta.date, meta.eurosPerLitre, meta.litresToStock);
-        }
-        if (meta.litresFromStock > 0D) {
-            this.stockStore.release(vehicle, meta.date, meta.litresFromStock);
-        }
-
-        Refuelling refuelling;
-        if (meta.isFull) {
-            refuelling = this.storeFillUp(vehicle, meta.eurosPerLitre,
-                    meta.litresToTank, meta.kilometre, meta.memo, meta.date);
-            final FillUpEvent event = new FillUpEvent().setRefuelling(refuelling);
-            this.fillUpEvent.fire(event);
-        } else {
-            refuelling = this.storePartialRefueling(vehicle, meta.eurosPerLitre, meta.litresToTank,
-                    meta.memo, meta.date);
-        }
-        vehicle.getRefuellings().add(refuelling);
-        this.em.merge(vehicle);
-    }
+    @Inject
+    private VehicleStore vehicleStore;
 
     public Refuelling storeFillUp(final Vehicle vehicle, final Double eurosPerLitre, final Double litres, final Long kilometre, final String memo,
                                   final Date date) {
@@ -103,6 +67,17 @@ public class RefuellingStore {
         return result;
     }
 
+    public Optional<Refuelling> getFillUpAfter(final Date date) {
+        final List<Refuelling> refuellings = this.em
+                .createNamedQuery(Refuelling.FIND_BY_FILLED_UP_AND_DATE_AFTER, Refuelling.class)
+                .setParameter("left", date, TemporalType.TIMESTAMP).getResultList();
+        Optional<Refuelling> result = Optional.empty();
+        if (refuellings.size() > 0) {
+            result = Optional.of(refuellings.get(0));
+        }
+        return result;
+    }
+
     public List<Refuelling> getPartialRefuellingsBetween(final Date left, final Date right, final Vehicle vehicle) {
         final List<Refuelling> result = this.em
                 .createNamedQuery(Refuelling.FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN, Refuelling.class)
@@ -111,9 +86,18 @@ public class RefuellingStore {
         return result;
     }
 
-    public Set<Refuelling> getForOnwerEmailAndVehicleName(String ownerEmail, String vehicleName) {
-        Vehicle vehicle = this.vehicleStore.getVehicleByNameAndOwnerEmail(ownerEmail, vehicleName).orElseThrow(() -> new IllegalStateException("No such vehicle/ owner association."));
-        Set<Refuelling> result = vehicle.getRefuellings();
-        return result;
+    public Optional<Refuelling> getById(Long id) {
+        Refuelling result = null;
+        try {
+            result = this.em.find(Refuelling.class, id);
+        } catch (EntityNotFoundException e) {
+           /* NOP */
+        }
+        return Optional.ofNullable(result);
+    }
+
+
+    public void remove(Refuelling refuelling) {
+        this.em.remove(refuelling);
     }
 }

@@ -21,22 +21,22 @@ package biz.suckow.fuelservicest.business;
  */
 
 import org.assertj.core.api.Assertions;
-import org.assertj.core.extractor.ToStringExtractor;
 import org.testng.annotations.Test;
 
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
+import javax.json.stream.JsonParser;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.time.Instant;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 @Test(dependsOnGroups = "vehicle")
 public class RefuellingsResourceIT extends ArquillianBlackBoxTest {
@@ -79,10 +79,11 @@ public class RefuellingsResourceIT extends ArquillianBlackBoxTest {
         Assertions.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         response.close();
     }
-    
+
     @Test(dependsOnMethods = "testAddTwoFullRefuellingsSucceeds")
-    public void testListRefuellingsSucceeds () {
+    public void testListRefuellingsSucceeds() {
         Response response = this.target.path("refuellings/{vehicleName}").resolveTemplate("vehicleName", VehiclesResourceIT.VEHICLE_NAME).request().header("X-FUEL-TOKEN", AuthsResourceIT.token).get();
+        Assertions.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
 
         List<String> values = new ArrayList<>();
         response.readEntity(JsonArray.class).forEach(new Consumer<JsonValue>() {
@@ -92,10 +93,46 @@ public class RefuellingsResourceIT extends ArquillianBlackBoxTest {
             }
         });
 
-        Assertions.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
         assertThat(values).hasSize(2);
-        assertThat(values.get(0)).contains(",eur:1.129,fillUp:true,km:1,ltr:50.0,memo:duke-car refuelling,consumption:");
-        assertThat(values.get(1)).contains(",eur:1.129,fillUp:true,km:130000,ltr:50.0,memo:duke-car refuelling,consumption:0.00");
+        assertThat(values.get(0)).contains(",eur:1.129,fillUp:true,km:130000,ltr:50.0,memo:duke-car refuelling,consumption:0.00");
+        assertThat(values.get(1)).contains(",eur:1.129,fillUp:true,km:1,ltr:50.0,memo:duke-car refuelling,consumption:");
+        response.close();
+    }
+
+    @Test(dependsOnMethods = "testListRefuellingsSucceeds")
+    public void testRemoveRefuellingsSucceeds() {
+        Response response = this.target.path("refuellings/{vehicleName}")
+                .resolveTemplate("vehicleName", VehiclesResourceIT.VEHICLE_NAME)
+                .request().header("X-FUEL-TOKEN", AuthsResourceIT.token)
+                .get();
+        Assertions.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+
+        JsonArray jsonArray = response.readEntity(JsonArray.class);
+        response.close();
+
+        JsonParser parser = Json.createParserFactory(null).createParser(jsonArray);
+        while (parser.hasNext()) {
+            JsonParser.Event event = parser.next();
+            switch (event) {
+                case KEY_NAME:
+                    if (parser.getString().equals("id")) {
+                        parser.next();
+                        long primaryKey = parser.getLong();
+                        Response deleteResponse = this.target.path("refuellings/{refuellingId}")
+                                .resolveTemplate("refuellingId", primaryKey)
+                                .request().header("X-FUEL-TOKEN", AuthsResourceIT.token)
+                                .delete();
+                        assertThat(deleteResponse.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+                        deleteResponse.close();
+                    }
+                default:
+                    break;
+            }
+        }
+
+        response = this.target.path("refuellings/{vehicleName}").resolveTemplate("vehicleName", VehiclesResourceIT.VEHICLE_NAME).request().header("X-FUEL-TOKEN", AuthsResourceIT.token).get();
+        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+        assertThat(response.readEntity(JsonArray.class)).isEmpty();
         response.close();
     }
 

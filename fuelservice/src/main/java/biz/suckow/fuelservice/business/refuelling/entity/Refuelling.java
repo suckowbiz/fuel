@@ -34,13 +34,16 @@ import java.util.Date;
         @NamedQuery(name = Refuelling.FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN, query = "SELECT r FROM Refuelling r WHERE r.isFillUp = false AND r.dateRefuelled > :left "
                 + "AND r.dateRefuelled < :right AND r.vehicle = :vehicle"),
         @NamedQuery(name = Refuelling.FIND_BY_FILLED_UP_AND_DATE_BEFORE, query = "SELECT r FROM Refuelling r WHERE r.isFillUp = true "
-                + "AND r.dateRefuelled < :right ORDER BY r.dateRefuelled DESC ")})
+                + "AND r.dateRefuelled < :right ORDER BY r.dateRefuelled DESC "),
+        @NamedQuery(name = Refuelling.FIND_BY_FILLED_UP_AND_DATE_AFTER, query = "SELECT r FROM Refuelling r WHERE r.isFillUp = true "
+                + "AND r.dateRefuelled > :left ORDER BY r.dateRefuelled ASC")})
 public class Refuelling extends BaseEntity {
     private static final long serialVersionUID = 9175526663957115977L;
     private static final String PREFIX = "biz.suckow.fuelservice.business.refuelling.entity.";
     public static final String FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN = Refuelling.PREFIX
             + "findByVehicleAndRefuelDate";
     public static final String FIND_BY_FILLED_UP_AND_DATE_BEFORE = Refuelling.PREFIX + "findByFilledUpAndDateBefore";
+    public static final String FIND_BY_FILLED_UP_AND_DATE_AFTER = Refuelling.PREFIX + "findByFilledUpAndDateAfter";
     @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)

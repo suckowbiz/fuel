@@ -46,6 +46,7 @@ public class Vehicle extends BaseEntity {
     @ManyToOne(optional = false)
     private Owner owner;
     @OneToMany(mappedBy = "vehicle")
+    @OrderBy("id DESC")
     private Set<Refuelling> refuellings = new HashSet<>();
 
     public Set<Refuelling> getRefuellings() {

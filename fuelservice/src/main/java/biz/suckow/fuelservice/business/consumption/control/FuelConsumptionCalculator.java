@@ -35,9 +35,9 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 public class FuelConsumptionCalculator {
-    private RefuellingStore refuellingStore;
     private final FuelStockLocator fuelStockLocator;
     private final Logger logger;
+    private RefuellingStore refuellingStore;
 
     @Inject
     public FuelConsumptionCalculator(final RefuellingStore refuellingStore, final FuelStockLocator fuelStockLocator,

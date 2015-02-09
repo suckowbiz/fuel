@@ -21,8 +21,6 @@ package biz.suckow.fuelservice.business.refuelling.boundary;
  */
 
 import biz.suckow.fuelservice.business.owner.entity.Owner;
-import biz.suckow.fuelservice.business.refuelling.boundary.RefuellingStore;
-import biz.suckow.fuelservice.business.refuelling.control.FillUpEventGun;
 import biz.suckow.fuelservice.business.refuelling.control.FuelStockStore;
 import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 import biz.suckow.fuelservice.business.vehicle.boundary.VehicleStore;
@@ -38,9 +36,9 @@ import javax.persistence.EntityManager;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Optional;
 
-import static org.easymock.EasyMock.*;
+import static org.easymock.EasyMock.cmp;
+import static org.easymock.EasyMock.expectLastCall;
 
 public class RefuellingStoreTest extends EasyMockSupport {
 
@@ -60,8 +58,6 @@ public class RefuellingStoreTest extends EasyMockSupport {
     @Mock
     private FuelStockStore stockStore;
     @Mock
-    private FillUpEventGun gun;
-    @Mock
     private VehicleStore vehicleStore;
     @TestSubject
     private RefuellingStore cut = new RefuellingStore();
@@ -69,14 +65,6 @@ public class RefuellingStoreTest extends EasyMockSupport {
     @BeforeClass
     private void beforeClass() {
         injectMocks(this);
-    }
-
-    @Test(expectedExceptions = IllegalStateException.class)
-    public void addMustFail() {
-        this.resetAll();
-        expect(this.vehicleStore.getVehicleByNameAndOwnerEmail(anyString(), anyString())).andStubReturn(Optional.<Vehicle>empty());
-        this.replayAll();
-        this.cut.add(null, null, null);
     }
 
     @Test
