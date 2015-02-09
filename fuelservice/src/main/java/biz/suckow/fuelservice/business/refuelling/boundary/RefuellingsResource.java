@@ -20,7 +20,7 @@ package biz.suckow.fuelservice.business.refuelling.boundary;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.owner.entity.Authenticated;
+import biz.suckow.fuelservice.business.owner.entity.CurrentIdentity;
 import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
 import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 import biz.suckow.fuelservice.business.refuelling.entity.RefuellingMeta;
@@ -37,7 +37,6 @@ import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Collection;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -53,7 +52,7 @@ public class RefuellingsResource {
     @Inject
     private Logger logger;
 
-    @Authenticated
+    @CurrentIdentity
     @Inject
     private OwnerPrincipal principal;
 

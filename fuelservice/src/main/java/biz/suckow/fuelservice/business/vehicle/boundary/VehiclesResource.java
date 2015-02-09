@@ -21,7 +21,7 @@ package biz.suckow.fuelservice.business.vehicle.boundary;
  */
 
 import biz.suckow.fuelservice.business.owner.boundary.OwnerStore;
-import biz.suckow.fuelservice.business.owner.entity.Authenticated;
+import biz.suckow.fuelservice.business.owner.entity.CurrentIdentity;
 import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
 import biz.suckow.fuelservice.business.token.entity.TokenSecured;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
@@ -39,7 +39,7 @@ import java.util.Set;
 @RequestScoped
 @Path("vehicles")
 public class VehiclesResource {
-    @Authenticated
+    @CurrentIdentity
     @Inject
     private OwnerPrincipal principal;
 

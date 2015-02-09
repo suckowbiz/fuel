@@ -39,7 +39,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test(dependsOnGroups = "refuelling")
 public class ResourceRemovalIT extends ArquillianBlackBoxTest {
 
-    @Test(dependsOnMethods = "testRemoveVehicleSucceeds")
+
+    @Test(dependsOnMethods = "testLogoutSucceeds")
     public void testRemoveOwnerSucceeds() {
         Response response = this.target.path("owners/{email}")
                 .resolveTemplate("email", OwnersResourceIT.OWNER_EMAIL)
@@ -47,6 +48,36 @@ public class ResourceRemovalIT extends ArquillianBlackBoxTest {
                 .header("X-FUEL-TOKEN", AuthsResourceIT.token)
                 .delete();
         assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+        response.close();
+    }
+
+    @Test(dependsOnMethods = "testRemoveVehicleSucceeds")
+    public void testLogoutSucceeds() {
+        Response response = this.target.path("auths/{email}")
+                .resolveTemplate("email", OwnersResourceIT.OWNER_EMAIL)
+                .request()
+                .header("X-FUEL-TOKEN", AuthsResourceIT.token)
+                .delete();
+        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+        response.close();
+
+        response = this.target.path("auths/{email}")
+                .resolveTemplate("email", OwnersResourceIT.OWNER_EMAIL)
+                .request()
+                .header("X-FUEL-TOKEN", AuthsResourceIT.token)
+                .delete();
+        assertThat(response.getStatus()).isEqualTo(Response.Status.UNAUTHORIZED.getStatusCode());
+        response.close();
+
+        response = this.target.path("auths/token/{email}/{password}")
+                .resolveTemplate("email", OwnersResourceIT.OWNER_EMAIL)
+                .resolveTemplate("password", "password")
+                .request()
+                .get();
+        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
+
+        AuthsResourceIT.token = response.readEntity(String.class);
+        assertThat(AuthsResourceIT.token).isNotNull().isNotEmpty();
         response.close();
     }
 

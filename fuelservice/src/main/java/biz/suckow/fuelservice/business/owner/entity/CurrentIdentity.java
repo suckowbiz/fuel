@@ -29,5 +29,5 @@ import java.lang.annotation.Target;
 @Qualifier
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.METHOD})
 @Retention(value = RetentionPolicy.RUNTIME)
-public @interface Authenticated {
+public @interface CurrentIdentity {
 }

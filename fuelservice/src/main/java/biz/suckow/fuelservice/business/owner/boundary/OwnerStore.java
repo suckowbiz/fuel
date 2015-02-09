@@ -69,7 +69,8 @@ public class OwnerStore {
                     .getRoles()
                     .stream()
                     .collect(Collectors.toSet());
-            result = new OwnerPrincipal().setName(email).setOwnedVehicleNames(vehicleNames).setRoles(roles);
+            boolean isLoggedOut = possibleOwner.get().getIsLoggedOut();
+            result = new OwnerPrincipal().setName(email).setOwnedVehicleNames(vehicleNames).setRoles(roles).setLoggedOut(isLoggedOut);
         }
         return result;
     }

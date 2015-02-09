@@ -20,7 +20,7 @@ package biz.suckow.fuelservice.business.token.boundary;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.owner.entity.Authenticated;
+import biz.suckow.fuelservice.business.owner.entity.CurrentIdentity;
 import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
 import biz.suckow.fuelservice.business.owner.entity.Role;
 import biz.suckow.fuelservice.business.token.entity.TokenSecured;
@@ -44,7 +44,7 @@ public class TokenSecuredFilter implements ContainerRequestFilter {
     @Context
     private ResourceInfo resourceInfo;
 
-    @Authenticated
+    @CurrentIdentity
     @Inject
     private Instance<OwnerPrincipal> principalFactory;
 
@@ -56,6 +56,11 @@ public class TokenSecuredFilter implements ContainerRequestFilter {
         boolean isNotInRole = Collections.disjoint(this.principalFactory.get().getRoles(), rolesAllowed);
         if (isNotInRole) {
             containerRequestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
+        }
+        boolean isLoggedOut = principalFactory.get().isLoggedOut();
+        if (isLoggedOut) {
+            containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
+                    .entity("Being logged out requests must not be submitted.").build());
         }
     }
 }

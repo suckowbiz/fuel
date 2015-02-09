@@ -45,6 +45,9 @@ public class Owner extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(nullable = false)
+    private Boolean isLoggedOut = true;
+
     /**
      * The password is expected to be hashed by frontend. Password are stored "as is".
      */
@@ -56,6 +59,16 @@ public class Owner extends BaseEntity {
         this.roles = new HashSet<>();
         this.vehicles = new HashSet<>();
     }
+
+
+    public Boolean getIsLoggedOut() {
+        return isLoggedOut;
+    }
+
+    public void setIsLoggedOut(Boolean isLoggedOn) {
+        this.isLoggedOut = isLoggedOn;
+    }
+
 
     public static long getSerialVersionUID() {
         return serialVersionUID;

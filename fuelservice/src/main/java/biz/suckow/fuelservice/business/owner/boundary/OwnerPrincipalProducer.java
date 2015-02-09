@@ -20,7 +20,7 @@ package biz.suckow.fuelservice.business.owner.boundary;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.owner.entity.Authenticated;
+import biz.suckow.fuelservice.business.owner.entity.CurrentIdentity;
 import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
 import biz.suckow.fuelservice.business.token.boundary.TokenService;
 import biz.suckow.fuelservice.business.token.control.TokenValidationException;
@@ -41,7 +41,7 @@ public class OwnerPrincipalProducer {
     @Inject
     private OwnerStore ownerStore;
 
-    @Authenticated
+    @CurrentIdentity
     @Produces
     public OwnerPrincipal produce() throws TokenValidationException {
         String token = request.getHeader(TokenService.TOKEN_HEADER_NAME);

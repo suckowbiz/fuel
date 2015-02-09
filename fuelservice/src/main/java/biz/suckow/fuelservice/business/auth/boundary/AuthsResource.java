@@ -22,13 +22,11 @@ package biz.suckow.fuelservice.business.auth.boundary;
 
 import biz.suckow.fuelservice.business.owner.entity.Owner;
 import biz.suckow.fuelservice.business.token.boundary.TokenService;
+import biz.suckow.fuelservice.business.token.entity.TokenSecured;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
@@ -42,10 +40,18 @@ public class AuthsResource {
     @Inject
     private TokenService tokenService;
 
+    @TokenSecured
+    @DELETE
+    @Path("{email}")
+    public Response logout(@PathParam("email") String email) {
+        this.loginService.logout(email);
+        return Response.ok().build();
+    }
+
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("token/{email}/{password}")
-    public Response generateToken(@PathParam("email") String email, @PathParam("password") String password) {
+    public Response login(@PathParam("email") String email, @PathParam("password") String password) {
         Response response = Response.status(Response.Status.UNAUTHORIZED).build();
         Optional<Owner> possibleOwner = this.loginService.login(email, password);
         if (possibleOwner.isPresent()) {

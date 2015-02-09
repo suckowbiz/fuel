@@ -26,10 +26,14 @@ import biz.suckow.fuelservice.business.owner.entity.Owner;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.persistence.EntityManager;
+import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @Stateless
 public class AuthService {
+    @Inject
+    private EntityManager em;
     @Inject
     private OwnerStore ownerStore;
 
@@ -37,12 +41,21 @@ public class AuthService {
         Optional<Owner> result = Optional.empty();
         Optional<Owner> possibleOwner = this.ownerStore.getByEmail(email);
         if (possibleOwner.isPresent()) {
-            if (possibleOwner.get().getPassword().equals(password)) {
-                result = possibleOwner;
+            Owner owner = possibleOwner.get();
+            if (owner.getPassword().equals(password)) {
+                owner.setIsLoggedOut(false);
+                owner = this.em.merge(owner);
+                result = Optional.of(owner);
             }
         }
         return result;
     }
 
-    // logout? -> remember logout happened and a new login is required (db) and skip any token requests meanwhile
+    public void logout(String email) {
+        Optional<Owner> possibleOwner = this.ownerStore.getByEmail(email);
+        possibleOwner.orElseThrow(() -> new IllegalArgumentException("No such user!"));
+        Owner owner = possibleOwner.get();
+        owner.setIsLoggedOut(true);
+        this.em.merge(owner);
+    }
 }
