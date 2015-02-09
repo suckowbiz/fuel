@@ -26,7 +26,7 @@ import javax.ws.rs.core.Response;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Test(groups = "login", dependsOnGroups = "owner")
+@Test(groups = "auth", dependsOnGroups = "owner")
 public class AuthsResourceIT extends ArquillianBlackBoxTest {
     static String token;
 

@@ -31,7 +31,7 @@ import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Test(groups = "vehicle", dependsOnGroups = "login")
+@Test(groups = "vehicle", dependsOnGroups = "auth")
 public class VehiclesResourceIT extends ArquillianBlackBoxTest {
     public static final String VEHICLE_NAME = "duke-car";
 
@@ -93,40 +93,6 @@ public class VehiclesResourceIT extends ArquillianBlackBoxTest {
                 .header("X-FUEL-TOKEN", AuthsResourceIT.token)
                 .post(null);
         assertThat(response.getStatus()).isEqualTo(Response.Status.BAD_REQUEST.getStatusCode());
-        response.close();
-    }
-
-    @Test(dependsOnMethods = "testAddDuplicateVehicleFails")
-    public void testRemovalSucceeds() {
-        Response response = this.target.path("vehicles/{vehicle}")
-                .resolveTemplate("vehicle", "dutches-bicycle")
-                .request()
-                .header("X-FUEL-TOKEN", AuthsResourceIT.token)
-                .post(null);
-        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        response.close();
-
-        response = this.target.path("vehicles/{vehicle}")
-                .resolveTemplate("vehicle", "dutches-bicycle")
-                .request()
-                .header("X-FUEL-TOKEN", AuthsResourceIT.token)
-                .delete();
-        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        response.close();
-
-        response = this.target.path("vehicles")
-                .request()
-                .header("X-FUEL-TOKEN", AuthsResourceIT.token)
-                .get();
-        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        Set<String> values = new HashSet<>();
-        response.readEntity(JsonArray.class).forEach(new Consumer<JsonValue>() {
-            @Override
-            public void accept(JsonValue jsonValue) {
-                values.add(jsonValue.toString().replaceAll("\"", ""));
-            }
-        });
-        assertThat(values).doesNotContain("dutches-bicycle");
         response.close();
     }
 }

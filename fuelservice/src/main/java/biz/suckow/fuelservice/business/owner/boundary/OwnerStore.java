@@ -74,4 +74,9 @@ public class OwnerStore {
         return result;
     }
 
+    public void removeByEmail(String email) {
+        Optional<Owner> possibleOwner = this.getByEmail(email);
+        possibleOwner.orElseThrow(() -> new IllegalArgumentException("No such owner!"));
+        this.em.remove(possibleOwner.get());
+    }
 }

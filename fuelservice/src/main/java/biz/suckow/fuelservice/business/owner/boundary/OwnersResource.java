@@ -21,14 +21,12 @@ package biz.suckow.fuelservice.business.owner.boundary;
  */
 
 import biz.suckow.fuelservice.business.owner.entity.Owner;
+import biz.suckow.fuelservice.business.token.entity.TokenSecured;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.constraints.Size;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
 
@@ -41,6 +39,14 @@ public class OwnersResource {
 
     @Inject
     private OwnerStore ownerStore;
+
+    @TokenSecured
+    @DELETE
+    @Path("{email}")
+    public Response remove(@PathParam("email") String email) {
+        this.ownerStore.removeByEmail(email);
+        return Response.ok().build();
+    }
 
     @POST
     @Produces(APPLICATION_JSON)

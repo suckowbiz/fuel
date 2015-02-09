@@ -38,7 +38,7 @@ import java.util.function.Consumer;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Test(dependsOnGroups = "vehicle")
+@Test(groups = "refuelling", dependsOnGroups = "vehicle")
 public class RefuellingsResourceIT extends ArquillianBlackBoxTest {
 
     @Test
@@ -96,43 +96,6 @@ public class RefuellingsResourceIT extends ArquillianBlackBoxTest {
         assertThat(values).hasSize(2);
         assertThat(values.get(0)).contains(",eur:1.129,fillUp:true,km:130000,ltr:50.0,memo:duke-car refuelling,consumption:0.00");
         assertThat(values.get(1)).contains(",eur:1.129,fillUp:true,km:1,ltr:50.0,memo:duke-car refuelling,consumption:");
-        response.close();
-    }
-
-    @Test(dependsOnMethods = "testListRefuellingsSucceeds")
-    public void testRemoveRefuellingsSucceeds() {
-        Response response = this.target.path("refuellings/{vehicleName}")
-                .resolveTemplate("vehicleName", VehiclesResourceIT.VEHICLE_NAME)
-                .request().header("X-FUEL-TOKEN", AuthsResourceIT.token)
-                .get();
-        Assertions.assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-
-        JsonArray jsonArray = response.readEntity(JsonArray.class);
-        response.close();
-
-        JsonParser parser = Json.createParserFactory(null).createParser(jsonArray);
-        while (parser.hasNext()) {
-            JsonParser.Event event = parser.next();
-            switch (event) {
-                case KEY_NAME:
-                    if (parser.getString().equals("id")) {
-                        parser.next();
-                        long primaryKey = parser.getLong();
-                        Response deleteResponse = this.target.path("refuellings/{refuellingId}")
-                                .resolveTemplate("refuellingId", primaryKey)
-                                .request().header("X-FUEL-TOKEN", AuthsResourceIT.token)
-                                .delete();
-                        assertThat(deleteResponse.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-                        deleteResponse.close();
-                    }
-                default:
-                    break;
-            }
-        }
-
-        response = this.target.path("refuellings/{vehicleName}").resolveTemplate("vehicleName", VehiclesResourceIT.VEHICLE_NAME).request().header("X-FUEL-TOKEN", AuthsResourceIT.token).get();
-        assertThat(response.getStatus()).isEqualTo(Response.Status.OK.getStatusCode());
-        assertThat(response.readEntity(JsonArray.class)).isEmpty();
         response.close();
     }
 
