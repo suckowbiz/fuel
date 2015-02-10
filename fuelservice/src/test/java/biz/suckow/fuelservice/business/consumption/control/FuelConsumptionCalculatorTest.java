@@ -65,7 +65,7 @@ public class FuelConsumptionCalculatorTest extends EasyMockSupport {
         final Refuelling refuelling = new Refuelling.Builder().kilometre(100L).litres(10D).dateRefueled(new Date())
                 .fillUp(false).build();
         new FuelConsumptionCalculator(this.refuellingStoreMock, this.fuelStockLocatorMock, Logger.getAnonymousLogger())
-                .computeConsumptionFor(refuelling);
+                .computeConsumption(refuelling);
     }
 
     @Test
@@ -79,7 +79,7 @@ public class FuelConsumptionCalculatorTest extends EasyMockSupport {
                 .fillUp(true).build();
 
         final Optional<BigDecimal> actualResult = new FuelConsumptionCalculator(this.refuellingStoreMock,
-                this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumptionFor(refuelling);
+                this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumption(refuelling);
         assertThat(actualResult.isPresent()).isFalse();
     }
 
@@ -107,7 +107,7 @@ public class FuelConsumptionCalculatorTest extends EasyMockSupport {
         this.replayAll();
 
         final Optional<BigDecimal> actualResult = new FuelConsumptionCalculator(this.refuellingStoreMock,
-                this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumptionFor(refuelling);
+                this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumption(refuelling);
         assertThat(actualResult.isPresent());
         assertThat(actualResult.get().doubleValue()).isEqualTo(10D / 100D);
         this.verifyAll();
@@ -153,7 +153,7 @@ public class FuelConsumptionCalculatorTest extends EasyMockSupport {
         this.replayAll();
 
         final Optional<BigDecimal> actualResult = new FuelConsumptionCalculator(this.refuellingStoreMock,
-                this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumptionFor(refuelling);
+                this.fuelStockLocatorMock, Logger.getAnonymousLogger()).computeConsumption(refuelling);
         assertThat(actualResult.isPresent());
         assertThat(actualResult.get().doubleValue()).isEqualTo(expectedConsumption);
         this.verifyAll();

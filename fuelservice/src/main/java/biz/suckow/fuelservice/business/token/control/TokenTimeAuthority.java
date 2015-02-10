@@ -30,7 +30,8 @@ public class TokenTimeAuthority {
     public TokenTime generate() {
         long issuedAtSeconds = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
         long expiresAtSeconds = issuedAtSeconds + EXPIRATION_SECONDS;
-        TokenTime result = new TokenTime().setExpiresAt(expiresAtSeconds).setIssuedAt(issuedAtSeconds);
+        TokenTime result = new TokenTime().setExpiresAt(expiresAtSeconds)
+                                          .setIssuedAt(issuedAtSeconds);
         return result;
     }
 }

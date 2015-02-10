@@ -40,10 +40,12 @@ public class JceRestrictionUnlock {
     void unlockJceStrengthRestriction() {
         try {
             // remove restriction to be able to create JWE/JWT/JWS token
-            java.lang.reflect.Field field = Class.forName(CLASS_NAME).getDeclaredField(FIELD_NAME);
+            java.lang.reflect.Field field = Class.forName(CLASS_NAME)
+                                                 .getDeclaredField(FIELD_NAME);
             field.setAccessible(true);
             field.set(null, Boolean.FALSE);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             logger.log(Level.SEVERE, "Hacking JCE restriction failed: {0}", ex.getMessage());
         }
     }

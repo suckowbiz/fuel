@@ -78,7 +78,8 @@ public class TokenService {
                 .expiration(tokenTime.getExpiresAt())
                 .principal(principal);
 
-        String jwe = new JWEBuilder().content(jwt, MediaType.APPLICATION_JSON_TYPE).dir(this.secret.get());
+        String jwe = new JWEBuilder().content(jwt, MediaType.APPLICATION_JSON_TYPE)
+                                     .dir(this.secret.get());
 
         String jws = new JWSBuilder()
                 .content(jwe, MediaType.TEXT_PLAIN_TYPE)
@@ -87,14 +88,16 @@ public class TokenService {
     }
 
     private JsonWebToken decrypt(String jwe) throws TokenValidationException {
-        byte[] content = new JWEInput(jwe).decrypt(this.secret.get()).getRawContent();
+        byte[] content = new JWEInput(jwe).decrypt(this.secret.get())
+                                          .getRawContent();
         JsonWebToken jwt;
         try {
             jwt = JsonSerialization.fromBytes(JsonWebToken.class, content);
             if (jwt.isExpired()) {
                 throw new TokenValidationException("Token expired.");
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new TokenValidationException("Failure deserialize token.");
         }
         return jwt;

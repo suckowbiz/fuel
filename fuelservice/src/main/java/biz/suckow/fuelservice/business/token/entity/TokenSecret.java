@@ -35,7 +35,8 @@ public class TokenSecret {
     @PostConstruct
     void init() {
         StringBuilder builder = new StringBuilder();
-        byte[] privateKey = signature.getPrivateKey().getEncoded();
+        byte[] privateKey = signature.getPrivateKey()
+                                     .getEncoded();
         for (int i = 0; i < this.STRENGTH_BIT; i++) {
             builder.append(privateKey[i]);
         }

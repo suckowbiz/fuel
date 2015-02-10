@@ -31,53 +31,72 @@ import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import java.util.Date;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Stateless
 public class RefuellingService {
     @Inject
-    FuelStockStore stockStore;
+    private FuelStockStore stockStore;
+
     @Inject
-    VehicleStore vehicleStore;
+    private VehicleStore vehicleStore;
+
     @Inject
-    private RefuellingStore store;
+    private RefuellingStore refuellingStore;
+
     @Inject
     private EntityManager em;
+
     @Inject
     private Event<FillUpEvent> fillUpEvent;
 
     public void add(final String vehicleName, final String ownerName, final RefuellingMeta meta) {
-        // TODO handle previous additions /recalculate ...
         final Vehicle vehicle = this.vehicleStore.getVehicleByNameAndOwnerEmail(ownerName, vehicleName)
                 .orElseThrow(() -> new IllegalStateException("No such vehicle."));
+        updateStock(meta, vehicle);
+
+        Refuelling refuelling;
+        if (meta.isFull) {
+            refuelling = this.refuellingStore.storeFillUp(vehicle, meta.eurosPerLitre, meta.litresToTank,
+                    meta.kilometre, meta.memo, meta.date);
+            final FillUpEvent event = new FillUpEvent().setRefuelling(refuelling);
+            this.fillUpEvent.fire(event);
+        } else {
+            refuelling = this.refuellingStore.storePartialRefueling(vehicle, meta.eurosPerLitre, meta.litresToTank,
+                    meta.memo, meta.date);
+        }
+        vehicle.getRefuellings().add(refuelling);
+        this.em.merge(vehicle);
+
+        // fire fill up for next refuelling to recalculate fuel consumption considering the actual addition
+        updateNextFillUpConsumptionIfRequired(refuelling.getDateRefuelled());
+    }
+
+    public void remove(final Refuelling refuelling) {
+        final Optional<Refuelling> possibleNextFillUp = this.refuellingStore.getFillUpAfter(refuelling.getDateRefuelled());
+        possibleNextFillUp.ifPresent(nextFillUp -> {
+            // it is required to update the next refuelling since previous partials must be re-considered
+            updateNextFillUpConsumptionIfRequired(nextFillUp.getDateRefuelled());
+        });
+        this.refuellingStore.remove(refuelling);
+    }
+
+    private void updateNextFillUpConsumptionIfRequired(final Date referenceRefuelling) {
+        final Optional<Refuelling> possibleNextFillUp = this.refuellingStore.getFillUpAfter(referenceRefuelling);
+        possibleNextFillUp.ifPresent(refuelling -> {
+            final FillUpEvent event = new FillUpEvent().setRefuelling(refuelling);
+            fillUpEvent.fire(event);
+        });
+    }
+
+    private void updateStock(final RefuellingMeta meta, final Vehicle vehicle) {
         if (meta.litresToStock > 0D) {
             this.stockStore.addition(vehicle, meta.date, meta.eurosPerLitre, meta.litresToStock);
         }
         if (meta.litresFromStock > 0D) {
             this.stockStore.release(vehicle, meta.date, meta.litresFromStock);
         }
-
-        Refuelling refuelling;
-        if (meta.isFull) {
-            refuelling = this.store.storeFillUp(vehicle, meta.eurosPerLitre,
-                    meta.litresToTank, meta.kilometre, meta.memo, meta.date);
-            final FillUpEvent event = new FillUpEvent().setRefuelling(refuelling);
-            this.fillUpEvent.fire(event);
-        } else {
-            refuelling = this.store.storePartialRefueling(vehicle, meta.eurosPerLitre, meta.litresToTank,
-                    meta.memo, meta.date);
-        }
-        vehicle.getRefuellings().add(refuelling);
-        this.em.merge(vehicle);
-    }
-
-    public void remove(Refuelling refuelling) {
-        Optional<Refuelling> possibleNextFillUp = this.store.getFillUpAfter(refuelling.getDateRefuelled());
-        possibleNextFillUp.ifPresent(nextFillUp -> {
-            // it is required to update the next refuelling since previous partials must be re-considered
-            FillUpEvent event = new FillUpEvent().setRefuelling(nextFillUp);
-            fillUpEvent.fire(event);
-        });
-        this.store.remove(refuelling);
     }
 }

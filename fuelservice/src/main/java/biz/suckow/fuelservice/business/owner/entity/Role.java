@@ -21,5 +21,5 @@ package biz.suckow.fuelservice.business.owner.entity;
  */
 
 public enum Role {
-    ADMIN, OWNER;
+    ADMIN, OWNER
 }

@@ -38,8 +38,10 @@ public class OwnerStore {
     @Inject
     EntityManager em;
 
-    public void create(String email, String password) {
-        Owner owner = new Owner().addRole(Role.OWNER).setEmail(email).setPassword(password);
+    public void create(final String email, final String password) {
+        final Owner owner = new Owner().addRole(Role.OWNER)
+                .setEmail(email)
+                .setPassword(password);
         this.em.persist(owner);
     }
 
@@ -47,36 +49,38 @@ public class OwnerStore {
         Owner result = null;
         try {
             result = (Owner) this.em.createNamedQuery(Owner.QueryByEmailCaseIgnore.NAME)
-                    .setParameter(Owner.QueryByEmailCaseIgnore.EMAIL, email).getSingleResult();
-        } catch (final NoResultException e) {
-        /* NOP */
+                    .setParameter(Owner.QueryByEmailCaseIgnore.EMAIL, email)
+                    .getSingleResult();
+        }
+        catch (final NoResultException e) {
+            /* NOP */
         }
         return Optional.ofNullable(result);
     }
 
-    public OwnerPrincipal createOwnerPrincipal(String email) {
+    public OwnerPrincipal createOwnerPrincipal(final String email) {
         OwnerPrincipal result = new OwnerPrincipal();
-        Optional<Owner> possibleOwner = this.getByEmail(email);
+        final Optional<Owner> possibleOwner = this.getByEmail(email);
         if (possibleOwner.isPresent()) {
-            Set<String> vehicleNames = possibleOwner
-                    .get()
-                    .getVehicles()
+            final Owner owner = possibleOwner.get();
+            final Set<String> vehicleNames = owner.getVehicles()
                     .stream()
                     .map(Vehicle::getVehicleName)
                     .collect(Collectors.toSet());
-            Set<Role> roles = possibleOwner
-                    .get()
-                    .getRoles()
+            final Set<Role> roles = owner.getRoles()
                     .stream()
                     .collect(Collectors.toSet());
-            boolean isLoggedOut = possibleOwner.get().getIsLoggedOut();
-            result = new OwnerPrincipal().setName(email).setOwnedVehicleNames(vehicleNames).setRoles(roles).setLoggedOut(isLoggedOut);
+            final boolean isLoggedOut = owner.getIsLoggedOut();
+            result = new OwnerPrincipal().setName(email)
+                    .setOwnedVehicleNames(vehicleNames)
+                    .setRoles(roles)
+                    .setLoggedOut(isLoggedOut);
         }
         return result;
     }
 
-    public void removeByEmail(String email) {
-        Optional<Owner> possibleOwner = this.getByEmail(email);
+    public void removeByEmail(final String email) {
+        final Optional<Owner> possibleOwner = this.getByEmail(email);
         possibleOwner.orElseThrow(() -> new IllegalArgumentException("No such owner!"));
         this.em.remove(possibleOwner.get());
     }

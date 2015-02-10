@@ -51,16 +51,21 @@ public class TokenSecuredFilter implements ContainerRequestFilter {
     // TODO add exception mapper for token validation exception to return 401/403
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-        TokenSecured annotation = this.resourceInfo.getResourceMethod().getAnnotation(TokenSecured.class);
+        TokenSecured annotation = this.resourceInfo.getResourceMethod()
+                                                   .getAnnotation(TokenSecured.class);
         List<Role> rolesAllowed = Arrays.asList(annotation.value());
-        boolean isNotInRole = Collections.disjoint(this.principalFactory.get().getRoles(), rolesAllowed);
+        boolean isNotInRole = Collections.disjoint(this.principalFactory.get()
+                                                                        .getRoles(), rolesAllowed);
         if (isNotInRole) {
-            containerRequestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
+            containerRequestContext.abortWith(Response.status(Response.Status.FORBIDDEN)
+                                                      .build());
         }
-        boolean isLoggedOut = principalFactory.get().isLoggedOut();
+        boolean isLoggedOut = principalFactory.get()
+                                              .isLoggedOut();
         if (isLoggedOut) {
             containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
-                    .entity("Being logged out requests must not be submitted.").build());
+                                                      .entity("Being logged out requests must not be submitted.")
+                                                      .build());
         }
     }
 }

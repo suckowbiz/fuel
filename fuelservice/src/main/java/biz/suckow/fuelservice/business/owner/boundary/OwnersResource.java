@@ -41,21 +41,24 @@ public class OwnersResource {
     private OwnerStore ownerStore;
 
     @TokenSecured
-    @DELETE
     @Path("{email}")
-    public Response remove(@PathParam("email") String email) {
+    @DELETE
+    public Response remove(@PathParam("email") final String email) {
         this.ownerStore.removeByEmail(email);
         return Response.ok().build();
     }
 
+    @Path("{email}/{password}")
     @POST
     @Produces(APPLICATION_JSON)
-    @Path("{email}/{password}")
-    public Response register(@Size(min = 8, max = 64) @PathParam("email") String email, @Size(min = 6, max = 255) @PathParam("password") String password) {
+    public Response register(@Size(min = 8, max = 64) @PathParam("email") final String email,
+                             @Size(min = 6, max = 255) @PathParam("password") final String password) {
         Response response;
-        Optional<Owner> possibleOwner = this.ownerStore.getByEmail(email);
+        final Optional<Owner> possibleOwner = this.ownerStore.getByEmail(email);
         if (possibleOwner.isPresent()) {
-            response = Response.status(Response.Status.FORBIDDEN).entity("Please use another email address.").build();
+            response = Response.status(Response.Status.FORBIDDEN)
+                               .entity("Please use another email address.")
+                               .build();
         } else {
             this.ownerStore.create(email, password);
             response = Response.ok().build();

@@ -26,8 +26,11 @@ import java.util.Set;
 
 public class OwnerPrincipal implements Principal {
     private String name;
+
     private boolean isLoggedOut = true;
+
     private Set<Role> roles = new HashSet<>();
+
     private Set<String> ownedVehicleNames = new HashSet<>();
 
     public boolean isLoggedOut() {

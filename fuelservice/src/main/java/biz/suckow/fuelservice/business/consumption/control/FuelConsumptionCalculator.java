@@ -47,7 +47,7 @@ public class FuelConsumptionCalculator {
         this.logger = logger;
     }
 
-    public java.util.Optional<BigDecimal> computeConsumptionFor(final Refuelling refuelling) {
+    public Optional<BigDecimal> computeConsumption(final Refuelling refuelling) {
         if (refuelling.getIsFillUp() == false) {
             throw new IllegalArgumentException("Refuelling must not be a partial one.");
         }
@@ -59,15 +59,15 @@ public class FuelConsumptionCalculator {
             final Vehicle vehicle = refuelling.getVehicle();
             final Date lastFillUpDate = possibleLastFillUp.get().getDateRefuelled();
 
-            BigDecimal litres = BigDecimal.valueOf(refuelling.getLitres());
-            litres = litres.add(this.getLitresConsumedFromStock(lastFillUpDate, refuelingDate, vehicle));
-            litres = litres.add(this.getLitresRefueledBetween(lastFillUpDate, refuelingDate, vehicle));
+            final BigDecimal litresConsumed = BigDecimal.valueOf(refuelling.getLitres())
+                    .add(this.getLitresConsumedFromStock(lastFillUpDate, refuelingDate, vehicle))
+                    .add(this.getLitresRefueledBetween(lastFillUpDate, refuelingDate, vehicle));
 
-            final Long distance = refuelling.getKilometre() - possibleLastFillUp.get().getKilometre();
-            if (distance == 0D) {
+            final Long distanceDriven = refuelling.getKilometre() - possibleLastFillUp.get().getKilometre();
+            if (distanceDriven == 0D) {
                 this.logger.warning("Cannot compute consumption because distance evaluates to zero!");
             } else {
-                result = litres.divide(BigDecimal.valueOf(distance), 4, RoundingMode.HALF_UP);
+                result = litresConsumed.divide(BigDecimal.valueOf(distanceDriven), 4, RoundingMode.HALF_UP);
             }
         }
         return Optional.ofNullable(result);
@@ -88,35 +88,24 @@ public class FuelConsumptionCalculator {
 
         BigDecimal result = litresAddedToStock.subtract(litresReleasedFromStock);
         if (result.longValue() < 0L) {
-            result = result.multiply(BigDecimal.valueOf(-1)); // in case more
-            // consumed than
-            // added within
-            // this interval
+            // invert sign to fix if more consumed than added
+            result = result.multiply(BigDecimal.valueOf(-1));
         }
         return result;
     }
 
     private BigDecimal sumStockReleaseLitres(final List<StockRelease> releases) {
-        Double result = 0D;
-        for (final StockRelease release : releases) {
-            result += release.getLitres();
-        }
+        Double result = releases.stream().mapToDouble(StockRelease::getLitres).sum();
         return BigDecimal.valueOf(result);
     }
 
     private BigDecimal sumRefueledLitres(final List<Refuelling> refuellings) {
-        Double result = 0D;
-        for (final Refuelling refuelling : refuellings) {
-            result += refuelling.getLitres();
-        }
+        Double result = refuellings.stream().mapToDouble(Refuelling::getLitres).sum();
         return BigDecimal.valueOf(result);
     }
 
     private BigDecimal sumStockAdditionsLitres(final List<StockAddition> additions) {
-        Double result = 0D;
-        for (final StockAddition addition : additions) {
-            result += addition.getLitres();
-        }
+        Double result = additions.stream().mapToDouble(StockAddition::getLitres).sum();
         return BigDecimal.valueOf(result);
     }
 }

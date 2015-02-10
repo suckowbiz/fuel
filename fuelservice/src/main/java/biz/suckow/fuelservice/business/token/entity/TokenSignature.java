@@ -38,8 +38,10 @@ public class TokenSignature {
     @PostConstruct
     void init() {
         try {
-            this.keyPair = KeyPairGenerator.getInstance("RSA").generateKeyPair();
-        } catch (NoSuchAlgorithmException e) {
+            this.keyPair = KeyPairGenerator.getInstance("RSA")
+                                           .generateKeyPair();
+        }
+        catch (NoSuchAlgorithmException e) {
             this.logger.log(Level.SEVERE, "Failure to create RSA key pair: {0}", e.getMessage());
         }
     }

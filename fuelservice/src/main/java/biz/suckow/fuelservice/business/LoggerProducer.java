@@ -27,6 +27,8 @@ import java.util.logging.Logger;
 public class LoggerProducer {
     @Produces
     public Logger produce(final InjectionPoint ip) {
-        return Logger.getLogger(ip.getMember().getDeclaringClass().getName());
+        return Logger.getLogger(ip.getMember()
+                                  .getDeclaringClass()
+                                  .getName());
     }
 }

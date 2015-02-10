@@ -54,7 +54,8 @@ public class VehiclesResource {
     @Path("{vehicleName}")
     public Response remove(@OwnedVehicle @PathParam("vehicleName") String vehicleName) {
         this.vehicleStore.removeOwnersVehicle(vehicleName, this.principal.getName());
-        return Response.ok().build();
+        return Response.ok()
+                       .build();
     }
 
     @TokenSecured
@@ -63,13 +64,16 @@ public class VehiclesResource {
     public Response addVehicle(@Size(min = 3, max = 64) @PathParam("vehicleName") String vehicleName) {
         Set<String> ownedVehicles = this.principal.getOwnedVehicleNames();
         if (ownedVehicles.contains(vehicleName)) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Failure to add duplicate vehicle.").build();
+            return Response.status(Response.Status.BAD_REQUEST)
+                           .entity("Failure to add duplicate vehicle.")
+                           .build();
         }
 
         String ownerEmail = this.principal.getName();
         this.vehicleStore.persistNewVehicle(ownerEmail, vehicleName);
 
-        return Response.ok().build();
+        return Response.ok()
+                       .build();
     }
 
     @TokenSecured
@@ -81,6 +85,8 @@ public class VehiclesResource {
         for (Vehicle vehicle : vehicles) {
             builder.add(vehicle.getVehicleName());
         }
-        return Response.ok().entity(builder.build()).build();
+        return Response.ok()
+                       .entity(builder.build())
+                       .build();
     }
 }

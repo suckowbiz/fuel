@@ -51,9 +51,10 @@ public class FillUpEventConsumer {
     public void onAfterFillUp(@Observes(during = TransactionPhase.AFTER_SUCCESS) final FillUpEvent event) {
         final Refuelling refuelling = event.getRefuelling();
         this.em.merge(refuelling);
-        final Optional<BigDecimal> possibleResult = this.maths.computeConsumptionFor(refuelling);
+        final Optional<BigDecimal> possibleResult = this.maths.computeConsumption(refuelling);
         if (possibleResult.isPresent()) {
-            refuelling.setConsumption(possibleResult.get().doubleValue());
+            refuelling.setConsumption(possibleResult.get()
+                                                    .doubleValue());
             this.em.merge(refuelling);
         } else {
             this.logger.log(Level.WARNING, "No consumption computation result present.");

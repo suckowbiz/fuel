@@ -24,24 +24,28 @@ import biz.suckow.fuelservice.business.BaseEntity;
 import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * An owner is a representation of an application user that is uniquely identified by email.
- */
 @Entity
 @NamedQuery(name = Owner.QueryByEmailCaseIgnore.NAME, query = "SELECT o FROM Owner o "
         + "WHERE LOWER(o.email) = LOWER(:" + Owner.QueryByEmailCaseIgnore.EMAIL + ")")
 public class Owner extends BaseEntity {
+    public static final class QueryByEmailCaseIgnore {
+        public static final String NAME = "Owner.byEmail";
+
+        public static final String EMAIL = "ownername";
+    }
+
     private static final long serialVersionUID = -2640121939957877859L;
-    @NotNull
+
+    @Column(nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles;
+
     @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE)
     private Set<Vehicle> vehicles;
-    @NotNull
+
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -51,17 +55,12 @@ public class Owner extends BaseEntity {
     /**
      * The password is expected to be hashed by frontend. Password are stored "as is".
      */
-    @NotNull
     @Column(nullable = false)
     private String password;
 
     public Owner() {
         this.roles = new HashSet<>();
         this.vehicles = new HashSet<>();
-    }
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
     }
 
     public Boolean getIsLoggedOut() {
@@ -116,10 +115,5 @@ public class Owner extends BaseEntity {
     public Owner addVehicle(Vehicle vehicle) {
         this.vehicles.add(vehicle);
         return this;
-    }
-
-    public static final class QueryByEmailCaseIgnore {
-        public static final String NAME = "Owner.byEmail";
-        public static final String EMAIL = "ownername";
     }
 }

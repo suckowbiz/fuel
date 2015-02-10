@@ -33,27 +33,26 @@ import java.util.Optional;
 public class AuthService {
     @Inject
     private EntityManager em;
+
     @Inject
     private OwnerStore ownerStore;
 
-    public Optional<Owner> login(String email, String password) {
-        Optional<Owner> result = Optional.empty();
-        Optional<Owner> possibleOwner = this.ownerStore.getByEmail(email);
-        if (possibleOwner.isPresent()) {
-            Owner owner = possibleOwner.get();
-            if (owner.getPassword().equals(password)) {
-                owner.setIsLoggedOut(false);
-                owner = this.em.merge(owner);
-                result = Optional.of(owner);
-            }
+    public Optional<Owner> login(final String email, final String password) {
+        Owner result = null;
+        final Optional<Owner> possibleOwner = this.ownerStore.getByEmail(email);
+        possibleOwner.orElseThrow(() -> new IllegalArgumentException("No such owner!"));
+        final Owner owner = possibleOwner.get();
+        if (owner.getPassword().equals(password)) {
+            owner.setIsLoggedOut(false);
+            result = this.em.merge(owner);
         }
-        return result;
+        return Optional.ofNullable(result);
     }
 
-    public void logout(String email) {
-        Optional<Owner> possibleOwner = this.ownerStore.getByEmail(email);
+    public void logout(final String email) {
+        final Optional<Owner> possibleOwner = this.ownerStore.getByEmail(email);
         possibleOwner.orElseThrow(() -> new IllegalArgumentException("No such user!"));
-        Owner owner = possibleOwner.get();
+        final Owner owner = possibleOwner.get();
         owner.setIsLoggedOut(true);
         this.em.merge(owner);
     }

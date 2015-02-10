@@ -31,8 +31,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
 
-@Stateless
 @Path("auths")
+@Stateless
 public class AuthsResource {
     @Inject
     private AuthService loginService;
@@ -40,22 +40,22 @@ public class AuthsResource {
     @Inject
     private TokenService tokenService;
 
-    @TokenSecured
-    @DELETE
     @Path("{email}")
-    public Response logout(@PathParam("email") String email) {
+    @DELETE
+    @TokenSecured
+    public Response logout(@PathParam("email") final String email) {
         this.loginService.logout(email);
         return Response.ok().build();
     }
 
+    @Path("token/{email}/{password}")
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @Path("token/{email}/{password}")
-    public Response login(@PathParam("email") String email, @PathParam("password") String password) {
+    public Response login(@PathParam("email") final String email, @PathParam("password") final String password) {
         Response response = Response.status(Response.Status.UNAUTHORIZED).build();
-        Optional<Owner> possibleOwner = this.loginService.login(email, password);
+        final Optional<Owner> possibleOwner = this.loginService.login(email, password);
         if (possibleOwner.isPresent()) {
-            String token = tokenService.generateToken(possibleOwner.get().getEmail());
+            final String token = tokenService.generateToken(possibleOwner.get().getEmail());
             response = Response.ok(token).build();
         }
         return response;
