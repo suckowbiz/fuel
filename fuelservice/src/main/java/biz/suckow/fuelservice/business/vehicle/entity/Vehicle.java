@@ -53,12 +53,9 @@ public class Vehicle extends BaseEntity {
 
     private static final long serialVersionUID = -5360751385120611439L;
 
-    // TODO name must be url safe
-    @NotNull
     @Column(nullable = false)
     private String vehicleName;
 
-    @NotNull
     @ManyToOne(optional = false)
     private Owner owner;
 

@@ -28,7 +28,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @Singleton
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
+@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class TokenSignature {
     @Inject
     private Logger logger;
@@ -38,8 +38,7 @@ public class TokenSignature {
     @PostConstruct
     void init() {
         try {
-            this.keyPair = KeyPairGenerator.getInstance("RSA")
-                    .generateKeyPair();
+            this.keyPair = KeyPairGenerator.getInstance("RSA").generateKeyPair();
         }
         catch (NoSuchAlgorithmException e) {
             this.logger.log(Level.SEVERE, "Failure to create RSA key pair: {0}", e.getMessage());

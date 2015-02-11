@@ -24,6 +24,7 @@ import biz.suckow.fuelservice.business.owner.entity.ClientIdentity;
 import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
 
 import javax.enterprise.context.RequestScoped;
+import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -32,7 +33,7 @@ import javax.validation.ConstraintValidatorContext;
 public class OwnedVehicleValidator implements ConstraintValidator<OwnedVehicle, String> {
     @ClientIdentity
     @Inject
-    private OwnerPrincipal principal;
+    private Instance<OwnerPrincipal> principal;
 
     @Inject
     private VehicleStore vehicleStore;
@@ -43,9 +44,9 @@ public class OwnedVehicleValidator implements ConstraintValidator<OwnedVehicle, 
     }
 
     @Override
-    public boolean isValid(String vehicleName, ConstraintValidatorContext constraintValidatorContext) {
+    public boolean isValid(final String vehicleName, final ConstraintValidatorContext context) {
         boolean result = false;
-        for (String ownedVehicleName : this.principal.getOwnedVehicleNames()) {
+        for (String ownedVehicleName : this.principal.get().getOwnedVehicleNames()) {
             if (ownedVehicleName.equals(vehicleName)) {
                 result = true;
                 break;

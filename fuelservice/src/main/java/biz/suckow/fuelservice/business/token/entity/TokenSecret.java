@@ -25,7 +25,7 @@ import javax.ejb.*;
 import javax.inject.Inject;
 
 @Singleton
-@ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
+@ConcurrencyManagement(ConcurrencyManagementType.BEAN)
 public class TokenSecret {
     public static final int STRENGTH_BIT = 512;
 
@@ -36,9 +36,8 @@ public class TokenSecret {
 
     @PostConstruct
     void init() {
-        StringBuilder builder = new StringBuilder();
-        byte[] privateKey = signature.getPrivateKey()
-                .getEncoded();
+        final StringBuilder builder = new StringBuilder();
+        byte[] privateKey = signature.getPrivateKey().getEncoded();
         for (int i = 0; i < this.STRENGTH_BIT; i++) {
             builder.append(privateKey[i]);
         }

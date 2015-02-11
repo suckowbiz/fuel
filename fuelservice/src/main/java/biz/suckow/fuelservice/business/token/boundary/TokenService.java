@@ -21,11 +21,9 @@ package biz.suckow.fuelservice.business.token.boundary;
  */
 
 
-import biz.suckow.fuelservice.business.token.control.TokenTimeAuthority;
 import biz.suckow.fuelservice.business.token.control.TokenValidationException;
 import biz.suckow.fuelservice.business.token.entity.TokenSecret;
 import biz.suckow.fuelservice.business.token.entity.TokenSignature;
-import biz.suckow.fuelservice.business.token.entity.TokenTime;
 import org.jboss.resteasy.jose.jwe.JWEBuilder;
 import org.jboss.resteasy.jose.jwe.JWEInput;
 import org.jboss.resteasy.jose.jws.JWSBuilder;
@@ -39,19 +37,19 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 @Stateless
 public class TokenService {
     public static final String TOKEN_HEADER_KEY = "X-FUEL-TOKEN";
+
+    private static final long EXPIRATION_SECONDS = TimeUnit.MINUTES.toSeconds(15);
 
     @Inject
     private TokenSignature signature;
 
     @Inject
     private TokenSecret secret;
-
-    @Inject
-    private TokenTimeAuthority timeAuthority;
 
     public String readPrincipal(final String token) throws TokenValidationException {
         if (token == null || token.isEmpty()) {
@@ -71,9 +69,10 @@ public class TokenService {
             throw new IllegalArgumentException("Principal must not be null or empty.");
         }
 
-        final TokenTime tokenTime = this.timeAuthority.generate();
-        final JsonWebToken jwt = new JsonWebToken().issuer(principal).issuedAt(tokenTime.getIssuedAt())
-                .expiration(tokenTime.getExpiresAt())
+        long issuedAtSeconds = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+        long expiresAtSeconds = issuedAtSeconds + EXPIRATION_SECONDS;
+        final JsonWebToken jwt = new JsonWebToken().issuer(principal).issuedAt(issuedAtSeconds)
+                .expiration(expiresAtSeconds)
                 .principal(principal);
 
         final String jwe = new JWEBuilder().content(jwt, MediaType.APPLICATION_JSON_TYPE).dir(this.secret.get());

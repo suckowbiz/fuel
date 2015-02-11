@@ -43,21 +43,19 @@ public class VehicleStore {
     @Inject
     Logger logger;
 
-    public void persist(Vehicle vehicle) {
+    public void persist(final Vehicle vehicle) {
         this.em.persist(vehicle);
     }
 
-    public void removeOwnersVehicle(String vehicleName, String ownerEmail) {
-        Optional<Owner> possibleOwner = this.ownerStore.getByEmail(ownerEmail);
+    public void removeOwnersVehicle(final String vehicleName, final String ownerEmail) {
+        final Optional<Owner> possibleOwner = this.ownerStore.getByEmail(ownerEmail);
         possibleOwner.orElseThrow(() -> new IllegalArgumentException("No such user!"));
         boolean needleFound = false;
-        Owner owner = possibleOwner.get();
-        for (Vehicle vehicle : owner.getVehicles()) {
-            if (vehicle.getVehicleName()
-                    .equals(vehicleName)) {
+        final Owner owner = possibleOwner.get();
+        for (final Vehicle vehicle : owner.getVehicles()) {
+            if (vehicle.getVehicleName().equals(vehicleName)) {
                 needleFound = true;
-                owner.getVehicles()
-                        .remove(vehicle);
+                owner.getVehicles().remove(vehicle);
                 this.em.merge(owner);
 
                 // remove cascades
@@ -70,13 +68,12 @@ public class VehicleStore {
         }
     }
 
-    public void persistNewVehicle(String email, String vehicleName) {
-        Optional<Owner> possibleOwner = this.ownerStore.getByEmail(email);
+    public void persistNewVehicle(final String email, final String vehicleName) {
+        final Optional<Owner> possibleOwner = this.ownerStore.getByEmail(email);
         if (possibleOwner.isPresent()) {
-            Owner owner = possibleOwner.get();
+            final Owner owner = possibleOwner.get();
 
-            Vehicle vehicle = new Vehicle().setOwner(owner)
-                    .setVehicleName(vehicleName);
+            Vehicle vehicle = new Vehicle().setOwner(owner).setVehicleName(vehicleName);
             this.em.persist(vehicle);
 
             owner.addVehicle(vehicle);

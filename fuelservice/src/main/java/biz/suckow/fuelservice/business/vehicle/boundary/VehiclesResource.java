@@ -62,31 +62,28 @@ public class VehiclesResource {
     @POST
     @Path("{vehicleName}")
     public Response addVehicle(@Size(min = 3, max = 64) @PathParam("vehicleName") String vehicleName) {
-        Set<String> ownedVehicles = this.principal.getOwnedVehicleNames();
+        final Set<String> ownedVehicles = this.principal.getOwnedVehicleNames();
         if (ownedVehicles.contains(vehicleName)) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Failure to add duplicate vehicle.")
                     .build();
         }
 
-        String ownerEmail = this.principal.getName();
+        final String ownerEmail = this.principal.getName();
         this.vehicleStore.persistNewVehicle(ownerEmail, vehicleName);
 
-        return Response.ok()
-                .build();
+        return Response.ok().build();
     }
 
     @TokenSecured
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response listAll() {
-        Set<Vehicle> vehicles = this.vehicleStore.getVehiclesByOwnerEmail(this.principal.getName());
-        JsonArrayBuilder builder = Json.createArrayBuilder();
-        for (Vehicle vehicle : vehicles) {
+        final Set<Vehicle> vehicles = this.vehicleStore.getVehiclesByOwnerEmail(this.principal.getName());
+        final JsonArrayBuilder builder = Json.createArrayBuilder();
+        for (final Vehicle vehicle : vehicles) {
             builder.add(vehicle.getVehicleName());
         }
-        return Response.ok()
-                .entity(builder.build())
-                .build();
+        return Response.ok().entity(builder.build()).build();
     }
 }

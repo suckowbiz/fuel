@@ -1,10 +1,10 @@
-package biz.suckow.fuelservice.business.token.entity;
+package biz.suckow.fuelservice.business;
 
 /*
  * #%L
- * fuelservice
+ * fuel
  * %%
- * Copyright (C) 2014 - 2015 Suckow.biz
+ * Copyright (C) 2014 Suckow.biz
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,26 +20,21 @@ package biz.suckow.fuelservice.business.token.entity;
  * #L%
  */
 
-public class TokenTime {
-    private long issuedAt;
+import javax.enterprise.inject.Produces;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
-    private long expiresAt;
+public class EntityManagerProducer {
+    @PersistenceContext
+    private EntityManager em;
 
-    public long getExpiresAt() {
-        return expiresAt;
+    @Produces
+    public EntityManager produce() {
+        return this.em;
     }
 
-    public TokenTime setExpiresAt(long expiresAt) {
-        this.expiresAt = expiresAt;
-        return this;
-    }
-
-    public long getIssuedAt() {
-        return issuedAt;
-    }
-
-    public TokenTime setIssuedAt(long issuedAt) {
-        this.issuedAt = issuedAt;
-        return this;
-    }
+//    public void close(@Disposes EntityManager em) {
+//        // The disposer method is called automatically when the context ends.
+//        em.close();
+//    }
 }
