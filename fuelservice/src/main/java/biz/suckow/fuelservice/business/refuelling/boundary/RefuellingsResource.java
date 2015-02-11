@@ -20,14 +20,13 @@ package biz.suckow.fuelservice.business.refuelling.boundary;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.owner.entity.CurrentIdentity;
+import biz.suckow.fuelservice.business.owner.entity.ClientIdentity;
 import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
 import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 import biz.suckow.fuelservice.business.refuelling.entity.RefuellingMeta;
 import biz.suckow.fuelservice.business.token.entity.TokenSecured;
 import biz.suckow.fuelservice.business.vehicle.boundary.OwnedVehicle;
 import biz.suckow.fuelservice.business.vehicle.boundary.VehicleStore;
-import biz.suckow.fuelservice.business.vehicle.entity.Vehicle;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Instance;
@@ -50,7 +49,7 @@ public class RefuellingsResource {
     @Inject
     private Logger logger;
 
-    @CurrentIdentity
+    @ClientIdentity
     @Inject
     private Instance<OwnerPrincipal> principal;
 
@@ -73,7 +72,7 @@ public class RefuellingsResource {
     @TokenSecured
     @DELETE
     @Path("{refuellingId}")
-    public Response remove(@PathParam("refuellingId") long refuellingId) {
+    public Response remove(@PathParam("refuellingId") final long refuellingId) {
         Response response = Response.status(Response.Status.NOT_FOUND)
                 .build();
         Optional<Refuelling> possibleRefuelling = this.refuellingStore.getById(refuellingId);
@@ -90,23 +89,19 @@ public class RefuellingsResource {
     @Path("{vehicleName}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response list(@OwnedVehicle @PathParam("vehicleName") final String vehicleName) {
-        JsonArrayBuilder result = Json.createArrayBuilder();
-        Optional<Vehicle> vehicle = this.vehicleStore.getVehicleByNameAndOwnerEmail(this.principal.getName(),
-                vehicleName);
-        vehicle.get()
-                .getRefuellings()
+        final JsonArrayBuilder result = Json.createArrayBuilder();
+        final String email = this.principal.get().getName();
+        this.vehicleStore.getVehicleByNameAndOwnerEmail(email, vehicleName).get().getRefuellings()
                 .forEach(refuelling -> {
                     String consumption = "";
                     if (refuelling.getConsumption() != null) {
                         consumption = String.format("%.2f", refuelling.getConsumption());
                     }
                     JsonObject json = Json.createObjectBuilder()
-                            .add("date", refuelling.getDateRefuelled()
-                                    .toString())
+                            .add("date", refuelling.getDateRefuelled().toString())
                             .add("id", refuelling.getId())
                             .add("eur", refuelling.getEurosPerLitre())
-                            .add("fillUp", refuelling.getIsFillUp()
-                                    .toString())
+                            .add("fillUp", refuelling.getIsFillUp().toString())
                             .add("km", refuelling.getKilometre())
                             .add("ltr", refuelling.getLitres())
                             .add("memo", refuelling.getMemo())
@@ -114,8 +109,6 @@ public class RefuellingsResource {
                             .build();
                     result.add(json);
                 });
-        return Response.ok()
-                .entity(result.build())
-                .build();
+        return Response.ok().entity(result.build()).build();
     }
 }

@@ -20,7 +20,7 @@ package biz.suckow.fuelservice.business.token.boundary;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.owner.entity.CurrentIdentity;
+import biz.suckow.fuelservice.business.owner.entity.ClientIdentity;
 import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
 import biz.suckow.fuelservice.business.owner.entity.Role;
 import biz.suckow.fuelservice.business.token.entity.TokenSecured;
@@ -44,7 +44,7 @@ public class TokenSecuredFilter implements ContainerRequestFilter {
     @Context
     private ResourceInfo resourceInfo;
 
-    @CurrentIdentity
+    @ClientIdentity
     @Inject
     private Instance<OwnerPrincipal> principalFactory;
 

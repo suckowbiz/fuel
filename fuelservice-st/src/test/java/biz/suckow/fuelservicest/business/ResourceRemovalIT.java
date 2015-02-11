@@ -37,7 +37,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Test(dependsOnGroups = "refuelling")
 public class ResourceRemovalIT extends ArquillianBlackBoxTest {
 
-
     @Test(dependsOnMethods = "testLogoutSucceeds")
     public void testRemoveOwnerSucceeds() {
         Response response = this.target.path("owners/{email}")

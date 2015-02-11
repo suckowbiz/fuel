@@ -20,7 +20,7 @@ package biz.suckow.fuelservice.business.vehicle.boundary;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.owner.entity.CurrentIdentity;
+import biz.suckow.fuelservice.business.owner.entity.ClientIdentity;
 import biz.suckow.fuelservice.business.owner.entity.OwnerPrincipal;
 
 import javax.enterprise.context.RequestScoped;
@@ -30,7 +30,7 @@ import javax.validation.ConstraintValidatorContext;
 
 @RequestScoped
 public class OwnedVehicleValidator implements ConstraintValidator<OwnedVehicle, String> {
-    @CurrentIdentity
+    @ClientIdentity
     @Inject
     private OwnerPrincipal principal;
 
