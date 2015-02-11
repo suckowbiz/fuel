@@ -33,7 +33,6 @@ import java.util.Date;
 public class StockRelease extends BaseEntity {
     private static final long serialVersionUID = 7021516650764717192L;
 
-    @NotNull
     @Column(nullable = false)
     private Double litres;
 

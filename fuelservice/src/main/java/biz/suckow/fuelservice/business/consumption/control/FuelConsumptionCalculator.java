@@ -36,12 +36,14 @@ import java.util.logging.Logger;
 
 public class FuelConsumptionCalculator {
     private final FuelStockLocator fuelStockLocator;
+
     private final Logger logger;
+
     private RefuellingStore refuellingStore;
 
     @Inject
     public FuelConsumptionCalculator(final RefuellingStore refuellingStore, final FuelStockLocator fuelStockLocator,
-                                     final Logger logger) {
+            final Logger logger) {
         this.refuellingStore = refuellingStore;
         this.fuelStockLocator = fuelStockLocator;
         this.logger = logger;

@@ -37,14 +37,31 @@ import java.util.Set;
         @NamedQuery(name = Vehicle.QueryByEmail.NAME, query = "SELECT v FROM Vehicle v WHERE " +
                 " v.owner.email = :" + Vehicle.QueryByEmail.EMAIL)})
 public class Vehicle extends BaseEntity {
+    public static final class QueryByEmailAndVehicleName {
+        public static final String NAME = "Vehicle.byEmailAndVehicleName";
+
+        public static final String EMAIL = "email";
+
+        public static final String VEHICLE_NAME = "vehicleName";
+    }
+
+    public static final class QueryByEmail {
+        public static final String NAME = "Vehicle.byEmail";
+
+        public static final String EMAIL = "email";
+    }
+
     private static final long serialVersionUID = -5360751385120611439L;
+
     // TODO name must be url safe
     @NotNull
     @Column(nullable = false)
     private String vehicleName;
+
     @NotNull
     @ManyToOne(optional = false)
     private Owner owner;
+
     @OrderBy("id DESC")
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.REMOVE)
     private Set<Refuelling> refuellings = new HashSet<>();
@@ -73,16 +90,5 @@ public class Vehicle extends BaseEntity {
     public Vehicle setVehicleName(final String value) {
         this.vehicleName = value;
         return this;
-    }
-
-    public static final class QueryByEmailAndVehicleName {
-        public static final String NAME = "Vehicle.byEmailAndVehicleName";
-        public static final String EMAIL = "email";
-        public static final String VEHICLE_NAME = "vehicleName";
-    }
-
-    public static final class QueryByEmail {
-        public static final String NAME = "Vehicle.byEmail";
-        public static final String EMAIL = "email";
     }
 }

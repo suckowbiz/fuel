@@ -41,58 +41,59 @@ public class RefuellingStore {
     @Inject
     private VehicleStore vehicleStore;
 
-    public Refuelling storeFillUp(final Vehicle vehicle, final Double eurosPerLitre, final Double litres, final Long kilometre, final String memo,
-                                  final Date date) {
+    public Refuelling storeFillUp(final Vehicle vehicle, final Double eurosPerLitre, final Double litres,
+            final Long kilometre, final String memo, final Date date) {
         final Refuelling result = new Refuelling.Builder().eurosPerLitre(eurosPerLitre)
-                                                          .litres(litres)
-                                                          .kilometre(kilometre)
-                                                          .memo(memo)
-                                                          .dateRefueled(date)
-                                                          .fillUp(true)
-                                                          .vehicle(vehicle)
-                                                          .build();
+                .litres(litres)
+                .kilometre(kilometre)
+                .memo(memo)
+                .dateRefueled(date)
+                .fillUp(true)
+                .vehicle(vehicle)
+                .build();
         this.em.persist(result);
         return result;
     }
 
-    public Refuelling storePartialRefueling(final Vehicle vehicle, final Double euros, final Double litres, final String memo, final Date date) {
+    public Refuelling storePartialRefueling(final Vehicle vehicle, final Double euros, final Double litres,
+            final String memo, final Date date) {
         final Refuelling result = new Refuelling.Builder().litres(litres)
-                                                          .eurosPerLitre(euros)
-                                                          .dateRefueled(date)
-                                                          .memo(memo)
-                                                          .vehicle(vehicle)
-                                                          .build();
+                .eurosPerLitre(euros)
+                .dateRefueled(date)
+                .memo(memo)
+                .vehicle(vehicle)
+                .build();
         this.em.persist(result);
         return result;
     }
 
     public Optional<Refuelling> getFillUpBefore(final Date date) {
         final List<Refuelling> refuellings = this.em
-                .createNamedQuery(Refuelling.FIND_BY_FILLED_UP_AND_DATE_BEFORE, Refuelling.class)
+                .createNamedQuery(Refuelling.FIND_FILLED_UP_BEFORE, Refuelling.class)
                 .setParameter("right", date, TemporalType.TIMESTAMP)
                 .getResultList();
-        Optional<Refuelling> result = Optional.empty();
+        Refuelling result = null;
         if (refuellings.size() > 0) {
-            result = Optional.of(refuellings.get(0));
+            result = refuellings.get(0);
         }
-        return result;
+        return Optional.ofNullable(result);
     }
 
     public Optional<Refuelling> getFillUpAfter(final Date date) {
         final List<Refuelling> refuellings = this.em
-                .createNamedQuery(Refuelling.FIND_BY_FILLED_UP_AND_DATE_AFTER, Refuelling.class)
+                .createNamedQuery(Refuelling.FIND_FILLED_UP_AFTER, Refuelling.class)
                 .setParameter("left", date, TemporalType.TIMESTAMP)
                 .getResultList();
-        Optional<Refuelling> result = Optional.empty();
+        Refuelling result = null;
         if (refuellings.size() > 0) {
-            result = Optional.of(refuellings.get(0));
+            result = refuellings.get(0);
         }
-        return result;
+        return Optional.ofNullable(result);
     }
 
     public List<Refuelling> getPartialRefuellingsBetween(final Date left, final Date right, final Vehicle vehicle) {
         final List<Refuelling> result = this.em
-                .createNamedQuery(Refuelling.FIND_PARTIALS_BY_VEHICLE_AND_DATE_BETWEEN, Refuelling.class)
+                .createNamedQuery(Refuelling.FIND_PARTIALS_BY_VEHICLE_AND_INTERVAL, Refuelling.class)
                 .setParameter("left", left)
                 .setParameter("right", right)
                 .setParameter("vehicle", vehicle)

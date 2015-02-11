@@ -33,7 +33,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.util.Date;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 @Stateless
 public class RefuellingService {
@@ -75,7 +74,8 @@ public class RefuellingService {
     }
 
     public void remove(final Refuelling refuelling) {
-        final Optional<Refuelling> possibleNextFillUp = this.refuellingStore.getFillUpAfter(refuelling.getDateRefuelled());
+        final Optional<Refuelling> possibleNextFillUp = this.refuellingStore
+                .getFillUpAfter(refuelling.getDateRefuelled());
         possibleNextFillUp.ifPresent(nextFillUp -> {
             // it is required to update the next refuelling since previous partials must be re-considered
             updateNextFillUpConsumptionIfRequired(nextFillUp.getDateRefuelled());

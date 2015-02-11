@@ -42,7 +42,7 @@ import java.io.IOException;
 
 @Stateless
 public class TokenService {
-    public static final String TOKEN_HEADER_NAME = "X-FUEL-TOKEN";
+    public static final String TOKEN_HEADER_KEY = "X-FUEL-TOKEN";
 
     @Inject
     private TokenSignature signature;
@@ -53,43 +53,38 @@ public class TokenService {
     @Inject
     private TokenTimeAuthority timeAuthority;
 
-    public String readPrincipal(String token) throws TokenValidationException {
+    public String readPrincipal(final String token) throws TokenValidationException {
         if (token == null || token.isEmpty()) {
             throw new TokenValidationException("Token must not be absent.");
         }
-
-        JWSInput jws = new JWSInput(token, ResteasyProviderFactory.getInstance());
+        final JWSInput jws = new JWSInput(token, ResteasyProviderFactory.getInstance());
         this.verify(jws);
 
-        String jwe = jws.readContent(String.class);
-        JsonWebToken jwt = this.decrypt(jwe);
+        final String jwe = jws.readContent(String.class);
+        final JsonWebToken jwt = this.decrypt(jwe);
+
         return jwt.getPrincipal();
     }
 
-    public String generateToken(String principal) {
+    public String generateToken(final String principal) {
         if (principal == null || principal.isEmpty()) {
             throw new IllegalArgumentException("Principal must not be null or empty.");
         }
 
-        TokenTime tokenTime = this.timeAuthority.generate();
-        JsonWebToken jwt = new JsonWebToken()
-                .issuer(principal)
-                .issuedAt(tokenTime.getIssuedAt())
+        final TokenTime tokenTime = this.timeAuthority.generate();
+        final JsonWebToken jwt = new JsonWebToken().issuer(principal).issuedAt(tokenTime.getIssuedAt())
                 .expiration(tokenTime.getExpiresAt())
                 .principal(principal);
 
-        String jwe = new JWEBuilder().content(jwt, MediaType.APPLICATION_JSON_TYPE)
-                                     .dir(this.secret.get());
-
-        String jws = new JWSBuilder()
-                .content(jwe, MediaType.TEXT_PLAIN_TYPE)
-                .rsa512(this.signature.getPrivateKey());
+        final String jwe = new JWEBuilder().content(jwt, MediaType.APPLICATION_JSON_TYPE).dir(this.secret.get());
+        final String jws = new JWSBuilder().content(jwe, MediaType.TEXT_PLAIN_TYPE).rsa512(
+                this.signature.getPrivateKey());
         return jws;
     }
 
-    private JsonWebToken decrypt(String jwe) throws TokenValidationException {
-        byte[] content = new JWEInput(jwe).decrypt(this.secret.get())
-                                          .getRawContent();
+    private JsonWebToken decrypt(final String jwe) throws TokenValidationException {
+        final byte[] content = new JWEInput(jwe).decrypt(this.secret.get())
+                .getRawContent();
         JsonWebToken jwt;
         try {
             jwt = JsonSerialization.fromBytes(JsonWebToken.class, content);
@@ -103,8 +98,8 @@ public class TokenService {
         return jwt;
     }
 
-    private void verify(JWSInput jws) throws TokenValidationException {
-        boolean result = RSAProvider.verify(jws, this.signature.getPublicKey());
+    private void verify(final JWSInput jws) throws TokenValidationException {
+        final boolean result = RSAProvider.verify(jws, this.signature.getPublicKey());
         if (result) {
             return;
         }

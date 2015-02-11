@@ -22,6 +22,7 @@ package biz.suckow.fuelservice.business.token.entity;
 
 public class TokenTime {
     private long issuedAt;
+
     private long expiresAt;
 
     public long getExpiresAt() {

@@ -26,11 +26,18 @@ import java.util.Date;
 @XmlRootElement
 public class RefuellingMeta {
     public Date date;
+
     public String memo;
+
     public long kilometre;
+
     public double eurosPerLitre;
+
     public double litresToTank;
+
     public double litresToStock;
+
     public double litresFromStock;
+
     public boolean isFull;
 }

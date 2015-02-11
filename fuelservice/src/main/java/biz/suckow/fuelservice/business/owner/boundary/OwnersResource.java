@@ -52,13 +52,13 @@ public class OwnersResource {
     @POST
     @Produces(APPLICATION_JSON)
     public Response register(@Size(min = 8, max = 64) @PathParam("email") final String email,
-                             @Size(min = 6, max = 255) @PathParam("password") final String password) {
+            @Size(min = 6, max = 255) @PathParam("password") final String password) {
         Response response;
         final Optional<Owner> possibleOwner = this.ownerStore.getByEmail(email);
         if (possibleOwner.isPresent()) {
             response = Response.status(Response.Status.FORBIDDEN)
-                               .entity("Please use another email address.")
-                               .build();
+                    .entity("Please use another email address.")
+                    .build();
         } else {
             this.ownerStore.create(email, password);
             response = Response.ok().build();

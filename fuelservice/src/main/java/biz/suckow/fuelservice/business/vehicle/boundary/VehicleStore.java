@@ -54,10 +54,10 @@ public class VehicleStore {
         Owner owner = possibleOwner.get();
         for (Vehicle vehicle : owner.getVehicles()) {
             if (vehicle.getVehicleName()
-                       .equals(vehicleName)) {
+                    .equals(vehicleName)) {
                 needleFound = true;
                 owner.getVehicles()
-                     .remove(vehicle);
+                        .remove(vehicle);
                 this.em.merge(owner);
 
                 // remove cascades
@@ -76,7 +76,7 @@ public class VehicleStore {
             Owner owner = possibleOwner.get();
 
             Vehicle vehicle = new Vehicle().setOwner(owner)
-                                           .setVehicleName(vehicleName);
+                    .setVehicleName(vehicleName);
             this.em.persist(vehicle);
 
             owner.addVehicle(vehicle);
@@ -90,9 +90,9 @@ public class VehicleStore {
         Vehicle result = null;
         try {
             result = this.em.createNamedQuery(Vehicle.QueryByEmailAndVehicleName.NAME, Vehicle.class)
-                            .setParameter(Vehicle.QueryByEmailAndVehicleName.EMAIL, email)
-                            .setParameter(Vehicle.QueryByEmailAndVehicleName.VEHICLE_NAME, vehicleName)
-                            .getSingleResult();
+                    .setParameter(Vehicle.QueryByEmailAndVehicleName.EMAIL, email)
+                    .setParameter(Vehicle.QueryByEmailAndVehicleName.VEHICLE_NAME, vehicleName)
+                    .getSingleResult();
         }
         catch (final NoResultException e) {
             /* NOP */
@@ -104,8 +104,8 @@ public class VehicleStore {
         List<Vehicle> result = new ArrayList<>();
         try {
             result = this.em.createNamedQuery(Vehicle.QueryByEmail.NAME, Vehicle.class)
-                            .setParameter(Vehicle.QueryByEmail.EMAIL, email)
-                            .getResultList();
+                    .setParameter(Vehicle.QueryByEmail.EMAIL, email)
+                    .getResultList();
         }
         catch (final NoResultException e) {
             /* NOP */

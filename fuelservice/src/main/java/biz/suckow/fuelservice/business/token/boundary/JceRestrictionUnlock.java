@@ -24,6 +24,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
+import java.lang.reflect.Field;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +32,7 @@ import java.util.logging.Logger;
 @Startup
 public class JceRestrictionUnlock {
     public static final String FIELD_NAME = "isRestricted";
+
     public static final String CLASS_NAME = "javax.crypto.JceSecurity";
 
     @Inject
@@ -40,8 +42,7 @@ public class JceRestrictionUnlock {
     void unlockJceStrengthRestriction() {
         try {
             // remove restriction to be able to create JWE/JWT/JWS token
-            java.lang.reflect.Field field = Class.forName(CLASS_NAME)
-                                                 .getDeclaredField(FIELD_NAME);
+            final Field field = Class.forName(CLASS_NAME).getDeclaredField(FIELD_NAME);
             field.setAccessible(true);
             field.set(null, Boolean.FALSE);
         }

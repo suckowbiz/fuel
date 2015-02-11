@@ -35,17 +35,14 @@ import java.util.Date;
 public class StockAddition extends BaseEntity {
     private static final long serialVersionUID = 6350184958523817787L;
 
-    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     @Column(nullable = false)
     private Date dateAdded;
 
-    @NotNull
     @DecimalMin(value = "0.009", inclusive = true)
     @Column(nullable = false)
     private Double eurosPerLitre;
 
-    @Min(value = 1)
     @NotNull
     @Column(nullable = false)
     private Double litres;

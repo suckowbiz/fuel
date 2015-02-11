@@ -44,7 +44,7 @@ public class OwnerPrincipalProducer {
     @ClientIdentity
     @Produces
     public OwnerPrincipal produce() throws TokenValidationException {
-        final String token = request.getHeader(TokenService.TOKEN_HEADER_NAME);
+        final String token = request.getHeader(TokenService.TOKEN_HEADER_KEY);
         final String email = this.tokenService.readPrincipal(token);
         final OwnerPrincipal result = this.ownerStore.createOwnerPrincipal(email);
         return result;

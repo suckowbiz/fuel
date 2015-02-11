@@ -28,7 +28,7 @@ public class LoggerProducer {
     @Produces
     public Logger produce(final InjectionPoint ip) {
         return Logger.getLogger(ip.getMember()
-                                  .getDeclaringClass()
-                                  .getName());
+                .getDeclaringClass()
+                .getName());
     }
 }

@@ -28,15 +28,17 @@ import javax.inject.Inject;
 @ConcurrencyManagement(ConcurrencyManagementType.CONTAINER)
 public class TokenSecret {
     public static final int STRENGTH_BIT = 512;
+
     @Inject
     private TokenSignature signature;
+
     private String secret;
 
     @PostConstruct
     void init() {
         StringBuilder builder = new StringBuilder();
         byte[] privateKey = signature.getPrivateKey()
-                                     .getEncoded();
+                .getEncoded();
         for (int i = 0; i < this.STRENGTH_BIT; i++) {
             builder.append(privateKey[i]);
         }

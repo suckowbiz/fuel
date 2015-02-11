@@ -54,7 +54,7 @@ public class FillUpEventConsumer {
         final Optional<BigDecimal> possibleResult = this.maths.computeConsumption(refuelling);
         if (possibleResult.isPresent()) {
             refuelling.setConsumption(possibleResult.get()
-                                                    .doubleValue());
+                    .doubleValue());
             this.em.merge(refuelling);
         } else {
             this.logger.log(Level.WARNING, "No consumption computation result present.");
