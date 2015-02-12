@@ -77,29 +77,24 @@
 
         <!-- (Alphabetical order!) -->
         <!-- <version.artifactId>x.x</version.artifactId> -->
-        <version.arquillian-bom>1.1.5.Final</version.arquillian-bom>
+	<version.arquillian-bom>1.1.7.Final</version.arquillian-bom>
         <version.arquillian-suite-extension>1.1.2</version.arquillian-suite-extension>
         <version.assertj-core>1.7.1</version.assertj-core>
-        <version.assertj-guava>1.3.0</version.assertj-guava>
         <version.derby>10.11.1.1</version.derby>
         <version.easymock>3.3.1</version.easymock>
-        <version.guava>18.0</version.guava>
-        <version.h2>1.2.140</version.h2>
-        <version.jacoco-maven-plugin>0.7.2.201409121644</version.jacoco-maven-plugin>
         <version.jboss-javaee-7.0-with-hibernate>8.2.1.Final</version.jboss-javaee-7.0-with-hibernate>
         <version.license-maven-plugin>1.8</version.license-maven-plugin>
-        <version.maven-compiler-plugin>3.2</version.maven-compiler-plugin>
         <version.maven-dependency-plugin>2.9</version.maven-dependency-plugin>
         <version.maven-eclipse-plugin>2.9</version.maven-eclipse-plugin>
         <version.maven-failsafe-plugin>2.18.1</version.maven-failsafe-plugin>
-        <version.maven-surefire-plugin>2.18.1</version.maven-surefire-plugin>
+        <version.maven-surefire-plugin>${version.maven-failsafe-plugin}</version.maven-surefire-plugin>
         <version.maven-war-plugin>2.1.1</version.maven-war-plugin>
         <version.shrinkwrap-resolver-depchain>2.1.1</version.shrinkwrap-resolver-depchain>
-        <version.testng>6.8.17</version.testng>
+        <version.testng>6.8.21</version.testng>
         <version.versions-maven-plugin>2.1</version.versions-maven-plugin>
         <version.wildfly-arquillian-container-embedded>8.2.0.Final</version.wildfly-arquillian-container-embedded>
-        <version.wildfly-dist>8.2.0.Final</version.wildfly-dist>
-        <version.wildfly-embedded>8.2.0.Final</version.wildfly-embedded>
+        <version.wildfly-dist>${version.wildfly-arquillian-container-embedded}</version.wildfly-dist>
+        <version.wildfly-embedded>${version.wildfly-arquillian-container-embedded}</version.wildfly-embedded>
     </properties>
 
     <dependencyManagement>
@@ -164,58 +159,6 @@
         </pluginManagement>
 
         <plugins>
-            <!-- Added to have code coverage support. -->
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${version.jacoco-maven-plugin}</version>
-                <executions>
-                    <!-- Creates /target/jacoco.exec containing results from unit tests. -->
-                    <execution>
-                        <id>default-prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <!-- Creates /target/jacoco-it.exec containing results from integration tests. -->
-                    <execution>
-                        <id>default-prepare-agent-integration</id>
-                        <goals>
-                            <goal>prepare-agent-integration</goal>
-                        </goals>
-                    </execution>
-                    <!-- Creates /target/jacoco-merged.exec and generates a single report from it. -->
-                    <execution>
-                        <id>merge-and-report</id>
-                        <goals>
-                            <goal>merge</goal>
-                            <goal>report</goal>
-                        </goals>
-                        <phase>verify</phase>
-                        <configuration>
-                            <fileSets>
-                                <fileSet>
-                                    <directory>${project.build.directory}</directory>
-                                    <includes>
-                                        <include>jacoco.exec</include>
-                                        <include>jacoco-it.exec</include>
-                                    </includes>
-                                </fileSet>
-                            </fileSets>
-                            <destFile>${project.build.directory}/jacoco-merged.exec</destFile>
-                            <outputDirectory>${project.build.directory}/jacoco</outputDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${version.maven-compiler-plugin}</version>
-                <configuration>
-                    <showDeprecation>true</showDeprecation>
-                </configuration>
-            </plugin>
             <!-- Automatically add license. -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -307,13 +250,13 @@
             <groupId>org.testng</groupId>
             <artifactId>testng</artifactId>
             <version>${version.testng}</version>
-            <scope>test</scope>
             <exclusions>
                 <exclusion>
                     <groupId>junit</groupId>
                     <artifactId>junit</artifactId>
                 </exclusion>
             </exclusions>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

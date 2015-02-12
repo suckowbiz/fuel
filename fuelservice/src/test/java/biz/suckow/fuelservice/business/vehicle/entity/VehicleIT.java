@@ -43,7 +43,8 @@ public class VehicleIT extends PersistenceSupport {
 
         try {
             em.persist(TestHelper.createDukeCar(duke));
-        } catch (final Throwable t) {
+        }
+        catch (final Throwable t) {
             assertThat(t).hasCauseInstanceOf(ConstraintViolationException.class);
         }
     }

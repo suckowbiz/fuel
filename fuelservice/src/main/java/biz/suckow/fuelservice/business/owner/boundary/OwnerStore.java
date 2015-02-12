@@ -48,8 +48,8 @@ public class OwnerStore {
     public Optional<Owner> getByEmail(final String email) {
         Owner result = null;
         try {
-            result = (Owner) this.em.createNamedQuery(Owner.QueryByEmailCaseIgnore.NAME)
-                    .setParameter(Owner.QueryByEmailCaseIgnore.EMAIL, email)
+            result = (Owner) this.em.createNamedQuery(Owner.BY_EMAIL_CASE_IGNORE)
+                    .setParameter("email", email)
                     .getSingleResult();
         }
         catch (final NoResultException e) {

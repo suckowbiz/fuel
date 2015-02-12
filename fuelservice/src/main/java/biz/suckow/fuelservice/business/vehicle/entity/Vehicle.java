@@ -25,33 +25,22 @@ import biz.suckow.fuelservice.business.owner.entity.Owner;
 import biz.suckow.fuelservice.business.refuelling.entity.Refuelling;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = {"vehicleName", "owner_id"}))
-@NamedQueries({@NamedQuery(name = Vehicle.QueryByEmailAndVehicleName.NAME, query = "SELECT v FROM Vehicle v "
-        + " WHERE v.vehicleName = :" + Vehicle.QueryByEmailAndVehicleName.VEHICLE_NAME
-        + " AND v.owner.email = :" + Vehicle.QueryByEmailAndVehicleName.EMAIL),
-        @NamedQuery(name = Vehicle.QueryByEmail.NAME, query = "SELECT v FROM Vehicle v WHERE " +
-                " v.owner.email = :" + Vehicle.QueryByEmail.EMAIL)})
+@NamedQueries({@NamedQuery(name = Vehicle.BY_EMAIL_AND_VEHICLE_NAME, query = "SELECT v FROM Vehicle v "
+        + " WHERE v.vehicleName = :vehicleName AND v.owner.email = :email"),
+        @NamedQuery(name = Vehicle.BY_EMAIL, query = "SELECT v FROM Vehicle v WHERE v.owner.email = :email")})
 public class Vehicle extends BaseEntity {
-    public static final class QueryByEmailAndVehicleName {
-        public static final String NAME = "Vehicle.byEmailAndVehicleName";
-
-        public static final String EMAIL = "email";
-
-        public static final String VEHICLE_NAME = "vehicleName";
-    }
-
-    public static final class QueryByEmail {
-        public static final String NAME = "Vehicle.byEmail";
-
-        public static final String EMAIL = "email";
-    }
+    private static final String PREFIX = "biz.suckow.fuelservice.business.vehicle.entity.";
 
     private static final long serialVersionUID = -5360751385120611439L;
+
+    public static final String BY_EMAIL_AND_VEHICLE_NAME = PREFIX + "byEmailAndVehicleName";
+
+    public static final String BY_EMAIL = PREFIX + "byEmail";
 
     @Column(nullable = false)
     private String vehicleName;

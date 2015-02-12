@@ -53,12 +53,16 @@ public class RefuellingStoreTest extends EasyMockSupport {
         }
         return -1;
     };
+
     @Mock
     private EntityManager em;
+
     @Mock
     private FuelStockStore stockStore;
+
     @Mock
     private VehicleStore vehicleStore;
+
     @TestSubject
     private RefuellingStore cut = new RefuellingStore();
 
@@ -75,7 +79,8 @@ public class RefuellingStoreTest extends EasyMockSupport {
         final Date expectedDate = new Date();
         final Vehicle expectedVehicle = new Vehicle().setOwner(new Owner().setEmail("duke")).setVehicleName(
                 "duke-car");
-        final Refuelling expectedRefuelling = new Refuelling.Builder().eurosPerLitre(expectedEuros).litres(expectedLitres)
+        final Refuelling expectedRefuelling = new Refuelling.Builder().eurosPerLitre(expectedEuros)
+                .litres(expectedLitres)
                 .memo(expectedMemo).dateRefueled(expectedDate).fillUp(false).vehicle(expectedVehicle).build();
 
         this.resetAll();

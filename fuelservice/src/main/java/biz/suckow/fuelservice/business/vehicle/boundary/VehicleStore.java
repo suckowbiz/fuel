@@ -86,9 +86,9 @@ public class VehicleStore {
     public Optional<Vehicle> getVehicleByNameAndOwnerEmail(final String email, final String vehicleName) {
         Vehicle result = null;
         try {
-            result = this.em.createNamedQuery(Vehicle.QueryByEmailAndVehicleName.NAME, Vehicle.class)
-                    .setParameter(Vehicle.QueryByEmailAndVehicleName.EMAIL, email)
-                    .setParameter(Vehicle.QueryByEmailAndVehicleName.VEHICLE_NAME, vehicleName)
+            result = this.em.createNamedQuery(Vehicle.BY_EMAIL_AND_VEHICLE_NAME, Vehicle.class)
+                    .setParameter("email", email)
+                    .setParameter("vehicleName", vehicleName)
                     .getSingleResult();
         }
         catch (final NoResultException e) {
@@ -100,8 +100,8 @@ public class VehicleStore {
     public Set<Vehicle> getVehiclesByOwnerEmail(final String email) {
         List<Vehicle> result = new ArrayList<>();
         try {
-            result = this.em.createNamedQuery(Vehicle.QueryByEmail.NAME, Vehicle.class)
-                    .setParameter(Vehicle.QueryByEmail.EMAIL, email)
+            result = this.em.createNamedQuery(Vehicle.BY_EMAIL, Vehicle.class)
+                    .setParameter("email", email)
                     .getResultList();
         }
         catch (final NoResultException e) {

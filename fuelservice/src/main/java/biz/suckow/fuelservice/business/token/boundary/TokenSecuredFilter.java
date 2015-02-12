@@ -37,6 +37,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @TokenSecured
 @Provider
@@ -50,16 +51,15 @@ public class TokenSecuredFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(final ContainerRequestContext containerRequestContext) throws IOException {
-        TokenSecured annotation = this.resourceInfo.getResourceMethod()
-                .getAnnotation(TokenSecured.class);
+        final TokenSecured annotation = this.resourceInfo.getResourceMethod().getAnnotation(TokenSecured.class);
         final List<Role> rolesAllowed = Arrays.asList(annotation.value());
-        boolean isNotInRole = Collections.disjoint(this.principalFactory.get().getRoles(), rolesAllowed);
-        if (isNotInRole) {
+        final Set<Role> actualRoles = this.principalFactory.get().getRoles();
+        boolean notInRole = Collections.disjoint(actualRoles, rolesAllowed);
+        if (notInRole) {
             containerRequestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
         }
-        boolean isLoggedOut = principalFactory.get()
-                .isLoggedOut();
-        if (isLoggedOut) {
+        boolean loggedOut = principalFactory.get().isLoggedOut();
+        if (loggedOut) {
             containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
                     .entity("Being logged out requests must not be submitted.")
                     .build());

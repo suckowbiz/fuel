@@ -60,7 +60,7 @@ public class FuelStockStore {
 
     public Optional<FuelStock> getFuelStockOf(final Vehicle vehicle) {
         FuelStock result = null;
-        final List<FuelStock> fuelStockItems = this.em.createNamedQuery(FuelStock.FIND_BY_VEHICLE, FuelStock.class)
+        final List<FuelStock> fuelStockItems = this.em.createNamedQuery(FuelStock.BY_VEHICLE, FuelStock.class)
                 .setParameter("vehicle", vehicle)
                 .getResultList();
         if (fuelStockItems.size() > 0) {

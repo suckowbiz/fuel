@@ -37,13 +37,15 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
 import java.util.concurrent.TimeUnit;
 
 @Stateless
 public class TokenService {
-    public static final String TOKEN_HEADER_KEY = "X-FUEL-TOKEN";
+    private static final long TOKEN_EXPIRATION_SECONDS = TimeUnit.MINUTES.toSeconds(15);
 
-    private static final long EXPIRATION_SECONDS = TimeUnit.MINUTES.toSeconds(15);
+    public static final String TOKEN_HEADER_KEY = "X-FUEL-TOKEN";
 
     @Inject
     private TokenSignature signature;
@@ -70,35 +72,39 @@ public class TokenService {
         }
 
         long issuedAtSeconds = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-        long expiresAtSeconds = issuedAtSeconds + EXPIRATION_SECONDS;
+        long expiresAtSeconds = issuedAtSeconds + TOKEN_EXPIRATION_SECONDS;
         final JsonWebToken jwt = new JsonWebToken().issuer(principal).issuedAt(issuedAtSeconds)
                 .expiration(expiresAtSeconds)
                 .principal(principal);
 
-        final String jwe = new JWEBuilder().content(jwt, MediaType.APPLICATION_JSON_TYPE).dir(this.secret.get());
-        final String jws = new JWSBuilder().content(jwe, MediaType.TEXT_PLAIN_TYPE).rsa512(
-                this.signature.getPrivateKey());
+        final String secret = this.secret.get();
+        final String jwe = new JWEBuilder().content(jwt, MediaType.APPLICATION_JSON_TYPE).dir(secret);
+
+        final PrivateKey privateKey = this.signature.getPrivateKey();
+        final String jws = new JWSBuilder().content(jwe, MediaType.TEXT_PLAIN_TYPE).rsa512(privateKey);
+
         return jws;
     }
 
     private JsonWebToken decrypt(final String jwe) throws TokenValidationException {
-        final byte[] content = new JWEInput(jwe).decrypt(this.secret.get())
-                .getRawContent();
         JsonWebToken jwt;
         try {
+            final String secret = this.secret.get();
+            final byte[] content = new JWEInput(jwe).decrypt(secret).getRawContent();
             jwt = JsonSerialization.fromBytes(JsonWebToken.class, content);
             if (jwt.isExpired()) {
                 throw new TokenValidationException("Token expired.");
             }
         }
         catch (IOException e) {
-            throw new TokenValidationException("Failure deserialize token.");
+            throw new TokenValidationException("Failure to deserialize token.");
         }
         return jwt;
     }
 
     private void verify(final JWSInput jws) throws TokenValidationException {
-        final boolean result = RSAProvider.verify(jws, this.signature.getPublicKey());
+        final PublicKey publicKey = this.signature.getPublicKey();
+        final boolean result = RSAProvider.verify(jws, publicKey);
         if (result) {
             return;
         }

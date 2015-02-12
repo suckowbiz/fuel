@@ -28,16 +28,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@NamedQuery(name = Owner.QueryByEmailCaseIgnore.NAME, query = "SELECT o FROM Owner o "
-        + "WHERE LOWER(o.email) = LOWER(:" + Owner.QueryByEmailCaseIgnore.EMAIL + ")")
+@NamedQuery(name = Owner.BY_EMAIL_CASE_IGNORE, query = "SELECT o FROM Owner o WHERE LOWER(o.email) = LOWER(:email)")
 public class Owner extends BaseEntity {
-    public static final class QueryByEmailCaseIgnore {
-        public static final String NAME = "Owner.byEmail";
-
-        public static final String EMAIL = "ownername";
-    }
-
     private static final long serialVersionUID = -2640121939957877859L;
+
+    private static final String PREFIX = "biz.suckow.fuelservice.business.owner.entity.";
+
+    public static final String BY_EMAIL_CASE_IGNORE = PREFIX + "byEmail";
 
     @Column(nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)

@@ -46,7 +46,8 @@ public class VehicleStoreIT extends PersistenceSupport {
         final Vehicle dukeCar = TestHelper.createDukeCar(duke);
         em.persist(dukeCar);
 
-        final Vehicle actualResult = this.cut.getVehicleByNameAndOwnerEmail(dukeCar.getOwner().getEmail(), dukeCar.getVehicleName())
+        final Vehicle actualResult = this.cut
+                .getVehicleByNameAndOwnerEmail(dukeCar.getOwner().getEmail(), dukeCar.getVehicleName())
                 .get();
         assertThat(actualResult).isNotNull();
         assertThat(actualResult.getId()).isEqualTo(dukeCar.getId());

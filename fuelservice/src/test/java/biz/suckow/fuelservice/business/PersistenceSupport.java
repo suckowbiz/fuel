@@ -30,7 +30,9 @@ import javax.persistence.Persistence;
 
 public abstract class PersistenceSupport extends EasyMockSupport {
     private static final String PERSISTENCE_UNIT_NAME = "integrationtest";
+
     protected static EntityManager em;
+
     protected static EntityTransaction tx;
 
     static {

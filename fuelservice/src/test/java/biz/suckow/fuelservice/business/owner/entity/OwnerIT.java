@@ -35,7 +35,8 @@ public class OwnerIT extends PersistenceSupport {
 
         try {
             em.persist(TestHelper.createDuke());
-        } catch (Throwable t) {
+        }
+        catch (Throwable t) {
             assertThat(t).hasCauseInstanceOf(ConstraintViolationException.class);
         }
     }

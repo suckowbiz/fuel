@@ -40,7 +40,7 @@ public class FuelStockLocator {
 
     public List<StockAddition> getAdditionsBetween(final Date left, final Date right, final Vehicle vehicle) {
         final List<StockAddition> result = this.em
-                .createNamedQuery(FuelStock.FIND_ADDITIONS_BY_VEHICLE_AND_DATE_BETWEEN, StockAddition.class)
+                .createNamedQuery(FuelStock.ADDITIONS_BY_VEHICLE_AND_DATE_BETWEEN, StockAddition.class)
                 .setParameter("left", left)
                 .setParameter("right", right)
                 .setParameter("vehicle", vehicle)
@@ -50,7 +50,7 @@ public class FuelStockLocator {
 
     public List<StockRelease> getReleasesBetween(final Date left, final Date right, final Vehicle vehicle) {
         final List<StockRelease> result = this.em
-                .createNamedQuery(FuelStock.FIND_RELEASES_BY_VEHCILE_AND_DATE_BETWEEN, StockRelease.class)
+                .createNamedQuery(FuelStock.RELEASES_BY_VEHICLE_AND_DATE_BETWEEN, StockRelease.class)
                 .setParameter("left", left)
                 .setParameter("right", right)
                 .setParameter("vehicle", vehicle)

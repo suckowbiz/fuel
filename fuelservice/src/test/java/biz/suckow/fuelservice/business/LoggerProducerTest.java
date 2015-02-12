@@ -1,4 +1,4 @@
-package biz.suckow.fuelservice.business.app.control;
+package biz.suckow.fuelservice.business;
 
 /*
  * #%L
@@ -20,7 +20,6 @@ package biz.suckow.fuelservice.business.app.control;
  * #L%
  */
 
-import biz.suckow.fuelservice.business.LoggerProducer;
 import org.testng.annotations.Test;
 
 import javax.enterprise.inject.spi.Annotated;
@@ -34,11 +33,10 @@ import java.util.logging.Logger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class LoggerFactoryTest {
+public class LoggerProducerTest {
     @Test
     public void produceLoggerMustBeOfRightName() {
         final Member member = new Member() {
-
             @Override
             public boolean isSynthetic() {
                 return false;
@@ -60,7 +58,6 @@ public class LoggerFactoryTest {
             }
         };
         InjectionPoint ip = new InjectionPoint() {
-
             @Override
             public boolean isTransient() {
                 return false;
@@ -98,8 +95,6 @@ public class LoggerFactoryTest {
         };
 
         Logger actualLogger = new LoggerProducer().produce(ip);
-        assertThat(actualLogger.getName()).contains(this.getClass().getName()); // logger
-        // appends
-        // $1
+        assertThat(actualLogger.getName()).contains(this.getClass().getName());
     }
 }

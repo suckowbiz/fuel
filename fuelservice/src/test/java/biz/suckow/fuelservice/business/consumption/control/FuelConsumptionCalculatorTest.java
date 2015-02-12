@@ -133,7 +133,8 @@ public class FuelConsumptionCalculatorTest extends EasyMockSupport {
         final double expectedConsumption = (litresFilledUp + litresPartiallyRefueled + litresToStock - litresFromStock)
                 / (kilometresFilledUp - kilometresLastFillUp);
 
-        final Refuelling partialRefuelling = new Refuelling.Builder().litres(litresPartiallyRefueled).dateRefueled(march)
+        final Refuelling partialRefuelling = new Refuelling.Builder().litres(litresPartiallyRefueled)
+                .dateRefueled(march)
                 .fillUp(false).build();
         final Refuelling refuellingBefore = new Refuelling.Builder().kilometre(kilometresLastFillUp)
                 .litres(litresFilledUp).dateRefueled(january).fillUp(true).build();
