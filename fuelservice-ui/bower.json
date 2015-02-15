@@ -1,0 +1,20 @@
+{
+  "name": "fuelservice-ui",
+  "version": "0.0.1",
+  "homepage": "https://github.com/suckowbiz/fuel",
+  "authors": [
+    "Tobias <tobias@suckow.biz>"
+  ],
+  "description": "fuelservice ui",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.5.4"
+  }
+}
