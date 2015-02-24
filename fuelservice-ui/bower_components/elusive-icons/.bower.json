@@ -1,0 +1,36 @@
+{
+  "name": "elusive-icons",
+  "description": "Elusive Icons",
+  "keywords": [],
+  "homepage": "http://elusiveicons.com",
+  "dependencies": {},
+  "devDependencies": {},
+  "license": [
+    "OFL-1.1",
+    "MIT",
+    "CC-BY-3.0"
+  ],
+  "main": [
+    "./css/elusive-icons.css",
+    "./fonts/*"
+  ],
+  "ignore": [
+    "*/.*",
+    "*.json",
+    "src",
+    "*.yml",
+    "Gemfile",
+    "Gemfile.lock",
+    "*.md"
+  ],
+  "_release": "5ddd9167c8",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "5ddd9167c8479ec07b78f3ba7150dc4ad32cc7bc"
+  },
+  "_source": "git://github.com/ReduxFramework/Elusive-Icons.git",
+  "_target": "*",
+  "_originalSource": "ReduxFramework/Elusive-Icons",
+  "_direct": true
+}
