@@ -79,7 +79,7 @@
         <!-- <version.artifactId>x.x</version.artifactId> -->
 	<version.arquillian-bom>1.1.7.Final</version.arquillian-bom>
         <version.arquillian-suite-extension>1.1.2</version.arquillian-suite-extension>
-        <version.assertj-core>1.7.1</version.assertj-core>
+        <version.assertj-core>2.0.0</version.assertj-core>
         <version.derby>10.11.1.1</version.derby>
         <version.easymock>3.3.1</version.easymock>
         <version.jboss-javaee-7.0-with-hibernate>8.2.1.Final</version.jboss-javaee-7.0-with-hibernate>
