@@ -20,7 +20,7 @@
     <inceptionYear>2014</inceptionYear>
 
     <build>
-        <finalName>${project.artifactId}-${project.version}</finalName>
+        <finalName>${project.artifactId}</finalName>
     </build>
 
     <dependencies>
