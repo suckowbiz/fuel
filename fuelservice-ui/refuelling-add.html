@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" ng-app ng-strict-di>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fuel</title>
+    <script src="bower_components/webcomponentsjs/webcomponents.min.js"></script>
+    <link rel="import" href="bower_components/polymer/polymer.html">
+    <link rel="import" href="bower_components/core-icons/maps-icons.html">
+    <link rel="import" href="bower_components/core-icons/core-icons.html">
+
+    <link href="app/style.css" rel="stylesheet" rel="stylesheet">
+    <link href="bower_components/bootstrap-css-only/css/bootstrap.min.css" rel="stylesheet">
+    <link href="bower_components/fontawesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="bower_components/elusive-icons/css/elusive-icons.min.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-fixed-top" bs-navbar>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Fuel</a>
+        <button class="navbar-btn btn btn-default" href="#"><i class="fa fa-automobile fa-fw"></i> Vehicle Name <i
+                class="fa fa-caret-down"></i></button>
+        <a class="navbar-text pull-right" href="#"><i class="fa fa-user fa-lg"></i>&nbsp;<i
+                class="fa fa-ellipsis-v fa-lg"></i></span></a>
+
+    </div>
+</nav>
+
+<style>
+    .input-group-addon {
+        min-width:170px;
+        text-align:left;
+    }
+</style>
+
+<div class="container">
+    <div class="page-header">
+        <h1>Tankstelle <small>Tanken</small></h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <core-icon icon="maps:local-gas-station" style="height: 150px; width: 150px;"></core-icon>
+            <p><h3></h3></p>
+        </div>
+        <div class="col-md-8">
+            <div class="panel panel-default">
+                <div class="panel-heading"><h2>Betankung <small> </small></h2></div>
+                <div class="panel-body">
+                    <form>
+                        <p class="text-muted text-right"><i class="el el-fw el-asterisk"></i> = Pflicht</p>
+                        <fieldset>
+                            <legend>Tankquittung</legend>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-fw fa-calendar-o"></i> Datum<sup><i class="el el-fw el-asterisk"></i></sup></span>
+                                <input type="text" class="form-control" value="07.03.2015">
+                            </div>
+                            <br />
+                            <div class="input-group">
+                                <span class="input-group-addon"><core-icon icon="maps:local-gas-station" style="height: 16px; width: 16px;"></core-icon> Getankt<sup><i class="el el-fw el-asterisk"></i></sup></span>
+                                <input type="text" class="form-control" placeholder="xx,xx">
+                                <span class="input-group-addon" style="min-width: 50px">l</span>
+                            </div>
+                            <br>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-credit-card fa-fw"></i> Bezahlt<sup><i class="el el-fw el-asterisk"></i></sup></span>
+                                <input type="text" class="form-control" placeholder="xx,xx">
+                                <span class="input-group-addon" style="min-width: 50px">€</span>
+                            </div>
+                            <br>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Wichtig</legend>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-fw fa-tachometer"></i> Kilometerstand<sup><i class="el el-fw el-asterisk"></i></sup></span>
+                                <input type="text" class="form-control" placeholder="xxxxx">
+                                <span class="input-group-addon" style="min-width: 50px">Km</span>
+                            </div>
+                            <br />
+                            <div class="input-group">
+                                <span class="input-group-addon" style="vertical-align:  top;"><i class="fa fa-fw fa-comment-o"></i> Memo</span>
+                                <textarea class="form-control"></textarea>
+                            </div>
+                            <br />
+                        </fieldset>
+                        <fieldset>
+                            <legend>Kanister</legend>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-fw fa-tint"></i> Kanister befüllt</span>
+                                <input type="text" class="form-control" placeholder="0,00">
+                                <span class="input-group-addon" style="min-width: 50px">l</span>
+                            </div>
+                            <br />
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-fw fa-filter"></i></i> Kanister benutzt</span>
+                                <input type="text" class="form-control" placeholder="0,00">
+                                <span class="input-group-addon" style="min-width: 50px">l</span>
+                            </div>
+                            <br/>
+                        </fieldset>
+                        <br />
+                        <div class="checkbox well well">
+                            <label>
+                                <input type="checkbox"><i class="fa fa-fw fa-hand-o-up"></i> Aufpassen, ich hab' <strong>nicht</strong> vollgetankt!
+                            </label>
+                            <br />
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Eintragen</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="footer navbar navbar-default navbar-fixed-bottom">
+    <div class="nav navbar-nav pull-right">
+        <p class="navbar-text"><i class="fa fa-copyright"></i> 2015 suckow.biz &bull; <a href="#" class="navbar-link">Nutzungsbedingungen</a> &bull; <a href="#" class="navbar-link">Impressum</a>
+        </p>
+    </div>
+</div>
+
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/angular-animate/angular-animate.min.js"></script>
+<script src="bower_components/angular-strap/dist/angular-strap.min.js"></script>
+<script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
+<script src="app/app.js"></script>
+</body>
+
+</html>
