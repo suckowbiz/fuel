@@ -17,7 +17,7 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top" bs-navbar>
+<nav class="navbar navbar-default navbar-fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="#">Fuel</a>
         <button class="navbar-btn btn btn-default" href="#"><i class="fa fa-automobile fa-fw"></i> Vehicle Name <i
@@ -30,7 +30,7 @@
 
 <style>
     .input-group-addon {
-        min-width:230px;
+        min-width:220px;
         text-align:left;
     }
 </style>
@@ -57,7 +57,7 @@
                             </div>
                             <br>
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-fw fa-user-secret"></i> Passwort (min. 5 Zeichen)</span>
+                                <span class="input-group-addon"><i class="fa fa-fw fa-user-secret"></i> Passwort (>= 5 Zeichen)</span>
                                 <input type="password" class="form-control" placeholder="">
                             </div>
                             <br/>
@@ -84,14 +84,19 @@
 
 </div>
 
-<div class="footer navbar navbar-default navbar-fixed-bottom">
-    <div class="nav navbar-nav pull-right">
-        <p class="navbar-text"><i class="fa fa-copyright"></i> 2015 suckow.biz &bull; <a href="#" class="navbar-link">Nutzungsbedingungen</a> &bull; <a href="#" class="navbar-link">Impressum</a>
-        </p>
-    </div>
-</div>
-
 <script src="bower_components/angular/angular.min.js"></script>
+
+<footer class="navbar navbar-default navbar-fixed-bottom">
+    <div class="container-fluid">
+        <ul class="nav navbar-nav navbar-right fa-ul">
+            <li class="navbar-text" style="cursor: default"><i class="fa fa-copyright"></i> 2015 suckow.biz</li>
+            <li><a href="#">Impressum</a></li>
+            <li><a href="#">Datenschutz</a></li>
+            <li><a href="#">Nutzungsbedingungen</a></li>
+        </ul>
+    </div>
+</footer>
+
 <script src="bower_components/angular-animate/angular-animate.min.js"></script>
 <script src="bower_components/angular-strap/dist/angular-strap.min.js"></script>
 <script src="bower_components/angular-strap/dist/angular-strap.tpl.min.js"></script>
